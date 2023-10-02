@@ -1,4 +1,4 @@
-package com.example.demoapp;
+package com.example.demoapp.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -6,6 +6,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import com.example.demoapp.R;
+import com.example.demoapp.activity.RecipeActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     ConstraintLayout recipes;

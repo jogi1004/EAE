@@ -7,7 +7,7 @@
         android:radius="30dp" />
     <stroke android:width="2dp"
         android:color="@color/black" />
-    <solid android:color="#F8841F"/>
+    <solid android:color="#D39F04"/>
 
     <size
         android:height="40dp"
