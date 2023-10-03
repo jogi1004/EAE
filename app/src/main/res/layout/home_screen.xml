@@ -13,7 +13,7 @@
         android:layout_height="400dp"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
-        android:src="@mipmap/Einkaufsliste" />
+        android:src="@mipmap/einkaufsliste" />
 
     <Button
         android:id="@+id/RecipeButton"
