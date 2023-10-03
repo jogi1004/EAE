@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">EAEProjekt</string>
+    <string name="RecipeButtonText">Rezeptliste</string>
+    <string name="ShoppingListButtonText">Einkaufsliste</string>
 </resources>
