@@ -41,7 +41,7 @@ public class DatabaseManager {
     public static final String COLUMN_STEP_TEXT = "Text";
     public static final String COLUMN_STEP_RECIPE_ID = "RezeptID";
 
-    private SQLiteOpenHelper dbHelper;
+    private final SQLiteOpenHelper dbHelper;
     private SQLiteDatabase database;
 
     public DatabaseManager(Context context) {
@@ -109,6 +109,7 @@ public class DatabaseManager {
         values.put(COLUMN_INGREDIENT_UNIT, unit);
         return database.insert(TABLE_INGREDIENTS, null, values);
     }
+
 
     public Cursor getAllIngredients() {
         return database.query(
@@ -190,6 +191,49 @@ public class DatabaseManager {
                 TABLE_INGREDIENT_QUANTITY + "." + COLUMN_INGREDIENT_QUANTITY_RECIPE_ID + " = ?";
         return database.rawQuery(query, new String[]{String.valueOf(recipeId)});
     }
+
+    // CRUD-Operationen für Schritte
+
+    public long insertStep(long recipeId, String stepText) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_STEP_RECIPE_ID, recipeId);
+        values.put(COLUMN_STEP_TEXT, stepText);
+        return database.insert(TABLE_STEPS, null, values);
+    }
+
+    public Cursor getAllStepsForRecipe(long recipeId) {
+        return database.query(
+                TABLE_STEPS,
+                null,
+                COLUMN_STEP_RECIPE_ID + " = ?",
+                new String[]{String.valueOf(recipeId)},
+                null,
+                null,
+                null
+        );
+    }
+
+    public int updateStep(long stepId, String newStepText) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_STEP_TEXT, newStepText);
+        return database.update(
+                TABLE_STEPS,
+                values,
+                COLUMN_STEP_ID + " = ?",
+                new String[]{String.valueOf(stepId)}
+        );
+    }
+
+    public int deleteStep(long stepId) {
+        return database.delete(
+                TABLE_STEPS,
+                COLUMN_STEP_ID + " = ?",
+                new String[]{String.valueOf(stepId)}
+        );
+    }
+
+
+
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
