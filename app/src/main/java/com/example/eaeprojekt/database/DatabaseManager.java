@@ -1,4 +1,4 @@
-package com.example.eaeprojekt;
+package com.example.eaeprojekt.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,6 +6,14 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.example.eaeprojekt.IngredientAmountDTO;
+import com.example.eaeprojekt.IngredientDTO;
+import com.example.eaeprojekt.RecipeDTO;
+import com.example.eaeprojekt.StepDTO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseManager {
 
@@ -58,7 +66,7 @@ public class DatabaseManager {
 
     // CRUD-Operationen für Rezepte
 
-    public long insertRecipe(String title, String portionsmenge, String dauer, int istFavorit) {
+    public long insertRecipe(String title, int portionsmenge, String dauer, int istFavorit) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_RECIPE_TITLE, title);
         values.put(COLUMN_RECIPE_PORTIONSMENGE, portionsmenge);
@@ -67,19 +75,89 @@ public class DatabaseManager {
         return database.insert(TABLE_RECIPES, null, values);
     }
 
-    public Cursor getAllRecipes() {
-        return database.query(
-                TABLE_RECIPES,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
-        );
+    public List<RecipeDTO> getAllRecipes() {
+        List<RecipeDTO> recipes = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_RECIPES, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    int idIndex = cursor.getColumnIndex(COLUMN_RECIPE_ID);
+                    int titleIndex = cursor.getColumnIndex(COLUMN_RECIPE_TITLE);
+                    int portionsmengeIndex = cursor.getColumnIndex(COLUMN_RECIPE_PORTIONSMENGE);
+                    int dauerIndex = cursor.getColumnIndex(COLUMN_RECIPE_DAUER);
+                    int istFavoritIndex = cursor.getColumnIndex(COLUMN_IS_FAVORITE);
+
+                    if (idIndex >= 0 && titleIndex >= 0 && portionsmengeIndex >= 0 && dauerIndex >= 0 && istFavoritIndex >= 0) {
+                        int id = cursor.getInt(idIndex);
+                        String title = cursor.getString(titleIndex);
+                        int portionsmenge = cursor.getInt(portionsmengeIndex);
+                        int dauer = cursor.getInt(dauerIndex);
+                        int istFavorit = cursor.getInt(istFavoritIndex);
+
+                        RecipeDTO recipeDTO = new RecipeDTO(id, title, portionsmenge, dauer, istFavorit);
+                        recipes.add(recipeDTO);
+                    }
+                } while (cursor.moveToNext());
+            }
+
+            cursor.close();
+
+        return recipes;
     }
 
-    public int updateRecipe(long recipeId, String newTitle, String newPortionsmenge, String newDauer, int newIstFavorit) {
+    public RecipeDTO getRecipeById(int id) {
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_RECIPES + " WHERE " + COLUMN_RECIPE_ID + " = ?", new String[]{String.valueOf(id)});
+        RecipeDTO recipeDTO = null;
+
+            if (cursor.moveToFirst()) {
+                int idIndex = cursor.getColumnIndex(COLUMN_RECIPE_ID);
+                int titleIndex = cursor.getColumnIndex(COLUMN_RECIPE_TITLE);
+                int portionsmengeIndex = cursor.getColumnIndex(COLUMN_RECIPE_PORTIONSMENGE);
+                int dauerIndex = cursor.getColumnIndex(COLUMN_RECIPE_DAUER);
+                int istFavoritIndex = cursor.getColumnIndex(COLUMN_IS_FAVORITE);
+
+                if (idIndex >= 0 && titleIndex >= 0 && portionsmengeIndex >= 0 && dauerIndex >= 0 && istFavoritIndex >= 0) {
+                    String title = cursor.getString(titleIndex);
+                    int portionsmenge = cursor.getInt(portionsmengeIndex);
+                    int dauer = cursor.getInt(dauerIndex);
+                    int istFavorit = cursor.getInt(istFavoritIndex);
+
+                    recipeDTO = new RecipeDTO(id, title, portionsmenge, dauer, istFavorit);
+                }
+            }
+
+            cursor.close();
+
+        return recipeDTO;
+    }
+
+    public RecipeDTO getRecipeByName(String name) {
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_RECIPES + " WHERE " + COLUMN_RECIPE_TITLE + " = ?", new String[]{name});
+        RecipeDTO recipeDTO = null;
+
+            if (cursor.moveToFirst()) {
+                int idIndex = cursor.getColumnIndex(COLUMN_RECIPE_ID);
+                int portionsmengeIndex = cursor.getColumnIndex(COLUMN_RECIPE_PORTIONSMENGE);
+                int dauerIndex = cursor.getColumnIndex(COLUMN_RECIPE_DAUER);
+                int istFavoritIndex = cursor.getColumnIndex(COLUMN_IS_FAVORITE);
+
+                if (idIndex >= 0 && portionsmengeIndex >= 0 && dauerIndex >= 0 && istFavoritIndex >= 0) {
+                    int id = cursor.getInt(idIndex);
+                    int portionsmenge = cursor.getInt(portionsmengeIndex);
+                    int dauer = cursor.getInt(dauerIndex);
+                    int istFavorit = cursor.getInt(istFavoritIndex);
+
+                    recipeDTO = new RecipeDTO(id, name, portionsmenge, dauer, istFavorit);
+                }
+            }
+
+            cursor.close();
+
+        return recipeDTO;
+    }
+
+
+    public int updateRecipe(long recipeId, String newTitle, int newPortionsmenge, String newDauer, int newIstFavorit) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_RECIPE_TITLE, newTitle);
         values.put(COLUMN_RECIPE_PORTIONSMENGE, newPortionsmenge);
@@ -101,6 +179,46 @@ public class DatabaseManager {
         );
     }
 
+    public List<RecipeDTO> getFavoritenRezepte() {
+        List<RecipeDTO> favoriten = new ArrayList<>();
+        String[] projection = {
+                COLUMN_RECIPE_ID,
+                COLUMN_RECIPE_TITLE,
+                COLUMN_RECIPE_PORTIONSMENGE,
+                COLUMN_RECIPE_DAUER,
+                COLUMN_IS_FAVORITE
+        };
+        String selection = COLUMN_IS_FAVORITE + " = ?";
+        String[] selectionArgs = { "1" };
+
+        Cursor cursor = database.query(
+                TABLE_RECIPES,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RECIPE_ID));
+                String title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RECIPE_TITLE));
+                int portionsmenge = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RECIPE_PORTIONSMENGE));
+                int dauer = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RECIPE_DAUER));
+                int istFavorit = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_FAVORITE));
+
+                RecipeDTO recipeDTO = new RecipeDTO(id, title, portionsmenge, dauer, istFavorit);
+                favoriten.add(recipeDTO);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return favoriten;
+    }
+
+
     // CRUD-Operationen für Zutaten
 
     public long insertIngredient(String name, String unit) {
@@ -110,18 +228,80 @@ public class DatabaseManager {
         return database.insert(TABLE_INGREDIENTS, null, values);
     }
 
+    public List<IngredientDTO> getAllIngredients() {
+        List<IngredientDTO> ingredients = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENTS, null);
 
-    public Cursor getAllIngredients() {
-        return database.query(
-                TABLE_INGREDIENTS,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
-        );
+            if (cursor.moveToFirst()) {
+                do {
+                    int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_ID);
+                    int nameIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_NAME);
+                    int unitIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_UNIT);
+
+                    if (idIndex >= 0 && nameIndex >= 0 && unitIndex >= 0) {
+                        int id = cursor.getInt(idIndex);
+                        String name = cursor.getString(nameIndex);
+                        String unit = cursor.getString(unitIndex);
+
+                        IngredientDTO ingredientDTO = new IngredientDTO(id, name, unit);
+                        ingredients.add(ingredientDTO);
+                    }
+                } while (cursor.moveToNext());
+            }
+
+            cursor.close();
+
+        return ingredients;
     }
+
+    public IngredientDTO getIngredientById(int id) {
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENTS + " WHERE " + COLUMN_INGREDIENT_ID + " = ?", new String[]{String.valueOf(id)});
+
+            if (cursor.moveToFirst()) {
+                int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_ID);
+                int nameIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_NAME);
+                int unitIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_UNIT);
+
+                if (idIndex >= 0 && nameIndex >= 0 && unitIndex >= 0) {
+                    int ingredientId = cursor.getInt(idIndex);
+                    String name = cursor.getString(nameIndex);
+                    String unit = cursor.getString(unitIndex);
+
+                    IngredientDTO ingredientDTO = new IngredientDTO(ingredientId, name, unit);
+                    cursor.close();
+                    return ingredientDTO;
+                }
+            }
+
+            cursor.close();
+
+        return null;
+    }
+
+    public IngredientDTO getIngredientByName(String name) {
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENTS + " WHERE " + COLUMN_INGREDIENT_NAME + " = ?", new String[]{name});
+
+            if (cursor.moveToFirst()) {
+                int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_ID);
+                int nameIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_NAME);
+                int unitIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_UNIT);
+
+                if (idIndex >= 0 && nameIndex >= 0 && unitIndex >= 0) {
+                    int ingredientId = cursor.getInt(idIndex);
+                    String ingredientName = cursor.getString(nameIndex);
+                    String unit = cursor.getString(unitIndex);
+
+                    IngredientDTO ingredientDTO = new IngredientDTO(ingredientId, ingredientName, unit);
+                    cursor.close();
+                    return ingredientDTO;
+                }
+            }
+
+            cursor.close();
+
+        return null;
+    }
+
 
     public int updateIngredient(long ingredientId, String newName, String newUnit) {
         ContentValues values = new ContentValues();
@@ -174,23 +354,36 @@ public class DatabaseManager {
         );
     }
 
-    public Cursor getIngredientsForRecipe(long recipeId) {
-        String query = "SELECT " +
-                TABLE_INGREDIENTS + "." + COLUMN_INGREDIENT_ID + ", " +
-                TABLE_INGREDIENTS + "." + COLUMN_INGREDIENT_NAME + ", " +
-                TABLE_INGREDIENTS + "." + COLUMN_INGREDIENT_UNIT + ", " +
-                TABLE_INGREDIENT_QUANTITY + "." + COLUMN_INGREDIENT_QUANTITY_AMOUNT +
-                " FROM " +
-                TABLE_INGREDIENTS +
-                " INNER JOIN " +
-                TABLE_INGREDIENT_QUANTITY +
-                " ON " +
-                TABLE_INGREDIENTS + "." + COLUMN_INGREDIENT_ID + " = " +
-                TABLE_INGREDIENT_QUANTITY + "." + COLUMN_INGREDIENT_QUANTITY_INGREDIENT_ID +
-                " WHERE " +
-                TABLE_INGREDIENT_QUANTITY + "." + COLUMN_INGREDIENT_QUANTITY_RECIPE_ID + " = ?";
-        return database.rawQuery(query, new String[]{String.valueOf(recipeId)});
+    public List<IngredientAmountDTO> getIngredientsForRecipe(int recipeId) {
+        List<IngredientAmountDTO> ingredientAmounts = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENT_QUANTITY + " WHERE " + COLUMN_INGREDIENT_QUANTITY_RECIPE_ID + " = ?", new String[]{String.valueOf(recipeId)});
+
+            if (cursor.moveToFirst()) {
+                int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_ID);
+                int amountIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_AMOUNT);
+                int ingredientIdIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_INGREDIENT_ID);
+                int isOnShoppingListIndex = cursor.getColumnIndex(COLUMN_IS_ON_SHOPPING_LIST);
+
+                while (!cursor.isAfterLast()) {
+                    if (idIndex >= 0 && amountIndex >= 0 && ingredientIdIndex >= 0 && isOnShoppingListIndex >= 0) {
+                        int id = cursor.getInt(idIndex);
+                        int amount = cursor.getInt(amountIndex);
+                        int ingredientId = cursor.getInt(ingredientIdIndex);
+                        int isOnShoppingList = cursor.getInt(isOnShoppingListIndex);
+
+                        IngredientAmountDTO ingredientAmountDTO = new IngredientAmountDTO(id, recipeId, ingredientId, amount, isOnShoppingList);
+                        ingredientAmounts.add(ingredientAmountDTO);
+                    }
+
+                    cursor.moveToNext();
+                }
+
+            cursor.close();
+        }
+
+        return ingredientAmounts;
     }
+
 
     // CRUD-Operationen für Schritte
 
@@ -201,17 +394,42 @@ public class DatabaseManager {
         return database.insert(TABLE_STEPS, null, values);
     }
 
-    public Cursor getAllStepsForRecipe(long recipeId) {
-        return database.query(
+    public List<StepDTO> getAllStepsForRecipe(int recipeId) {
+        List<StepDTO> steps = new ArrayList<>();
+        String selection = COLUMN_STEP_RECIPE_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(recipeId)};
+        Cursor cursor = database.query(
                 TABLE_STEPS,
                 null,
-                COLUMN_STEP_RECIPE_ID + " = ?",
-                new String[]{String.valueOf(recipeId)},
+                selection,
+                selectionArgs,
                 null,
                 null,
                 null
         );
+
+            if (cursor.moveToFirst()) {
+                int idIndex = cursor.getColumnIndex(COLUMN_STEP_ID);
+                int textIndex = cursor.getColumnIndex(COLUMN_STEP_TEXT);
+
+                while (!cursor.isAfterLast()) {
+                    if (idIndex >= 0 && textIndex >= 0) {
+                        int id = cursor.getInt(idIndex);
+                        String text = cursor.getString(textIndex);
+
+                        StepDTO stepDTO = new StepDTO(id, text, recipeId);
+                        steps.add(stepDTO);
+                    }
+
+                    cursor.moveToNext();
+                }
+            }
+
+            cursor.close();
+
+        return steps;
     }
+
 
     public int updateStep(long stepId, String newStepText) {
         ContentValues values = new ContentValues();
@@ -231,8 +449,6 @@ public class DatabaseManager {
                 new String[]{String.valueOf(stepId)}
         );
     }
-
-
 
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
