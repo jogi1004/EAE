@@ -6,7 +6,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -50,28 +49,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void logAllIngredients(DatabaseManager dbMan) {
-        // Hole alle Zutaten aus der Datenbank
-        Cursor cursor = dbMan.getAllIngredients();
+     List<IngredientDTO> ingredients = dbMan.getAllIngredients();
+     for (IngredientDTO ingredient : ingredients) {
+         Log.d("HSKL", "Name: " + ingredient.getName() + ", Einheit: " + ingredient.getUnit());
+     }
 
-        // Überprüfe, ob der Cursor Daten enthält
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                // Holen Sie sich die Zutatennamen und Einheiten aus dem Cursor
-                int nameIndex = cursor.getColumnIndex(DatabaseManager.COLUMN_INGREDIENT_NAME);
-                int unitIndex = cursor.getColumnIndex(DatabaseManager.COLUMN_INGREDIENT_UNIT);
-
-                if (nameIndex != -1 && unitIndex != -1) {
-                    String name = cursor.getString(nameIndex);
-                    String unit = cursor.getString(unitIndex);
-
-                    // Gib die Zutat als Log-Ausgabe aus
-                    Log.d("HSKL", "Name: " + name + ", Einheit: " + unit);
-                }
-            } while (cursor.moveToNext());
-
-            // Cursor schließen, nachdem er nicht mehr benötigt wird
-            cursor.close();
-        }
     }
 
     @Override
