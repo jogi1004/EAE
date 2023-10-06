@@ -1,14 +1,23 @@
-package com.example.eaeprojekt;
+package com.example.eaeprojekt.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.eaeprojekt.DatabaseManager;
+import com.example.eaeprojekt.R;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    ConstraintLayout recipes;
+    ConstraintLayout shoppingBag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +41,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Optional: Schließe die Datenbankverbindung
         dbMan.close();
+
+        recipes = findViewById(R.id.recipes);
+        recipes.setOnClickListener(this);
+
+        shoppingBag = findViewById(R.id.shoppingBag);
+        shoppingBag.setOnClickListener(this);
     }
 
     public void logAllIngredients(DatabaseManager dbMan) {
@@ -57,5 +72,22 @@ public class MainActivity extends AppCompatActivity {
             // Cursor schließen, nachdem er nicht mehr benötigt wird
             cursor.close();
         }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view == recipes){
+            Intent recipeIntent = new Intent(this, RecipeActivity.class);
+            startActivity(recipeIntent);
+        }
+        if (view == shoppingBag){
+
+        }
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
     }
 }
