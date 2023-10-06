@@ -3,15 +3,16 @@ package com.example.eaeprojekt.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.example.eaeprojekt.DatabaseManager;
+import com.example.eaeprojekt.IngredientDTO;
 import com.example.eaeprojekt.R;
+import com.example.eaeprojekt.database.DatabaseManager;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 

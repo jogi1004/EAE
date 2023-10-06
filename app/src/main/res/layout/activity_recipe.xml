@@ -33,7 +33,7 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Wilkommen zurück!"
+        android:text="Willkommen zurück!"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintEnd_toStartOf="@+id/newRecipe"
         app:layout_constraintStart_toEndOf="@+id/imageView"
