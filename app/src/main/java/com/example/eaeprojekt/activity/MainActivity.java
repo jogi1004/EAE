@@ -27,17 +27,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Beispieldaten hinzufügen
         DatabaseManager dbMan = new DatabaseManager(this);
         dbMan.open();
+        // Datenbank löschen
+        //deleteDatabase(DatabaseManager.DATABASE_NAME);
         String zutatName1 = "Mehl";
         String zutatName2 = "Milch";
         String zutatEinheit1 = "g";
         String zutatEinheit2 = "ml";
-        dbMan.insertIngredient(zutatName1, zutatEinheit1);
-        dbMan.insertIngredient(zutatName2, zutatEinheit2);
+        //dbMan.insertIngredient(zutatName1, zutatEinheit1);
+        //dbMan.insertIngredient(zutatName2, zutatEinheit2);
+        //dbMan.insertRecipe("Pizza", 4, "30", 1);
+        //dbMan.insertRecipe("Pasta", 2, "60", 0);
         logAllIngredients(dbMan);
 
-
-        // Datenbank löschen
-         deleteDatabase(DatabaseManager.DATABASE_NAME);
 
         // Optional: Schließe die Datenbankverbindung
         dbMan.close();
