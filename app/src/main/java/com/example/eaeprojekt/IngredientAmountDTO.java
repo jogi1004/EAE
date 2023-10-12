@@ -2,12 +2,12 @@ package com.example.eaeprojekt;
 
 public class IngredientAmountDTO {
     private int id;
-    private int amount;
-    private int recipeId;
-    private int ingredientId;
+    private double amount;
+    private long recipeId;
+    private long ingredientId;
     private int onShoppingList;
 
-    public IngredientAmountDTO(int id, int amount, int recipeId, int ingredientId, int onShoppingList) {
+    public IngredientAmountDTO(int id, double amount, long recipeId, long ingredientId, int onShoppingList) {
         this.id = id;
         this.amount = amount;
         this.recipeId = recipeId;
@@ -19,15 +19,15 @@ public class IngredientAmountDTO {
         return id;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public int getRecipeId() {
+    public long getRecipeId() {
         return recipeId;
     }
 
-    public int getIngredientId() {
+    public long getIngredientId() {
         return ingredientId;
     }
 
