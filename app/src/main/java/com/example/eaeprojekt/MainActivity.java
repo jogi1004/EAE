@@ -1,4 +1,4 @@
-package com.example.eaeprojekt.activity;
+package com.example.eaeprojekt;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,7 +11,7 @@ import android.widget.Button;
 
 
 import com.example.eaeprojekt.R;
-import com.example.eaeprojekt.activity.classes.DatabaseManager;
+import com.example.eaeprojekt.DatabaseManager;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 

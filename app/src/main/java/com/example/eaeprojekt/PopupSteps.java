@@ -1,4 +1,4 @@
-package com.example.eaeprojekt.activity.classes;
+package com.example.eaeprojekt;
 
 import android.view.Gravity;
 import android.view.LayoutInflater;

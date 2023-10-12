@@ -13,13 +13,13 @@
         android:theme="@style/Theme.EAEProjekt"
         tools:targetApi="31">
         <activity
-            android:name=".activity.NewRecipeActivity"
+            android:name=".NewRecipeActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.RecipeActivity"
+            android:name=".RecipeActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

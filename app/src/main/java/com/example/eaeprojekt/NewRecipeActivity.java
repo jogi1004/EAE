@@ -1,4 +1,4 @@
-package com.example.eaeprojekt.activity;
+package com.example.eaeprojekt;
 
 import android.os.Bundle;
 import android.view.View;
@@ -8,7 +8,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.eaeprojekt.R;
-import com.example.eaeprojekt.activity.classes.PopupSteps;
+import com.example.eaeprojekt.PopupSteps;
 
 
 public class NewRecipeActivity extends AppCompatActivity implements View.OnClickListener {
