@@ -1,19 +1,30 @@
-package com.example.eaeprojekt;
+package com.example.eaeprojekt.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+
+import com.example.eaeprojekt.R;
+import com.example.eaeprojekt.activity.classes.DatabaseManager;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    Button but;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        but = findViewById(R.id.buttonHomescr);
+        but.setOnClickListener(this);
+
 
         // Beispieldaten hinzufügen
         DatabaseManager dbMan = new DatabaseManager(this);
@@ -57,5 +68,11 @@ public class MainActivity extends AppCompatActivity {
             // Cursor schließen, nachdem er nicht mehr benötigt wird
             cursor.close();
         }
+    }
+
+    @Override
+    public void onClick(View view) {
+        Intent intent = new Intent(this, NewRecipeActivity.class);
+        startActivity(intent);
     }
 }

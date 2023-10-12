@@ -1,4 +1,4 @@
-package com.example.eaeprojekt;
+package com.example.eaeprojekt.activity.classes;
 
 import android.content.ContentValues;
 import android.content.Context;
