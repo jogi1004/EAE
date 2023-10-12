@@ -2,82 +2,58 @@ package com.example.eaeprojekt;
 
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.eaeprojekt.R;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
-public class PopupSteps {
+public class PopupSteps implements View.OnClickListener {
 
 
+    ConstraintLayout buttonAdd;
+    ConstraintLayout buttonBack;
 
-        //PopupWindow display method
+    NewRecipeActivity mainActivity;
 
-        public void showPopupWindow(final View view) {
+    PopupWindow popupWindow;
 
+    public void showPopupWindow(final View view, NewRecipeActivity newRecipeActivity) {
 
-            //Create a View object yourself through inflater
+        mainActivity = newRecipeActivity;
+
             LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
             View popupView = inflater.inflate(R.layout.add_steps_popup, null);
 
-            //Specify the length and width through constants
-            int width = LinearLayout.LayoutParams.MATCH_PARENT;
-            int height = LinearLayout.LayoutParams.MATCH_PARENT;
-
-            //Make Inactive Items Outside Of PopupWindow
+            //length and width from the Window
+            int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            int height = LinearLayout.LayoutParams.WRAP_CONTENT;
             boolean focusable = true;
 
-            //Create a window with our parameters
-            final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+            //Create window
+            popupWindow = new PopupWindow(popupView, width, height, focusable);
 
             //Set the location of the window on the screen
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
-            //Initialize the elements of our window, install the handler
 
-            TextView test2 = popupView.findViewById(R.id.zubereitungsschritt);
-            //test2.setText(R.string.textTitle);
+            //Buttons
+            buttonAdd = popupView.findViewById(R.id.add_button);
+            buttonAdd.setOnClickListener(this);
 
-            Button buttonAdd = popupView.findViewById(R.id.add_button);
-            buttonAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            buttonBack = popupView.findViewById(R.id.cancel_button);
+            buttonBack.setOnClickListener(this);
 
-                    //As an example, display the message
-                    Toast.makeText(view.getContext(), "Wow, popup action button", Toast.LENGTH_SHORT).show();
-
-                }
-            });
-
-            Button buttonBack = popupView.findViewById(R.id.cancel_button);
-            buttonAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    //As an example, display the message
-                    Toast.makeText(view.getContext(), "Wow, popup action button", Toast.LENGTH_SHORT).show();
-
-                }
-            });
-
-
-
-            //Handler for clicking on the inactive zone of the window
-
-            popupView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-
-                    //Close the window when clicked
-                    popupWindow.dismiss();
-                    return true;
-                }
-            });
         }
 
+    @Override
+    public void onClick(View view) {
+
+        if(view == buttonBack){
+            FrameLayout frame = mainActivity.findViewById(R.id.mainmenu);
+            frame.getForeground().setAlpha(0);
+            popupWindow.dismiss();
+        }
     }
+}

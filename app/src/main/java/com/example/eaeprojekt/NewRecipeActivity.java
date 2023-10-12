@@ -1,7 +1,9 @@
 package com.example.eaeprojekt;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -31,13 +33,20 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         button_add_steps = (ConstraintLayout) findViewById(R.id.button_add_steps);
         button_add_steps.setOnClickListener(this);
 
+        FrameLayout layout_MainMenu = (FrameLayout) findViewById( R.id.mainmenu);
+        layout_MainMenu.getForeground().setAlpha( 0);
     }
 
     @Override
     public void onClick(View view) {
         if(view == button_add_ingredients){
+
             PopupSteps popup = new PopupSteps();
-            popup.showPopupWindow(view);
+            popup.showPopupWindow(view, this);
+
+            //background-dimming
+            FrameLayout layout_MainMenu = (FrameLayout) findViewById( R.id.mainmenu);
+            layout_MainMenu.getForeground().setAlpha( 220);
         }else {
 
         }
