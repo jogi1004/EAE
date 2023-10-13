@@ -1,4 +1,4 @@
-package com.example.eaeprojekt;
+package com.example.eaeprojekt.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 

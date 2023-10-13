@@ -16,11 +16,11 @@ public class PopupSteps implements View.OnClickListener {
     ConstraintLayout buttonAdd;
     ConstraintLayout buttonBack;
 
-    NewRecipeActivity mainActivity;
+    com.example.eaeprojekt.NewRecipeActivity mainActivity;
 
     PopupWindow popupWindow;
 
-    public void showPopupWindow(final View view, NewRecipeActivity newRecipeActivity) {
+    public void showPopupWindow(final View view, com.example.eaeprojekt.NewRecipeActivity newRecipeActivity) {
 
         mainActivity = newRecipeActivity;
 

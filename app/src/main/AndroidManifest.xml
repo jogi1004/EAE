@@ -16,11 +16,10 @@
             android:name=".NewRecipeActivity"
             android:exported="false" />
         <activity
-            android:name=".RecipeActivity"
-            android:exported="false" />
-        <activity
             android:name=".activity.RecipeActivity"
-            android:exported="false"/>
+            android:exported="false" />
+        <activity android:name=".activity.ShoppingBagActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.MainActivity"
             android:exported="true">

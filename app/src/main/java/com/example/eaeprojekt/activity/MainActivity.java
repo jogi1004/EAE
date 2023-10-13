@@ -4,23 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-
-
-import com.example.eaeprojekt.R;
-import com.example.eaeprojekt.DatabaseManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.example.eaeprojekt.IngredientDTO;
 import com.example.eaeprojekt.R;
+import com.example.eaeprojekt.activity.RecipeActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -28,15 +20,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ConstraintLayout recipes;
     ConstraintLayout shoppingBag;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        but = findViewById(R.id.buttonHomescr);
-        but.setOnClickListener(this);
-
 
         // Beispieldaten hinzufügen
         DatabaseManager dbMan = new DatabaseManager(this);
@@ -45,13 +32,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String zutatName2 = "Milch";
         String zutatEinheit1 = "g";
         String zutatEinheit2 = "ml";
-        dbMan.insertIngredient(zutatName1, zutatEinheit1);
-        dbMan.insertIngredient(zutatName2, zutatEinheit2);
-        logAllIngredients(dbMan);
-
-
         // Datenbank löschen
-         deleteDatabase(DatabaseManager.DATABASE_NAME);
+        //deleteDatabase(DatabaseManager.DATABASE_NAME);
+        List<Long> ids = new ArrayList<>();
+        ids.add(dbMan.insertIngredient(zutatName1, zutatEinheit1));
+        ids.add(dbMan.insertIngredient(zutatName2, zutatEinheit2));
+        List<Long> idds = new ArrayList<>();
+        idds.add(dbMan.insertIngredientQuantity(-1, ids.get(0), 201, 1));
+        idds.add(dbMan.insertIngredientQuantity(-1, ids.get(1), 350, 1));
+        for (long y : idds) {
+            Log.d("HSKL", "Neu: " + y);
+        }
+
 
         // Optional: Schließe die Datenbankverbindung
         dbMan.close();
@@ -63,14 +55,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         shoppingBag.setOnClickListener(this);
     }
 
-    public void logAllIngredients(DatabaseManager dbMan) {
-     List<IngredientDTO> ingredients = dbMan.getAllIngredients();
-     for (IngredientDTO ingredient : ingredients) {
-         Log.d("HSKL", "Name: " + ingredient.getName() + ", Einheit: " + ingredient.getUnit());
-     }
-
-    }
-
     @Override
     public void onClick(View view) {
         if(view == recipes){
@@ -78,7 +62,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(recipeIntent);
         }
         if (view == shoppingBag){
-
+            Intent shoppingBagIntent = new Intent(this, ShoppingBagActivity.class);
+            startActivity(shoppingBagIntent);
         }
 
     }
