@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.example.eaeprojekt.IngredientDTO;
 import com.example.eaeprojekt.R;
+import com.example.eaeprojekt.activity.RecipeActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
 
 import java.util.ArrayList;

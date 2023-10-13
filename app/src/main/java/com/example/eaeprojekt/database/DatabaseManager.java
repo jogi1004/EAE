@@ -79,28 +79,28 @@ public class DatabaseManager {
         List<RecipeDTO> recipes = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_RECIPES, null);
 
-            if (cursor.moveToFirst()) {
-                do {
-                    int idIndex = cursor.getColumnIndex(COLUMN_RECIPE_ID);
-                    int titleIndex = cursor.getColumnIndex(COLUMN_RECIPE_TITLE);
-                    int portionsmengeIndex = cursor.getColumnIndex(COLUMN_RECIPE_PORTIONSMENGE);
-                    int dauerIndex = cursor.getColumnIndex(COLUMN_RECIPE_DAUER);
-                    int istFavoritIndex = cursor.getColumnIndex(COLUMN_IS_FAVORITE);
+        if (cursor.moveToFirst()) {
+            do {
+                int idIndex = cursor.getColumnIndex(COLUMN_RECIPE_ID);
+                int titleIndex = cursor.getColumnIndex(COLUMN_RECIPE_TITLE);
+                int portionsmengeIndex = cursor.getColumnIndex(COLUMN_RECIPE_PORTIONSMENGE);
+                int dauerIndex = cursor.getColumnIndex(COLUMN_RECIPE_DAUER);
+                int istFavoritIndex = cursor.getColumnIndex(COLUMN_IS_FAVORITE);
 
-                    if (idIndex >= 0 && titleIndex >= 0 && portionsmengeIndex >= 0 && dauerIndex >= 0 && istFavoritIndex >= 0) {
-                        int id = cursor.getInt(idIndex);
-                        String title = cursor.getString(titleIndex);
-                        int portionsmenge = cursor.getInt(portionsmengeIndex);
-                        int dauer = cursor.getInt(dauerIndex);
-                        int istFavorit = cursor.getInt(istFavoritIndex);
+                if (idIndex >= 0 && titleIndex >= 0 && portionsmengeIndex >= 0 && dauerIndex >= 0 && istFavoritIndex >= 0) {
+                    int id = cursor.getInt(idIndex);
+                    String title = cursor.getString(titleIndex);
+                    int portionsmenge = cursor.getInt(portionsmengeIndex);
+                    int dauer = cursor.getInt(dauerIndex);
+                    int istFavorit = cursor.getInt(istFavoritIndex);
 
-                        RecipeDTO recipeDTO = new RecipeDTO(id, title, portionsmenge, dauer, istFavorit);
-                        recipes.add(recipeDTO);
-                    }
-                } while (cursor.moveToNext());
-            }
+                    RecipeDTO recipeDTO = new RecipeDTO(id, title, portionsmenge, dauer, istFavorit);
+                    recipes.add(recipeDTO);
+                }
+            } while (cursor.moveToNext());
+        }
 
-            cursor.close();
+        cursor.close();
 
         return recipes;
     }
@@ -109,24 +109,24 @@ public class DatabaseManager {
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_RECIPES + " WHERE " + COLUMN_RECIPE_ID + " = ?", new String[]{String.valueOf(id)});
         RecipeDTO recipeDTO = null;
 
-            if (cursor.moveToFirst()) {
-                int idIndex = cursor.getColumnIndex(COLUMN_RECIPE_ID);
-                int titleIndex = cursor.getColumnIndex(COLUMN_RECIPE_TITLE);
-                int portionsmengeIndex = cursor.getColumnIndex(COLUMN_RECIPE_PORTIONSMENGE);
-                int dauerIndex = cursor.getColumnIndex(COLUMN_RECIPE_DAUER);
-                int istFavoritIndex = cursor.getColumnIndex(COLUMN_IS_FAVORITE);
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(COLUMN_RECIPE_ID);
+            int titleIndex = cursor.getColumnIndex(COLUMN_RECIPE_TITLE);
+            int portionsmengeIndex = cursor.getColumnIndex(COLUMN_RECIPE_PORTIONSMENGE);
+            int dauerIndex = cursor.getColumnIndex(COLUMN_RECIPE_DAUER);
+            int istFavoritIndex = cursor.getColumnIndex(COLUMN_IS_FAVORITE);
 
-                if (idIndex >= 0 && titleIndex >= 0 && portionsmengeIndex >= 0 && dauerIndex >= 0 && istFavoritIndex >= 0) {
-                    String title = cursor.getString(titleIndex);
-                    int portionsmenge = cursor.getInt(portionsmengeIndex);
-                    int dauer = cursor.getInt(dauerIndex);
-                    int istFavorit = cursor.getInt(istFavoritIndex);
+            if (idIndex >= 0 && titleIndex >= 0 && portionsmengeIndex >= 0 && dauerIndex >= 0 && istFavoritIndex >= 0) {
+                String title = cursor.getString(titleIndex);
+                int portionsmenge = cursor.getInt(portionsmengeIndex);
+                int dauer = cursor.getInt(dauerIndex);
+                int istFavorit = cursor.getInt(istFavoritIndex);
 
-                    recipeDTO = new RecipeDTO(id, title, portionsmenge, dauer, istFavorit);
-                }
+                recipeDTO = new RecipeDTO(id, title, portionsmenge, dauer, istFavorit);
             }
+        }
 
-            cursor.close();
+        cursor.close();
 
         return recipeDTO;
     }
@@ -135,23 +135,23 @@ public class DatabaseManager {
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_RECIPES + " WHERE " + COLUMN_RECIPE_TITLE + " = ?", new String[]{name});
         RecipeDTO recipeDTO = null;
 
-            if (cursor.moveToFirst()) {
-                int idIndex = cursor.getColumnIndex(COLUMN_RECIPE_ID);
-                int portionsmengeIndex = cursor.getColumnIndex(COLUMN_RECIPE_PORTIONSMENGE);
-                int dauerIndex = cursor.getColumnIndex(COLUMN_RECIPE_DAUER);
-                int istFavoritIndex = cursor.getColumnIndex(COLUMN_IS_FAVORITE);
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(COLUMN_RECIPE_ID);
+            int portionsmengeIndex = cursor.getColumnIndex(COLUMN_RECIPE_PORTIONSMENGE);
+            int dauerIndex = cursor.getColumnIndex(COLUMN_RECIPE_DAUER);
+            int istFavoritIndex = cursor.getColumnIndex(COLUMN_IS_FAVORITE);
 
-                if (idIndex >= 0 && portionsmengeIndex >= 0 && dauerIndex >= 0 && istFavoritIndex >= 0) {
-                    int id = cursor.getInt(idIndex);
-                    int portionsmenge = cursor.getInt(portionsmengeIndex);
-                    int dauer = cursor.getInt(dauerIndex);
-                    int istFavorit = cursor.getInt(istFavoritIndex);
+            if (idIndex >= 0 && portionsmengeIndex >= 0 && dauerIndex >= 0 && istFavoritIndex >= 0) {
+                int id = cursor.getInt(idIndex);
+                int portionsmenge = cursor.getInt(portionsmengeIndex);
+                int dauer = cursor.getInt(dauerIndex);
+                int istFavorit = cursor.getInt(istFavoritIndex);
 
-                    recipeDTO = new RecipeDTO(id, name, portionsmenge, dauer, istFavorit);
-                }
+                recipeDTO = new RecipeDTO(id, name, portionsmenge, dauer, istFavorit);
             }
+        }
 
-            cursor.close();
+        cursor.close();
 
         return recipeDTO;
     }
@@ -360,25 +360,25 @@ public class DatabaseManager {
         List<IngredientAmountDTO> ingredientAmounts = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENT_QUANTITY + " WHERE " + COLUMN_INGREDIENT_QUANTITY_RECIPE_ID + " = ?", new String[]{String.valueOf(recipeId)});
 
-            if (cursor.moveToFirst()) {
-                int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_ID);
-                int amountIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_AMOUNT);
-                int ingredientIdIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_INGREDIENT_ID);
-                int isOnShoppingListIndex = cursor.getColumnIndex(COLUMN_IS_ON_SHOPPING_LIST);
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_ID);
+            int amountIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_AMOUNT);
+            int ingredientIdIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_INGREDIENT_ID);
+            int isOnShoppingListIndex = cursor.getColumnIndex(COLUMN_IS_ON_SHOPPING_LIST);
 
-                while (!cursor.isAfterLast()) {
-                    if (idIndex >= 0 && amountIndex >= 0 && ingredientIdIndex >= 0 && isOnShoppingListIndex >= 0) {
-                        int id = cursor.getInt(idIndex);
-                        int amount = cursor.getInt(amountIndex);
-                        int ingredientId = cursor.getInt(ingredientIdIndex);
-                        int isOnShoppingList = cursor.getInt(isOnShoppingListIndex);
+            while (!cursor.isAfterLast()) {
+                if (idIndex >= 0 && amountIndex >= 0 && ingredientIdIndex >= 0 && isOnShoppingListIndex >= 0) {
+                    int id = cursor.getInt(idIndex);
+                    int amount = cursor.getInt(amountIndex);
+                    int ingredientId = cursor.getInt(ingredientIdIndex);
+                    int isOnShoppingList = cursor.getInt(isOnShoppingListIndex);
 
-                        IngredientAmountDTO ingredientAmountDTO = new IngredientAmountDTO(id, recipeId, ingredientId, amount, isOnShoppingList);
-                        ingredientAmounts.add(ingredientAmountDTO);
-                    }
-
-                    cursor.moveToNext();
+                    IngredientAmountDTO ingredientAmountDTO = new IngredientAmountDTO(id, recipeId, ingredientId, amount, isOnShoppingList);
+                    ingredientAmounts.add(ingredientAmountDTO);
                 }
+
+                cursor.moveToNext();
+            }
 
             cursor.close();
         }
@@ -441,24 +441,24 @@ public class DatabaseManager {
                 null
         );
 
-            if (cursor.moveToFirst()) {
-                int idIndex = cursor.getColumnIndex(COLUMN_STEP_ID);
-                int textIndex = cursor.getColumnIndex(COLUMN_STEP_TEXT);
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(COLUMN_STEP_ID);
+            int textIndex = cursor.getColumnIndex(COLUMN_STEP_TEXT);
 
-                while (!cursor.isAfterLast()) {
-                    if (idIndex >= 0 && textIndex >= 0) {
-                        int id = cursor.getInt(idIndex);
-                        String text = cursor.getString(textIndex);
+            while (!cursor.isAfterLast()) {
+                if (idIndex >= 0 && textIndex >= 0) {
+                    int id = cursor.getInt(idIndex);
+                    String text = cursor.getString(textIndex);
 
-                        StepDTO stepDTO = new StepDTO(id, text, recipeId);
-                        steps.add(stepDTO);
-                    }
-
-                    cursor.moveToNext();
+                    StepDTO stepDTO = new StepDTO(id, text, recipeId);
+                    steps.add(stepDTO);
                 }
-            }
 
-            cursor.close();
+                cursor.moveToNext();
+            }
+        }
+
+        cursor.close();
 
         return steps;
     }

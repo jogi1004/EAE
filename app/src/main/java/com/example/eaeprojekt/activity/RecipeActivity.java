@@ -1,8 +1,9 @@
 package com.example.eaeprojekt.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import com.example.eaeprojekt.R;
@@ -18,7 +19,12 @@ public class RecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
-        newRecipe = (FloatingActionButton) findViewById(R.id.newRecipe);
-        recipeLayout = (LinearLayout) findViewById(R.id.recipeLayout);
+        newRecipe = findViewById(R.id.newRecipe);
+        recipeLayout = findViewById(R.id.recipeLayout);
+
+        newRecipe.setOnClickListener(view -> {
+            Intent intent = new Intent(RecipeActivity.this, NewRecipeActivity.class);
+            startActivity(intent);
+        });
     }
 }
