@@ -1,6 +1,7 @@
-package com.example.eaeprojekt;
+package com.example.eaeprojekt.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,10 +13,21 @@ import android.widget.Button;
 
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.DatabaseManager;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+
+import com.example.eaeprojekt.IngredientDTO;
+import com.example.eaeprojekt.R;
+import com.example.eaeprojekt.database.DatabaseManager;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button but;
+    ConstraintLayout recipes;
+    ConstraintLayout shoppingBag;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,36 +55,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Optional: Schließe die Datenbankverbindung
         dbMan.close();
+
+        recipes = findViewById(R.id.recipes);
+        recipes.setOnClickListener(this);
+
+        shoppingBag = findViewById(R.id.shoppingBag);
+        shoppingBag.setOnClickListener(this);
     }
 
     public void logAllIngredients(DatabaseManager dbMan) {
-        // Hole alle Zutaten aus der Datenbank
-        Cursor cursor = dbMan.getAllIngredients();
+     List<IngredientDTO> ingredients = dbMan.getAllIngredients();
+     for (IngredientDTO ingredient : ingredients) {
+         Log.d("HSKL", "Name: " + ingredient.getName() + ", Einheit: " + ingredient.getUnit());
+     }
 
-        // Überprüfe, ob der Cursor Daten enthält
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                // Holen Sie sich die Zutatennamen und Einheiten aus dem Cursor
-                int nameIndex = cursor.getColumnIndex(DatabaseManager.COLUMN_INGREDIENT_NAME);
-                int unitIndex = cursor.getColumnIndex(DatabaseManager.COLUMN_INGREDIENT_UNIT);
-
-                if (nameIndex != -1 && unitIndex != -1) {
-                    String name = cursor.getString(nameIndex);
-                    String unit = cursor.getString(unitIndex);
-
-                    // Gib die Zutat als Log-Ausgabe aus
-                    Log.d("HSKL", "Name: " + name + ", Einheit: " + unit);
-                }
-            } while (cursor.moveToNext());
-
-            // Cursor schließen, nachdem er nicht mehr benötigt wird
-            cursor.close();
-        }
     }
 
     @Override
     public void onClick(View view) {
-        Intent intent = new Intent(this, NewRecipeActivity.class);
-        startActivity(intent);
+        if(view == recipes){
+            Intent recipeIntent = new Intent(this, RecipeActivity.class);
+            startActivity(recipeIntent);
+        }
+        if (view == shoppingBag){
+
+        }
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
     }
 }
