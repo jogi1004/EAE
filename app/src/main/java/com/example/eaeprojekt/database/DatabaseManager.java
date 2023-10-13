@@ -232,24 +232,24 @@ public class DatabaseManager {
         List<IngredientDTO> ingredients = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENTS, null);
 
-        if (cursor.moveToFirst()) {
-            do {
-                int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_ID);
-                int nameIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_NAME);
-                int unitIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_UNIT);
+            if (cursor.moveToFirst()) {
+                do {
+                    int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_ID);
+                    int nameIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_NAME);
+                    int unitIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_UNIT);
 
-                if (idIndex >= 0 && nameIndex >= 0 && unitIndex >= 0) {
-                    int id = cursor.getInt(idIndex);
-                    String name = cursor.getString(nameIndex);
-                    String unit = cursor.getString(unitIndex);
+                    if (idIndex >= 0 && nameIndex >= 0 && unitIndex >= 0) {
+                        int id = cursor.getInt(idIndex);
+                        String name = cursor.getString(nameIndex);
+                        String unit = cursor.getString(unitIndex);
 
-                    IngredientDTO ingredientDTO = new IngredientDTO(id, name, unit);
-                    ingredients.add(ingredientDTO);
-                }
-            } while (cursor.moveToNext());
-        }
+                        IngredientDTO ingredientDTO = new IngredientDTO(id, name, unit);
+                        ingredients.add(ingredientDTO);
+                    }
+                } while (cursor.moveToNext());
+            }
 
-        cursor.close();
+            cursor.close();
 
         return ingredients;
     }
