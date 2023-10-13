@@ -40,7 +40,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
         if(view == button_add_ingredients){
-
             PopupSteps popup = new PopupSteps();
             popup.showPopupWindow(view, this);
 

@@ -2,6 +2,7 @@ package com.example.eaeprojekt;
 
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -36,7 +37,6 @@ public class PopupSteps implements View.OnClickListener {
 
             //Set the location of the window on the screen
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-
 
             //Buttons
             buttonAdd = popupView.findViewById(R.id.add_button);
