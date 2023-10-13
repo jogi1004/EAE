@@ -1,4 +1,4 @@
-package com.example.eaeprojekt;
+package com.example.eaeprojekt.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -39,15 +39,13 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View view) {
-        if(view == button_add_ingredients){
+        if(view == button_add_steps){
             PopupSteps popup = new PopupSteps();
             popup.showPopupWindow(view, this);
 
             //background-dimming
             FrameLayout layout_MainMenu = (FrameLayout) findViewById( R.id.mainmenu);
-            layout_MainMenu.getForeground().setAlpha( 220);
-        }else {
-
+            layout_MainMenu.getForeground().setAlpha(220);
         }
     }
 }

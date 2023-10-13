@@ -2,7 +2,6 @@ package com.example.eaeprojekt;
 
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -10,17 +9,19 @@ import android.widget.PopupWindow;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.eaeprojekt.activity.NewRecipeActivity;
+
 public class PopupSteps implements View.OnClickListener {
 
 
     ConstraintLayout buttonAdd;
     ConstraintLayout buttonBack;
 
-    com.example.eaeprojekt.NewRecipeActivity mainActivity;
+    NewRecipeActivity mainActivity;
 
     PopupWindow popupWindow;
 
-    public void showPopupWindow(final View view, com.example.eaeprojekt.NewRecipeActivity newRecipeActivity) {
+    public void showPopupWindow(final View view, NewRecipeActivity newRecipeActivity) {
 
         mainActivity = newRecipeActivity;
 
