@@ -5,7 +5,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.example.eaeprojekt.R;
@@ -40,10 +39,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         List<Long> idds = new ArrayList<>();
         idds.add(dbMan.insertIngredientQuantity(-1, ids.get(0), 201, 1));
         idds.add(dbMan.insertIngredientQuantity(-1, ids.get(1), 350, 1));
-        for (long y : idds) {
-            Log.d("HSKL", "Neu: " + y);
-        }
-
 
         // Optional: Schließe die Datenbankverbindung
         dbMan.close();
