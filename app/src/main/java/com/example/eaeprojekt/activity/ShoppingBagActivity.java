@@ -1,7 +1,6 @@
 package com.example.eaeprojekt.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,11 +31,9 @@ public class ShoppingBagActivity extends AppCompatActivity {
         db = new DatabaseManager(this);
         db.open();
         List<IngredientAmountDTO> ingredientsOnShoppingList = db.getIngredientsOnShoppingList();
-        Log.d("HSKL", "DB Zugriff läuft");
 
 
         for (IngredientAmountDTO ingredientAmount : ingredientsOnShoppingList) {
-            Log.d("HSKL", "IngredientAmountId: " + ingredientAmount.getId());
 
             RelativeLayout ingredientAmountItem = new RelativeLayout(this);
             ingredientAmountItem.setLayoutParams(new RelativeLayout.LayoutParams(
@@ -45,16 +42,10 @@ public class ShoppingBagActivity extends AppCompatActivity {
             ));
 
             long ingredientId = ingredientAmount.getIngredientId();
-            Log.d("HSKL", "IngredientId: " + ingredientId);
             IngredientDTO ingredient = db.getIngredientById((int) ingredientId);
-            Log.d("HSKL", ingredient+"");
             String ingredientName = ingredient.getName();
-            Log.d("HSKL", "IngredientName: " + ingredientName);
             String ingredientUnit = ingredient.getUnit();
-            Log.d("HSKL", "IngredientUnit: " + ingredientUnit);
             double ingredientAmountAmount = ingredientAmount.getAmount();
-            Log.d("HSKL", "IngredientAmount: " + ingredientAmountAmount);
-            Log.d("HSKL", ingredientName+ingredientUnit+ingredientAmountAmount);
 
             // Erstellen und Konfigurieren Sie das Anzeige-TextView für das Zutatennamen.
             TextView ingredientNameTextView = new TextView(this);

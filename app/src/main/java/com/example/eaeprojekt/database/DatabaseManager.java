@@ -222,10 +222,19 @@ public class DatabaseManager {
     // CRUD-Operationen für Zutaten
 
     public long insertIngredient(String name, String unit) {
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_INGREDIENT_NAME, name);
-        values.put(COLUMN_INGREDIENT_UNIT, unit);
-        return database.insert(TABLE_INGREDIENTS, null, values);
+        // Überprüfen, ob die Zutat bereits vorhanden ist
+        List<IngredientDTO> existingIngredients = getIngredientsByName(name);
+
+        for (IngredientDTO ingredient : existingIngredients) {
+            if (ingredient != null && ingredient.getUnit().equals(unit)) {
+                // Die Zutat ist bereits vorhanden, wir geben die ID der vorhandenen Zutat zurück
+                return ingredient.getId();
+            }
+        }
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_INGREDIENT_NAME, name);
+                values.put(COLUMN_INGREDIENT_UNIT, unit);
+                return database.insert(TABLE_INGREDIENTS, null, values);
     }
 
     public List<IngredientDTO> getAllIngredients() {
@@ -276,7 +285,7 @@ public class DatabaseManager {
     }
 
 
-/*    public List<IngredientDTO> getIngredientsByName(String name) {
+    public List<IngredientDTO> getIngredientsByName(String name) {
         List<IngredientDTO> result = new ArrayList<>();
 
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENTS + " WHERE " + COLUMN_INGREDIENT_NAME + " = ?", new String[]{name});
@@ -290,19 +299,14 @@ public class DatabaseManager {
                 int ingredientId = cursor.getInt(idIndex);
                 String ingredientName = cursor.getString(nameIndex);
                 String unit = cursor.getString(unitIndex);
-
                 IngredientDTO ingredientDTO = new IngredientDTO(ingredientId, ingredientName, unit);
                 result.add(ingredientDTO);
             } while (cursor.moveToNext());
         }
 
         cursor.close();
-
         return result;
-    }*/
-
-
-
+    }
 
 
     public int updateIngredient(long ingredientId, String newName, String newUnit) {
