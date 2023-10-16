@@ -13,8 +13,13 @@
         android:theme="@style/Theme.EAEProjekt"
         tools:targetApi="31">
         <activity
+            android:name=".activity.NewRecipeActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.RecipeActivity"
-            android:exported="false"/>
+            android:exported="false" />
+        <activity android:name=".activity.ShoppingBagActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.MainActivity"
             android:exported="true">

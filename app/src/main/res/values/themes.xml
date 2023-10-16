@@ -2,9 +2,9 @@
     <!-- Base application theme. -->
     <attr name="buttonCornerRadius" format="dimension" />
     <style name="Base.Theme.EAEProjekt" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name ="colorPrimary">#FFEFB6</item>
-        <item name ="colorSecondary">#D9D9D9</item>
-        <!-- EInstellung für ganze App das Buttons einen Corner Radius haben -->
+        <item name ="colorPrimary">#FFECAF</item>
+        <item name ="colorSecondary">#4D713D</item>
+        <!-- Einstellung für ganze App das Buttons einene Corner Radius haben -->
         <item name="buttonCornerRadius">20dp</item>
 
 

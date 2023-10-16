@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_recipes"
+    tools:context=".activity.ShoppingBagActivity">
+
+    <ImageView
+        android:id="@+id/shoppingBagImageView"
+        android:layout_width="107dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/burger_andre" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/newShoppingBagEntry"
+        android:layout_width="63dp"
+        android:layout_height="57dp"
+        android:layout_marginEnd="20dp"
+        android:clickable="true"
+        app:backgroundTint="#FDBC6C"
+        app:layout_constraintBottom_toBottomOf="@id/shoppingBagImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_add"
+        android:contentDescription="TODO" />
+
+    <TextView
+        android:id="@+id/shoppingBagTextView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Deine Einkaufsliste"
+        app:layout_constraintBottom_toBottomOf="@id/shoppingBagImageView"
+        app:layout_constraintEnd_toStartOf="@id/newShoppingBagEntry"
+        app:layout_constraintStart_toEndOf="@id/shoppingBagImageView"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"
+        android:textColor="#61380B"
+        android:textSize="20sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shoppingBagTextView4">
+
+        <LinearLayout
+            android:id="@+id/shoppingBagLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

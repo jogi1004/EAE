@@ -16,15 +16,17 @@ import android.widget.TextView;
 
 import com.example.eaeprojekt.IngredientDTO;
 import com.example.eaeprojekt.R;
+import com.example.eaeprojekt.activity.RecipeActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     ImageButton recipe;
-    ImageButton shopping;
+    ImageButton shoppingBag;
     ImageButton addRecipe;
     BottomNavigationView b;
 
@@ -43,12 +45,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String zutatName2 = "Milch";
         String zutatEinheit1 = "g";
         String zutatEinheit2 = "ml";
-        dbMan.insertIngredient(zutatName1, zutatEinheit1);
-        dbMan.insertIngredient(zutatName2, zutatEinheit2);
-        dbMan.insertRecipe("Pizza", 4, "30", 1);
-        dbMan.insertRecipe("Pasta", 2, "60", 0);
-        logAllIngredients(dbMan);
-
+        // Datenbank löschen
+        //deleteDatabase(DatabaseManager.DATABASE_NAME);
+        List<Long> ids = new ArrayList<>();
+        ids.add(dbMan.insertIngredient(zutatName1, zutatEinheit1));
+        ids.add(dbMan.insertIngredient(zutatName2, zutatEinheit2));
+        List<Long> idds = new ArrayList<>();
+        idds.add(dbMan.insertIngredientQuantity(-1, ids.get(0), 201, 1));
+        idds.add(dbMan.insertIngredientQuantity(-1, ids.get(1), 350, 1));
 
         // Optional: Schließe die Datenbankverbindung
         dbMan.close();
@@ -82,11 +86,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(recipeIntent);
             finish();
         }
-        if (view == shopping) {
-            //Öffnen der Einkaufsliste
-        }
         if (view == addRecipe) {
             //Öffnen der Hinzufügen Activity
+        }
+        if (view == shoppingBag) {
+            Intent shoppingBagIntent = new Intent(this, ShoppingBagActivity.class);
+            startActivity(shoppingBagIntent);
         }
 
     }
@@ -108,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
              **/
             Intent i = new Intent(this, RecipeActivity.class);
             startActivity(i);
-            return true;
         }
         if (id == R.id.shoppingBagButtonNavBar) {
             //Öffnen der Einkaufsliste

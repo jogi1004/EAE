@@ -4,13 +4,8 @@
 
     <!-- shape property for the view based on the value particular view would be drawn -->
     <corners
-        android:radius="30dp" />
-    <stroke android:width="1.5dp"
-        android:color="@color/black" />
+        android:radius="100dp" />
     <solid android:color="#EEC131"/>
 
-    <size
-        android:height="40dp"
-        android:width="40dp" />
 
 </shape>
