@@ -2,4 +2,17 @@
     <string name="app_name">EAEProjekt</string>
     <string name="RecipeButtonText">Rezeptliste</string>
     <string name="ShoppingListButtonText">Einkaufsliste</string>
+    <string name="recipeButton">Rezeptliste</string>
+    <string name="shoppingBag">Einkaufsliste</string>
+    <string name="ImageViewDescription">Logo der App, ein Burger mit Augen</string>
+    <string name="titleBelowLogo">Save all of your recipes in one space</string>
+    <string name="header">Cook It</string>
+    <string name="welcomeBackTxt">Willkommen zurück!</string>
+    <string name="addButtonDescription">Kleines Plus Icon zum hinzufügen von Rezepten.</string>
+    <string name="AddSymbolDescription">Plus Zeichen in der unteren Mitte des Bildschirms zum Hinzufügen von neuen Rezepten.</string>
+    <string name="shoppinglist">Einkaufsliste</string>
+    <string name="recipelist">Rezepteliste</string>
+    <string name="BannerTextRecipeList">Deine Rezepteliste</string>
+    <string name="TestRecipeName">TestRezept</string>
+    <string name="recipeDescription">Button um ein Rezept zu öffnen</string>
 </resources>

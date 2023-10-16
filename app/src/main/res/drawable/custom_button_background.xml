@@ -3,7 +3,7 @@
     android:shape="rectangle">
 
     <!-- Hintergrundfarbe des Buttons -->
-    <solid android:background="#D9D9D9" />
+    <solid android:background="#EEC131" />
 
     <!-- Radius für die Ecken des Buttons (verwendet das benutzerdefinierte Attribut) -->
     <corners android:radius="?attr/buttonCornerRadius" />
@@ -11,5 +11,5 @@
     <!-- Optional: Füge einen Rand hinzu -->
     <stroke
         android:width="2dp"
-        android:color="#D9D9D9" />
+        android:color="#EEC131" />
 </shape>
