@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">EAEProjekt</string>
-    <string name="RecipeButtonText">Rezeptliste</string>
-    <string name="ShoppingListButtonText">Einkaufsliste</string>
     <string name="recipeButton">Rezeptliste</string>
     <string name="shoppingBag">Einkaufsliste</string>
     <string name="ImageViewDescription">Logo der App, ein Burger mit Augen</string>
@@ -17,4 +15,18 @@
     <string name="recipeDescription">Button um ein Rezept zu öffnen</string>
     <string name="favoritesSwitch">nur Favoriten anzeigen&#32;</string>
     <string name="recipeDetails">%1$s Portionen | Dauer: %2$s</string> <!--TODO-->
+    <string-array name="portionsmenge">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
 </resources>
