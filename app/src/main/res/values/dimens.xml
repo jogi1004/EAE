@@ -5,4 +5,5 @@
     <dimen name="oval_size_height">180dp</dimen>
     <dimen name="margin_20dp">20dp</dimen>
     <dimen name="icon_size">16dp</dimen>
+    <dimen name="margin_70dp">70dp</dimen>
 </resources>
