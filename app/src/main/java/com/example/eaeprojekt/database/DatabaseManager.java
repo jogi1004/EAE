@@ -181,26 +181,8 @@ public class DatabaseManager {
 
     public List<RecipeDTO> getFavoritenRezepte() {
         List<RecipeDTO> favoriten = new ArrayList<>();
-        String[] projection = {
-                COLUMN_RECIPE_ID,
-                COLUMN_RECIPE_TITLE,
-                COLUMN_RECIPE_PORTIONSMENGE,
-                COLUMN_RECIPE_DAUER,
-                COLUMN_IS_FAVORITE
-        };
-        String selection = COLUMN_IS_FAVORITE + " = ?";
-        String[] selectionArgs = { "1" };
 
-        Cursor cursor = database.query(
-                TABLE_RECIPES,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
-
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_RECIPES + " WHERE " + COLUMN_IS_FAVORITE + " = 1", new String[]{});
         if (cursor.moveToFirst()) {
             do {
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RECIPE_ID));

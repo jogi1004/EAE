@@ -15,4 +15,6 @@
     <string name="BannerTextRecipeList">Deine Rezepteliste</string>
     <string name="TestRecipeName">TestRezept</string>
     <string name="recipeDescription">Button um ein Rezept zu öffnen</string>
+    <string name="favoritesSwitch">nur Favoriten anzeigen&#32;</string>
+    <string name="recipeDetails">%1$s Portionen | Dauer: %2$s</string> <!--TODO-->
 </resources>
