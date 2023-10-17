@@ -3,7 +3,8 @@
     <attr name="buttonCornerRadius" format="dimension" />
     <style name="Base.Theme.EAEProjekt" parent="Theme.Material3.DayNight.NoActionBar">
         <item name ="colorPrimary">#FFECAF</item>
-        <item name ="colorSecondary">#4D713D</item>
+        <item name ="colorSecondary">#EEC131</item>
+        <item name="colorAccent">#4D713D</item>
         <!-- Einstellung für ganze App das Buttons einene Corner Radius haben -->
         <item name="buttonCornerRadius">20dp</item>
 

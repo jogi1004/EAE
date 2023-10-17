@@ -60,14 +60,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         b = findViewById(R.id.bottomNavView);
         b.setSelectedItemId(R.id.AddButtonNavBar);
         b.setOnItemSelectedListener(this::onNavigationItemSelected);
-        //Verknüpfen der ImageButtons die in der XML eine ID erhalten haben
-        //recipe = findViewById(R.id.recipeListButtonNavBar);
-        //shopping = findViewById(R.id.shoppingBagButtonNavBar);
-        //addRecipe = findViewById(R.id.AddButtonNavBar);
-        //On Click Listener Hinzufügen um das antippen erkennen zu könnens
-        //recipe.setOnClickListener(this);
-        //shopping.setOnClickListener(this);
-        //addRecipe.setOnClickListener(this);
 
     }
 
@@ -104,6 +96,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.AddButtonNavBar) {
+            Intent i = new Intent(this, NewRecipeActivity.class);
+            startActivity(i);
             //Öffne ADDActivity
         }
         if (id == R.id.recipeListButtonNavBar) {
@@ -116,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if (id == R.id.shoppingBagButtonNavBar) {
             //Öffnen der Einkaufsliste
+            Intent i = new Intent(this, ShoppingBagActivity.class);
+            startActivity(i);
 
         }
         return false;
