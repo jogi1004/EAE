@@ -40,12 +40,12 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/welcomeBackTxt"
-        android:layout_marginStart="25sp"
+        android:text="@string/RecipeTxt"
+        android:layout_marginEnd="8sp"
         android:layout_marginTop="85sp"
         android:textStyle="bold"
         android:textColor="@color/fontColor"
-        android:textSize="20sp"/>
+        android:textSize="18sp"/>
 
    </LinearLayout>
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -90,59 +90,6 @@ public class RecipeActivity extends AppCompatActivity {
             recipeDetails.setTextSize(16);
 
 
-            //Erstellen des Hintergrunds für die einzelnen Rezepte
-           /** int backgroundWidth = recipeLayout.getWidth() -10;
-            int backgroundHeight = 100;
-            RelativeLayout background = new RelativeLayout(this);
-            background.setLayoutParams(new ViewGroup.LayoutParams(backgroundWidth,backgroundHeight));
-            background.setBackgroundColor(R.color.buttonGrey);
-**/
-// Erstellen einer ImageView.
-            /**
-             * int roundImageViewWidth = 100;
-             *             int roundImageViewHeight = 1000;
-             *             ImageView imageView = new ImageView(this);
-             *             imageView.setImageResource(R.color.backgroundGreen); // Bild für die ImageView
-             *             imageView.setId(View.generateViewId()); // ID für die View festlegen
-             *             imageView.setLayoutParams(new RelativeLayout.LayoutParams(roundImageViewWidth, roundImageViewHeight));
-             *             imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE); // Skalieren
-             */
-
-
-// Erstellen Sie ein ImageView für das Rezeptbild und setzen Sie die Größe.
-            /**ImageView recipeImage = new ImageView(this);
-            recipeImage.setImageResource(R.drawable.burger_andre);
-            RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(
-                    200, // Breite des Bildes
-                    RelativeLayout.LayoutParams.MATCH_PARENT // Höhe auf MATCH_PARENT setzen
-            );
-            imageParams.addRule(RelativeLayout.RIGHT_OF, ovalBackground.getId()); // Das Bild rechts vom Oval platzieren
-            recipeImage.setLayoutParams(imageParams);
-**/
-// Erstellen Sie ein LinearLayout für die Daten.
-            /** LinearLayout dataLayout = new LinearLayout(this);
-            dataLayout.setOrientation(LinearLayout.VERTICAL);
-            RelativeLayout.LayoutParams dataParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            );
-            dataParams.addRule(RelativeLayout.RIGHT_OF, imageView.getId()); // Daten rechts vom Bild platzieren
-            dataParams.addRule(RelativeLayout.ALIGN_TOP, imageView.getId()); // Daten oben mit dem Bild ausrichten
-            dataLayout.setLayoutParams(dataParams);
-            int marginInDp = (int) getResources().getDimension(R.dimen.margin_20dp);
-            dataLayout.setPadding(marginInDp, 0, marginInDp, 0); // Rechts und links Abstand von 20dp
-
-// Erstellen Sie einen Text für den Rezeptnamen.
-            TextView recipeName = new TextView(this);
-            recipeName.setText(recipe.getTitle());
-            recipeName.setTextSize(25);
-            recipeName.setTypeface(null, Typeface.BOLD); // Fettschrift hinzufügen
-
-// Erstellen Sie einen Text für Dauer und Anzahl der Personen.
-            TextView recipeDetails = new TextView(this);
-            recipeDetails.setText("Portionen: " + recipe.getPortions() + " | Dauer: " + recipe.getDuration());
-            recipeDetails.setTextSize(16);
-             **/
 
 // Die Reihenfolge der Hinzufügung ändern, damit der Hintergrund zuerst angezeigt wird.
             recipeItem.addView(bg);
