@@ -1,13 +1,20 @@
 package com.example.eaeprojekt.activity;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,39 +23,61 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.PopupSteps;
+import com.example.eaeprojekt.StepDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
+
+import java.util.List;
 
 
 public class NewRecipeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     Toolbar toolbar;
+    ImageView backButton;
     ConstraintLayout button_add_ingredients;
     ConstraintLayout button_add_steps;
     ConstraintLayout button_add_recipe;
+    ConstraintLayout button_cancel;
     DatabaseManager db;
     EditText title;
     EditText time;
     Spinner spinner_portionsmenge;
     int portionsmenge;
 
+    public static long newRecipeId;
+    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_recipe);
 
-        //initialisierung der View
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //datenbankzugriff
+        db = new DatabaseManager(this);
+        db.open();
 
+        //Neues Rezept erstellen mit keinen Inhalten (wird gelöscht, falls vorgang abgebrochen wird)
+        newRecipeId = db.insertRecipe("", 1,"", 0);
+
+        //ZurückButton behandeln
+        backButton = (ImageView) findViewById(R.id.backButton);
+        backButton.setOnClickListener(this);
+
+
+        //Buttons zum Rezept behandeln
         button_add_ingredients = (ConstraintLayout) findViewById(R.id.button_add_ingredients);
         button_add_ingredients.setOnClickListener(this);
 
         button_add_steps = (ConstraintLayout) findViewById(R.id.button_add_steps);
         button_add_steps.setOnClickListener(this);
 
+
         button_add_recipe = (ConstraintLayout) findViewById(R.id.button_add_recipe);
         button_add_recipe.setOnClickListener(this);
 
+        button_cancel = (ConstraintLayout) findViewById(R.id.button_cancel);
+        button_cancel.setOnClickListener(this);
+
+        //Layout zum dimmen
         FrameLayout layout_MainMenu = (FrameLayout) findViewById( R.id.mainmenu);
         layout_MainMenu.getForeground().setAlpha( 0);
 
@@ -63,7 +92,46 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         spinner_portionsmenge.setAdapter(adapter);
         spinner_portionsmenge.setOnItemSelectedListener(this);
 
+
+
+
         //schrittbeschreibungen in der view hinzufügen
+        Log.d("recreate", "" + (int) newRecipeId);
+        List<StepDTO> stepss = db.getAllStepsForRecipe((int) newRecipeId);
+
+        for(StepDTO step: stepss) {
+
+            Log.d("recreate", "" + step.getText());
+
+            ConstraintLayout layout = new ConstraintLayout(this);
+
+            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
+                    ConstraintLayout.LayoutParams.MATCH_PARENT,
+                    ConstraintLayout.LayoutParams.WRAP_CONTENT
+            );
+            layout.setBackgroundResource(R.drawable.background_with_rounded_corners_green);
+            layout.setPadding(20, 20, 20, 20);
+            layout.setLayoutParams(layoutParams);
+            layoutParams.setMargins(40, 10, 40, 10);
+
+            TextView stepDescriptionText = new TextView(this);
+            stepDescriptionText.setText(step.getText());
+            stepDescriptionText.setGravity(Gravity.CENTER);
+            stepDescriptionText.setTextColor(Color.parseColor("#FFFFFF"));
+
+            ViewGroup.LayoutParams textViewParams = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, // Set the width as needed
+                    ViewGroup.LayoutParams.MATCH_PARENT  // Set the height as needed
+            );
+            stepDescriptionText.setLayoutParams(textViewParams);
+
+            layout.addView(stepDescriptionText);
+
+            LinearLayout parentLayout = findViewById(R.id.stepsLayout);
+            parentLayout.addView(layout);
+
+        }
+
 
     }
 
@@ -76,6 +144,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             //background-dimming
             FrameLayout layout_MainMenu = (FrameLayout) findViewById( R.id.mainmenu);
             layout_MainMenu.getForeground().setAlpha(220);
+
         } else if (view == button_add_recipe) {
 
         //neuen Eintrag in db (newRecipe)
@@ -83,11 +152,26 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             //datenbankzugriff
             db = new DatabaseManager(this);
             db.open();
+            //Rezepteinträge aktuallisieren
+            db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, time.getText().toString(), 0);
+            db.close();
 
-            db.insertRecipe(title.getText().toString(), portionsmenge, time.getText().toString(), 0);
-            Log.d("NewRecipe", "Rezept erstellt " + title.getText().toString() + " " +
-                    portionsmenge + " " + time.getText().toString());
+        } else if (view == backButton || view == button_cancel) {
+            Intent intent = new Intent(this, RecipeActivity.class);
+            startActivity(intent);
 
+            db = new DatabaseManager(this);
+            db.open();
+
+            db.deleteRecipe(newRecipeId);
+
+            /*
+            List <StepDTO> stepsToDelete = db.getAllStepsForRecipe(-1);
+            for(StepDTO step : stepsToDelete) {
+                db.deleteStep(step.getId());
+            }
+*/
+            db.close();
         }
 
     }

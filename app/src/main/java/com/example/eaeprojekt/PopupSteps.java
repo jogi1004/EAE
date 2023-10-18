@@ -1,10 +1,12 @@
 package com.example.eaeprojekt;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -13,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.eaeprojekt.activity.NewRecipeActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
@@ -82,31 +85,42 @@ public class PopupSteps implements View.OnClickListener {
 
             EditText stepDescription = (EditText) view.findViewById(R.id.step_description);
 
-            db.insertStep(-1, stepDescription.getText().toString());
+            db.insertStep(NewRecipeActivity.newRecipeId, stepDescription.getText().toString());
 
             frame.getForeground().setAlpha(0);
             popupWindow.dismiss();
 
 
-
             //schrittbeschreibung in der view hinzufügen
 
-            RelativeLayout layout = new RelativeLayout(context);
+            ConstraintLayout layout = new ConstraintLayout(context);
 
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
+            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
+                    ConstraintLayout.LayoutParams.MATCH_PARENT,
+                    ConstraintLayout.LayoutParams.WRAP_CONTENT
             );
-
+            layout.setBackgroundResource(R.drawable.background_with_rounded_corners_green);
+            layout.setPadding(20,20,20,20);
             layout.setLayoutParams(layoutParams);
+            layoutParams.setMargins(40, 10, 40, 10);
 
-            TextView stepDiscriptionText = new TextView(context);
-            stepDiscriptionText.setText(stepDescription.getText().toString());
+            TextView stepDescriptionText = new TextView(context);
+            stepDescriptionText.setText(stepDescription.getText().toString());
+            stepDescriptionText.setGravity(Gravity.CENTER);
+            stepDescriptionText.setTextColor(Color.parseColor("#FFFFFF"));
 
-            layout.addView(stepDiscriptionText);
+            ViewGroup.LayoutParams textViewParams = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, // Set the width as needed
+                    ViewGroup.LayoutParams.MATCH_PARENT  // Set the height as needed
+            );
+            stepDescriptionText.setLayoutParams(textViewParams);
+
+            layout.addView(stepDescriptionText);
 
             LinearLayout parentLayout = mainActivity.findViewById(R.id.stepsLayout);
             parentLayout.addView(layout);
+
+            db.close();
 
         }
     }

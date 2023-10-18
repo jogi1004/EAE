@@ -479,6 +479,17 @@ public class DatabaseManager {
         );
     }
 
+    public int updateStepRecipeId(long stepId, long recipeId) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_RECIPE_ID, recipeId);
+        return database.update(
+                TABLE_STEPS,
+                values,
+                COLUMN_STEP_ID + " = ?",
+                new String[]{String.valueOf(stepId)}
+        );
+    }
+
     public int deleteStep(long stepId) {
         return database.delete(
                 TABLE_STEPS,
