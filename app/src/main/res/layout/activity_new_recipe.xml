@@ -18,8 +18,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:alpha="0"/> <!-- Später noch löschen -->
+        app:layout_constraintTop_toTopOf="parent" /> <!-- Später noch löschen -->
 
 
         <androidx.appcompat.widget.Toolbar
@@ -153,6 +152,7 @@
                         android:layout_marginStart="60dp"
                         android:background="@drawable/background_edit_text"
                         android:contentDescription="Feld für den Titel"
+                        android:textAlignment="center"
                         app:layout_constraintBottom_toBottomOf="@+id/title"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -178,6 +178,7 @@
                         android:background="@drawable/background_edit_text"
                         android:contentDescription="Feld für den Dauer"
                         android:inputType="number"
+                        android:textAlignment="center"
                         app:layout_constraintBottom_toBottomOf="@+id/time"
                         app:layout_constraintStart_toStartOf="@+id/title_text"
                         app:layout_constraintTop_toTopOf="@+id/time" />

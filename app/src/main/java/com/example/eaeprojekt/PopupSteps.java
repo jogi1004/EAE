@@ -1,8 +1,6 @@
 package com.example.eaeprojekt;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +10,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.DrawableRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
@@ -32,14 +28,6 @@ public class PopupSteps implements View.OnClickListener {
     View view;
     PopupWindow popupWindow;
     FrameLayout frame;
-    ConstraintLayout layoutAddStep;
-
-    private Context context;
-
-    public PopupSteps(Context context) {
-        this.context = context;
-    }
-
 
     public void showPopupWindow(final View view, NewRecipeActivity newRecipeActivity) {
 
@@ -64,7 +52,7 @@ public class PopupSteps implements View.OnClickListener {
             buttonAdd = popupView.findViewById(R.id.add_button);
             buttonAdd.setOnClickListener(this);
 
-            buttonBack = popupView.findViewById(R.id.cancel_button);
+            buttonBack = popupView.findViewById(R.id.cancel_button_ingredient);
             buttonBack.setOnClickListener(this);
 
         }
@@ -82,7 +70,7 @@ public class PopupSteps implements View.OnClickListener {
         } else if (viewClick == buttonAdd) {
 
             //datenbankzugriff
-            db = new DatabaseManager(context);
+            db = new DatabaseManager(mainActivity);
             db.open();
 
             EditText stepDescription = (EditText) view.findViewById(R.id.step_description);
@@ -95,7 +83,7 @@ public class PopupSteps implements View.OnClickListener {
 
             //schrittbeschreibung in der view hinzufügen
 
-            ConstraintLayout layout = new ConstraintLayout(context);
+            ConstraintLayout layout = new ConstraintLayout(mainActivity);
 
             ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
                     ConstraintLayout.LayoutParams.MATCH_PARENT,
@@ -107,7 +95,7 @@ public class PopupSteps implements View.OnClickListener {
             layoutParams.setMargins(40, 10, 40, 10);
 
             // Text der Schrittbeschreibung
-            TextView stepDescriptionText = new TextView(context);
+            TextView stepDescriptionText = new TextView(mainActivity);
             stepDescriptionText.setId(View.generateViewId());
             stepDescriptionText.setText(stepDescription.getText().toString());
             stepDescriptionText.setGravity(Gravity.CENTER);
@@ -122,7 +110,7 @@ public class PopupSteps implements View.OnClickListener {
             layout.addView(stepDescriptionText);
 
             //Mülleimer
-            ImageView trash = new ImageView(context);
+            ImageView trash = new ImageView(mainActivity);
             trash.setImageResource(R.drawable.light_trash_can);
             trash.setId(View.generateViewId());
 
