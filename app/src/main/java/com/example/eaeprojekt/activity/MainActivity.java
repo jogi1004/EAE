@@ -1,7 +1,6 @@
 package com.example.eaeprojekt.activity;
 
-import static com.example.eaeprojekt.R.id.AddButtonNavBar;
-import static com.example.eaeprojekt.R.id.recipeListButtonNavBar;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,24 +9,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.example.eaeprojekt.IngredientDTO;
 import com.example.eaeprojekt.R;
-import com.example.eaeprojekt.activity.RecipeActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+/**
+ * MainActivity gets started when the App Icon is pressed. It represents the Home Menu with the Navigation Bar at the Bottom.
+ * If the Icons in the NavBar get pressed the Activity behind it gets started.
+ */
+public class MainActivity extends AppCompatActivity {
 
-    ImageButton recipe;
-    ImageButton shoppingBag;
-    ImageButton addRecipe;
     BottomNavigationView b;
 
     @SuppressLint("NonConstantResourceId")
@@ -74,27 +70,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View view) {
-        if (view == recipe) {
-            Intent recipeIntent = new Intent(this, RecipeActivity.class);
-            startActivity(recipeIntent);
-            finish();
-        }
-        if (view == addRecipe) {
-            //Öffnen der Hinzufügen Activity
-        }
-        if (view == shoppingBag) {
-            Intent shoppingBagIntent = new Intent(this, ShoppingBagActivity.class);
-            startActivity(shoppingBagIntent);
-        }
-
-    }
-
-    @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
     }
 
+    /**
+     * Method to get the Item in the NavBar and start the Activity.
+     * @param item is the Menu Item in which the Buttons for the Bar get declarated
+     * @return boolean true or false if pressed or not
+     */
     private boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.AddButtonNavBar) {

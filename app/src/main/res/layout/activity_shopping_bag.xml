@@ -1,81 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".activity.ShoppingBagActivity">
+    tools:context=".activity.RecipeActivity">
 
-    <ImageView
-        android:id="@+id/shoppingBagImageView"
-        android:layout_width="107dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="30dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/burger_andre" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/newShoppingBagEntry"
-        android:layout_width="63dp"
-        android:layout_height="57dp"
-        android:layout_marginEnd="20dp"
-        android:clickable="true"
-        app:backgroundTint="#FDBC6C"
-        app:layout_constraintBottom_toBottomOf="@id/shoppingBagImageView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_add"
-        android:contentDescription="TODO" />
-
-    <TextView
-        android:id="@+id/shoppingBagTextView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Deine Einkaufsliste"
-        app:layout_constraintBottom_toBottomOf="@id/shoppingBagImageView"
-        app:layout_constraintEnd_toStartOf="@id/newShoppingBagEntry"
-        app:layout_constraintStart_toEndOf="@id/shoppingBagImageView"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textStyle="bold"
-        android:textColor="#61380B"
-        android:textSize="20sp" />
-
-    <ScrollView
-        android:id="@+id/ScrollViewShopping"
+    <RelativeLayout
+        android:id="@+id/WelcomeLinearLayoutRecipes"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="80dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@id/bottomNavView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/shoppingBagTextView4">
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/shoppingBagLayout"
+        <TextView
+            android:id="@+id/BannerShopping"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView">
+            android:layout_height="35sp"
+            android:text="@string/BannerTxtShopping"
+            android:background="@color/backgroundGreen"
+            android:textColor="@color/white"
+            android:layout_marginTop="10sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:gravity="center"/>
 
-        </LinearLayout>
-    </ScrollView>
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="107dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="60sp"
+            android:layout_marginStart="10sp"
+            app:srcCompat="@drawable/burger_andre"
+            android:contentDescription="@string/ImageViewDescription"/>
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/NeedToBuy"
+            android:layout_below="@id/BannerShopping"
+            android:layout_marginTop="20sp"
+            android:layout_toEndOf="@id/imageView"
+            android:textStyle="bold"
+            android:textColor="@color/fontColor"
+            android:textSize="18sp"/>
+
+        <ImageButton
+            android:id="@+id/addButtonShoppingBag"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="100sp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20sp"
+            android:contentDescription="@string/AddSymbolDescription"
+            android:scaleType="fitCenter"
+            android:src="@drawable/add_symbol"
+            android:background="@color/background"/>
+
+        <ImageButton
+            android:id="@+id/deleteAllButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="100sp"
+            android:layout_toStartOf="@id/addButtonShoppingBag"
+            android:layout_marginEnd="20sp"
+            android:contentDescription="@string/AddSymbolDescription"
+            android:scaleType="fitCenter"
+            android:src="@drawable/trash_can"
+            android:background="@color/background"/>
+
+    </RelativeLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0sp"
+        android:layout_above="@id/bottomNavView"
+        android:layout_below="@id/WelcomeLinearLayoutRecipes">
+        <ScrollView
+            android:id="@+id/ScrollViewRecipes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
+
+            <LinearLayout
+                android:id="@+id/shoppingLayoutinScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+
+
+            </LinearLayout>
+
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/backgroundGreen"
+        app:menu="@menu/bottom_nav_bar"
         android:layout_gravity="bottom"
-        android:background="@color/darkerYellow"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_nav_bar"></com.google.android.material.bottomnavigation.BottomNavigationView>
+        android:layout_alignParentBottom="true">
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
