@@ -517,8 +517,6 @@ public class DatabaseManager {
                     ")";
             db.execSQL(createIngredientQuantityTableQuery);
 
-
-
             // Tabelle für Schritte in Rezepten erstellen
             String createStepsTableQuery = "CREATE TABLE " + TABLE_STEPS + " (" +
                     COLUMN_STEP_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +

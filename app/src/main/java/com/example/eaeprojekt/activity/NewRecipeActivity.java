@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -23,6 +22,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.PopupSteps;
+import com.example.eaeprojekt.RecipeDTO;
 import com.example.eaeprojekt.StepDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
 
@@ -44,7 +44,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     int portionsmenge;
 
     public static long newRecipeId;
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,20 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         db.open();
 
         //Neues Rezept erstellen mit keinen Inhalten (wird gelöscht, falls vorgang abgebrochen wird)
-        newRecipeId = db.insertRecipe("", 1,"", 0);
+        List<RecipeDTO> alleRezepte = db.getAllRecipes();
+
+        boolean foundRecipe = false;
+        for(RecipeDTO recipe : alleRezepte) {
+            if (recipe.getIsFavorite() == -1) {
+                foundRecipe = true;
+                newRecipeId = recipe.getId();
+                break;
+            }
+        }
+
+        if(!foundRecipe) {
+            newRecipeId = db.insertRecipe("", 1, "", -1);
+        }
 
         //ZurückButton behandeln
         backButton = (ImageView) findViewById(R.id.backButton);
@@ -96,7 +109,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
 
         //schrittbeschreibungen in der view hinzufügen
-        Log.d("recreate", "" + (int) newRecipeId);
+        Log.d("recreate", "das kann ja nicht sein" + (int) newRecipeId);
         List<StepDTO> stepss = db.getAllStepsForRecipe((int) newRecipeId);
 
         for(StepDTO step: stepss) {
@@ -147,14 +160,17 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
         } else if (view == button_add_recipe) {
 
-        //neuen Eintrag in db (newRecipe)
-
             //datenbankzugriff
             db = new DatabaseManager(this);
             db.open();
             //Rezepteinträge aktuallisieren
             db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, time.getText().toString(), 0);
             db.close();
+
+            Intent intent = new Intent(this, RecipeActivity.class);
+            startActivity(intent);
+
+            finish();
 
         } else if (view == backButton || view == button_cancel) {
             Intent intent = new Intent(this, RecipeActivity.class);
@@ -172,6 +188,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             }
 */
             db.close();
+            finish();
         }
 
     }
