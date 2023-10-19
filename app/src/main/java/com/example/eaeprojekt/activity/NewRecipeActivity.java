@@ -19,6 +19,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.PopupSteps;
@@ -116,6 +117,8 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
             Log.d("recreate", "" + step.getText());
 
+            //schrittbeschreibung in der view hinzufügen
+
             ConstraintLayout layout = new ConstraintLayout(this);
 
             ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
@@ -123,25 +126,63 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                     ConstraintLayout.LayoutParams.WRAP_CONTENT
             );
             layout.setBackgroundResource(R.drawable.background_with_rounded_corners_green);
-            layout.setPadding(20, 20, 20, 20);
+            layout.setPadding(20,20,20,20);
             layout.setLayoutParams(layoutParams);
             layoutParams.setMargins(40, 10, 40, 10);
 
+            // Text der Schrittbeschreibung
             TextView stepDescriptionText = new TextView(this);
+            stepDescriptionText.setId(View.generateViewId());
             stepDescriptionText.setText(step.getText());
             stepDescriptionText.setGravity(Gravity.CENTER);
             stepDescriptionText.setTextColor(Color.parseColor("#FFFFFF"));
 
             ViewGroup.LayoutParams textViewParams = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, // Set the width as needed
-                    ViewGroup.LayoutParams.MATCH_PARENT  // Set the height as needed
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
             );
             stepDescriptionText.setLayoutParams(textViewParams);
 
             layout.addView(stepDescriptionText);
 
+            //Mülleimer
+            ImageView trash = new ImageView(this);
+            trash.setImageResource(R.drawable.light_trash_can);
+            trash.setId(View.generateViewId());
+
+            ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
+                    70,
+                    70
+            );
+            trash.setLayoutParams(trashParams);
+            layout.addView(trash);
+
+
+            //Constraints
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.clone(layout);
+
+            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.END, trash.getId(), ConstraintSet.START);
+            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+
+
+            constraintSet.connect(trash.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+            constraintSet.connect(trash.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(trash.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+
+            constraintSet.applyTo(layout);
+
+
             LinearLayout parentLayout = findViewById(R.id.stepsLayout);
             parentLayout.addView(layout);
+
+            trash.setOnClickListener(v ->{
+                Log.d("delete","here normal");
+                db.deleteStep(step.getId());
+                parentLayout.removeView(layout);
+            });
 
         }
 

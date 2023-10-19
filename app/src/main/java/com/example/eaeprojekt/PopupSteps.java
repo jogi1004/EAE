@@ -87,7 +87,7 @@ public class PopupSteps implements View.OnClickListener {
 
             EditText stepDescription = (EditText) view.findViewById(R.id.step_description);
 
-            db.insertStep(NewRecipeActivity.newRecipeId, stepDescription.getText().toString());
+            long stepId = db.insertStep(NewRecipeActivity.newRecipeId, stepDescription.getText().toString());
 
             frame.getForeground().setAlpha(0);
             popupWindow.dismiss();
@@ -106,8 +106,9 @@ public class PopupSteps implements View.OnClickListener {
             layout.setLayoutParams(layoutParams);
             layoutParams.setMargins(40, 10, 40, 10);
 
-            // Text der Schrittbeschreibun
+            // Text der Schrittbeschreibung
             TextView stepDescriptionText = new TextView(context);
+            stepDescriptionText.setId(View.generateViewId());
             stepDescriptionText.setText(stepDescription.getText().toString());
             stepDescriptionText.setGravity(Gravity.CENTER);
             stepDescriptionText.setTextColor(Color.parseColor("#FFFFFF"));
@@ -125,7 +126,6 @@ public class PopupSteps implements View.OnClickListener {
             trash.setImageResource(R.drawable.light_trash_can);
             trash.setId(View.generateViewId());
 
-
             ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
                     70,
                     70
@@ -133,10 +133,31 @@ public class PopupSteps implements View.OnClickListener {
             trash.setLayoutParams(trashParams);
             layout.addView(trash);
 
+
+            //Constraints
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.clone(layout);
+
+            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.END, trash.getId(), ConstraintSet.START);
+            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+
+
+            constraintSet.connect(trash.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+            constraintSet.connect(trash.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(trash.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+
+            constraintSet.applyTo(layout);
+
+
             LinearLayout parentLayout = mainActivity.findViewById(R.id.stepsLayout);
             parentLayout.addView(layout);
 
-            db.close();
+            trash.setOnClickListener(v ->{
+                db.deleteStep(stepId);
+                parentLayout.removeView(layout);
+            });
 
         }
     }
