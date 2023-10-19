@@ -164,8 +164,9 @@ public class ShoppingBagActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.AddButtonNavBar) {
             /**
-             * Creating Intent for starting NewRecipeActivity
-             */
+             Creating Intent for starting NewRecipeActivity
+             **/
+
             Intent i = new Intent(this, NewRecipeActivity.class);
             startActivity(i);
         }
