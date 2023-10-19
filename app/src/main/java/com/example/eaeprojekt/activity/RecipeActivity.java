@@ -1,15 +1,15 @@
 package com.example.eaeprojekt.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -19,56 +19,63 @@ import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.RecipeDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
+import java.util.Locale;
 
 public class RecipeActivity extends AppCompatActivity {
 
-    LinearLayout recipeLayout;
-    DatabaseManager db;
-    ImageButton recipe;
-    ImageButton shopping;
-    ImageButton addRecipe;
-    BottomNavigationView b;
+    private LinearLayout recipeLayout;
+    private DatabaseManager db;
 
-    @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
-        b = findViewById(R.id.bottomNavView);
-        b.setSelectedItemId(R.id.recipeListButtonNavBar);
-        b.setOnItemSelectedListener(this::onNavigationItemSelected);
-        recipeLayout = (LinearLayout) findViewById(R.id.recipeLayoutinScrollView);
+        recipeLayout = findViewById(R.id.recipeLayoutinScrollView);
         db = new DatabaseManager(this);
         db.open();
-        List<RecipeDTO> recipes = db.getAllRecipes();
-        db.close();
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView);
+        bottomNavigationView.setSelectedItemId(R.id.recipeListButtonNavBar);
+        bottomNavigationView.setOnItemSelectedListener(this::onNavigationItemSelected);
 
+        SwitchCompat mySwitch = findViewById(R.id.switch1);
+        updateRecipeList(db.getAllRecipes());
+        mySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                updateRecipeList(db.getFavoritenRezepte());
+            }
+            else {
+                updateRecipeList(db.getAllRecipes());
+            }
+
+        });
+    }
+
+    private void updateRecipeList(List<RecipeDTO> recipes) {
+        Log.d("HSKL", "updateList");
+        recipeLayout.removeAllViews();
 
         for (RecipeDTO recipe : recipes) {
-// Erstellen Sie ein neues RelativeLayout für jedes Rezept.
             int backgroundHeight = 100;
-            int backgroundWidth = recipeLayout.getWidth() -10;
+            int backgroundWidth = recipeLayout.getWidth() - 10;
+
             RelativeLayout recipeItem = new RelativeLayout(this);
             recipeItem.setLayoutParams(new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT
-                    ));
+            ));
+
             ImageView bg = new ImageView(this);
             bg.setLayoutParams(new ViewGroup.LayoutParams(backgroundWidth, backgroundHeight));
             bg.setId(View.generateViewId());
 
-
-            //Erstellen der ImageView und hinzufügen zum Layout
             ImageView picture = new ImageView(this);
             picture.setImageResource(R.drawable.add_symbol);
-            picture.setLayoutParams(new ViewGroup.LayoutParams(100,100));
-            picture.setPadding(30,0,10,40);
-
+            picture.setLayoutParams(new ViewGroup.LayoutParams(100, 100));
+            picture.setPadding(30, 0, 10, 40);
 
             LinearLayout dataLayout = new LinearLayout(this);
             dataLayout.setOrientation(LinearLayout.VERTICAL);
@@ -76,22 +83,22 @@ public class RecipeActivity extends AppCompatActivity {
                     RelativeLayout.LayoutParams.MATCH_PARENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT
             );
-            dataParams.addRule(RelativeLayout.RIGHT_OF, picture.getId()); // Daten rechts vom Bild platzieren
-            dataParams.addRule(RelativeLayout.TEXT_ALIGNMENT_GRAVITY, picture.getId()); // Daten oben mit dem Bild ausrichten
+            dataParams.addRule(RelativeLayout.RIGHT_OF, picture.getId());
+            dataParams.addRule(RelativeLayout.TEXT_ALIGNMENT_GRAVITY, picture.getId());
             dataLayout.setLayoutParams(dataParams);
+
             int marginInDp = (int) getResources().getDimension(R.dimen.margin_70dp);
-            dataLayout.setPadding(marginInDp, 0, marginInDp, 50); // Rechts und links Abstand von 20dp
+            dataLayout.setPadding(marginInDp, 0, marginInDp, 50);
+
             TextView recipeName = new TextView(this);
             recipeName.setText(recipe.getTitle());
             recipeName.setTextSize(25);
-            recipeName.setTypeface(null, Typeface.BOLD); // Fettschrift hinzufügen
+            recipeName.setTypeface(null, Typeface.BOLD);
+
             TextView recipeDetails = new TextView(this);
-            recipeDetails.setText(recipe.getPortions() + "Portionen | Dauer: " + recipe.getDuration() +"min");
+            recipeDetails.setText(String.format(Locale.GERMANY, "%d Portionen | Dauer: %dmin", recipe.getPortions(), recipe.getDuration()));
             recipeDetails.setTextSize(16);
 
-
-
-// Die Reihenfolge der Hinzufügung ändern, damit der Hintergrund zuerst angezeigt wird.
             recipeItem.addView(bg);
             recipeItem.addView(picture);
             dataLayout.addView(recipeName);
@@ -100,10 +107,18 @@ public class RecipeActivity extends AppCompatActivity {
             recipeLayout.addView(recipeItem);
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        if (db != null) {
+            db.close();
+        }
+        super.onDestroy();
+    }
+
     private boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.AddButtonNavBar) {
-            // Beim andrücken des Buttons öffnen der NewRecipeActivity
             Intent i = new Intent(this, NewRecipeActivity.class);
             startActivity(i);
         }
