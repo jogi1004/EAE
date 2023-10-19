@@ -8,7 +8,7 @@
     android:background="@color/background"
     tools:context=".activity.RecipeActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/WelcomeLinearLayoutRecipes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,6 +16,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/BannerShopping"
             android:layout_width="match_parent"
             android:layout_height="35sp"
             android:text="@string/BannerTxtShopping"
@@ -32,7 +33,7 @@
             android:layout_width="107dp"
             android:layout_height="100dp"
             android:layout_marginTop="60sp"
-            android:layout_marginStart="-400sp"
+            android:layout_marginStart="10sp"
             app:srcCompat="@drawable/burger_andre"
             android:contentDescription="@string/ImageViewDescription"/>
 
@@ -41,13 +42,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/NeedToBuy"
-            android:layout_marginEnd="8sp"
-            android:layout_marginTop="80sp"
+            android:layout_below="@id/BannerShopping"
+            android:layout_marginTop="20sp"
+            android:layout_toEndOf="@id/imageView"
             android:textStyle="bold"
             android:textColor="@color/fontColor"
             android:textSize="18sp"/>
 
-    </LinearLayout>
+        <ImageButton
+            android:id="@+id/addButtonShoppingBag"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="100sp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20sp"
+            android:contentDescription="@string/AddSymbolDescription"
+            android:scaleType="fitCenter"
+            android:src="@drawable/add_symbol"
+            android:background="@color/background"/>
+
+        <ImageButton
+            android:id="@+id/deleteAllButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="100sp"
+            android:layout_toStartOf="@id/addButtonShoppingBag"
+            android:layout_marginEnd="20sp"
+            android:contentDescription="@string/AddSymbolDescription"
+            android:scaleType="fitCenter"
+            android:src="@drawable/trash_can"
+            android:background="@color/background"/>
+
+    </RelativeLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0sp"
@@ -59,7 +85,9 @@
             android:layout_height="wrap_content"
             android:background="@color/background"
             android:orientation="vertical"
-            tools:ignore="MissingConstraints">
+            tools:ignore="MissingConstraints"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
 
             <LinearLayout
                 android:id="@+id/shoppingLayoutinScrollView"
@@ -83,7 +111,7 @@
         android:id="@+id/bottomNavView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/darkerYellow"
+        android:background="@color/backgroundGreen"
         app:menu="@menu/bottom_nav_bar"
         android:layout_gravity="bottom"
         android:layout_alignParentBottom="true">
