@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -62,7 +63,9 @@ public class ShoppingBagActivity extends AppCompatActivity {
             shape.setCornerRadius(30); // Radius für abgerundete Ecken in Pixeln
             shape.setColor(getResources().getColor(R.color.darkerYellow));
 
-            //Creating Layout for single Ingredient
+            /**
+             * Layout for single Ingredient
+             */
             RelativeLayout ingredientAmountItem = new RelativeLayout(this);
             ingredientAmountItem.setLayoutParams(new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -93,52 +96,74 @@ public class ShoppingBagActivity extends AppCompatActivity {
             ingNameTextView.setTextSize(20);
             ingNameTextView.setTextColor(getResources().getColor(R.color.fontColor));
             ingNameTextView.setId(View.generateViewId());
+
             TextView ingAmountTextView = new TextView(this);
             String amountTXT = String.valueOf(ingredientAmountAmount);
             ingAmountTextView.setText(amountTXT);
             ingAmountTextView.setTextSize(20);
             ingAmountTextView.setTextColor(getResources().getColor(R.color.fontColor));
             ingAmountTextView.setId(View.generateViewId());
+
             TextView ingUnitTextView = new TextView(this);
             ingUnitTextView.setText(ingredientUnit);
             ingUnitTextView.setTextSize(20);
             ingUnitTextView.setTextColor(getResources().getColor(R.color.fontColor));
             ingUnitTextView.setId(View.generateViewId());
+
             ImageView trashCanIconImageView = new ImageView(this);
             trashCanIconImageView.setImageResource(R.drawable.trash_can);
+            trashCanIconImageView.setId(View.generateViewId());
+
+            CheckBox checkBox = new CheckBox(this);
+
 
             /**
              * Changing Layout with params
              */
-
             RelativeLayout.LayoutParams textViewParamsName = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT
             );
             textViewParamsName.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            textViewParamsName.setMargins(25,20,0,10);
+            textViewParamsName.setMargins(60,10,0,0);
 
             RelativeLayout.LayoutParams textViewParamsAmount = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT
             );
-            textViewParamsAmount.addRule(RelativeLayout.RIGHT_OF, ingNameTextView.getId());
-            textViewParamsAmount.setMargins(50,20,0,10);
+            textViewParamsAmount.addRule(RelativeLayout.ALIGN_START);
+            textViewParamsAmount.setMargins(500,10,0,0);
 
             RelativeLayout.LayoutParams textViewParamsUnit = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT
             );
             textViewParamsUnit.addRule(RelativeLayout.RIGHT_OF, ingAmountTextView.getId());
-            textViewParamsUnit.setMargins(30,20,0,10);
+            textViewParamsUnit.setMargins(30,10,0,0);
 
             RelativeLayout.LayoutParams trashCanParams = new RelativeLayout.LayoutParams(
-                    100,
-                    100
+                    75,
+                    75
             );
+
+            /**
+             * Adding some rules for the Layout of trashcan
+             */
             trashCanParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            trashCanParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
             trashCanParams.setMargins(0,0,20,0);
 
+            RelativeLayout.LayoutParams checkBoxparams = new RelativeLayout.LayoutParams(
+                    85,
+                    85
+            );
+            checkBoxparams.addRule(RelativeLayout.LEFT_OF, trashCanIconImageView.getId());
+            checkBoxparams.setMargins(0,0,15,0);
+
+            /**
+             * Adding Rules for the Checkbox
+             */
+            checkBox.setLayoutParams(checkBoxparams);
             /**
              * Adding LayoutParams to TextViews
              */
@@ -153,6 +178,7 @@ public class ShoppingBagActivity extends AppCompatActivity {
             ingredientAmountItem.addView(ingAmountTextView);
             ingredientAmountItem.addView(ingUnitTextView);
             ingredientAmountItem.addView(trashCanIconImageView);
+            ingredientAmountItem.addView(checkBox);
             /**
              * Adding Layout to ScrollView
              */

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EAEProjekt</string>
+    <string name="app_name">Cook It</string>
     <string name="recipeButton">Rezeptliste</string>
     <string name="shoppingBag">Einkaufsliste</string>
     <string name="ImageViewDescription">Logo der App, ein Burger mit Augen</string>

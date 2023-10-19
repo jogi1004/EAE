@@ -30,12 +30,12 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="107dp"
+            android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_marginStart="20sp"
             android:layout_marginTop="60sp"
-            android:layout_marginStart="10sp"
-            app:srcCompat="@drawable/burger_andre"
-            android:contentDescription="@string/ImageViewDescription"/>
+            android:contentDescription="@string/ImageViewDescription"
+            app:srcCompat="@drawable/burger_andre" />
 
         <TextView
             android:id="@+id/textView4"
