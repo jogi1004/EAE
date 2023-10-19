@@ -163,20 +163,24 @@ public class ShoppingBagActivity extends AppCompatActivity {
     private boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.AddButtonNavBar) {
+            /**
+             Creating Intent for starting NewRecipeActivity
+             **/
+
             Intent i = new Intent(this, NewRecipeActivity.class);
             startActivity(i);
-            //Öffne ADDActivity
         }
         if (id == R.id.recipeListButtonNavBar) {
             /**
-             Erstellen eines Intents zum Öffnen der RecipeActivity
-             sobald in der Navbar der entsprechende Button gedrückt wurde
+             Creating Intent for starting RecipeActivity
              **/
             Intent i = new Intent(this, RecipeActivity.class);
             startActivity(i);
         }
         if (id == R.id.shoppingBagButtonNavBar) {
-            //Öffnen der Einkaufsliste
+            /**
+             * Creating Intent for starting ShoppingBagActivity
+             */
             Intent i = new Intent(this, ShoppingBagActivity.class);
             startActivity(i);
 

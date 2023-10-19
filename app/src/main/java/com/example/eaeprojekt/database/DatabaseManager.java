@@ -157,7 +157,7 @@ public class DatabaseManager {
     }
 
 
-    public int updateRecipe(long recipeId, String newTitle, int newPortionsmenge, String newDauer, int newIstFavorit) {
+    public int updateRecipe(long recipeId, String newTitle, int newPortionsmenge,int newDauer, int newIstFavorit) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_RECIPE_TITLE, newTitle);
         values.put(COLUMN_RECIPE_PORTIONSMENGE, newPortionsmenge);

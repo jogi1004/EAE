@@ -5,14 +5,18 @@
         android:id="@+id/shoppingBagButtonNavBar"
         android:title="@string/shoppinglist"
         android:icon="@drawable/shopping_icon"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:iconTint="@color/white"/>
     <item
         android:id="@+id/AddButtonNavBar"
         android:icon="@drawable/add_symbol"
-        android:title="" />
+        android:title="@string/NavBarAddText"
+        android:iconTint="@color/white"
+        />
     <item
         android:id="@+id/recipeListButtonNavBar"
         android:title="@string/recipelist"
         android:icon="@drawable/add_symbol"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:iconTint="@color/white"/>
 </menu>

@@ -164,8 +164,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             db = new DatabaseManager(this);
             db.open();
             //Rezepteinträge aktuallisieren
-            db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, time.getText().toString(), 0);
-            db.close();
+            db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), 0);
 
             Intent intent = new Intent(this, RecipeActivity.class);
             startActivity(intent);
@@ -181,12 +180,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
             db.deleteRecipe(newRecipeId);
 
-            /*
-            List <StepDTO> stepsToDelete = db.getAllStepsForRecipe(-1);
-            for(StepDTO step : stepsToDelete) {
-                db.deleteStep(step.getId());
-            }
-*/
             db.close();
             finish();
         }

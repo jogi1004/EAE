@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
@@ -104,18 +106,32 @@ public class PopupSteps implements View.OnClickListener {
             layout.setLayoutParams(layoutParams);
             layoutParams.setMargins(40, 10, 40, 10);
 
+            // Text der Schrittbeschreibun
             TextView stepDescriptionText = new TextView(context);
             stepDescriptionText.setText(stepDescription.getText().toString());
             stepDescriptionText.setGravity(Gravity.CENTER);
             stepDescriptionText.setTextColor(Color.parseColor("#FFFFFF"));
 
             ViewGroup.LayoutParams textViewParams = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, // Set the width as needed
-                    ViewGroup.LayoutParams.MATCH_PARENT  // Set the height as needed
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
             );
             stepDescriptionText.setLayoutParams(textViewParams);
 
             layout.addView(stepDescriptionText);
+
+            //Mülleimer
+            ImageView trash = new ImageView(context);
+            trash.setImageResource(R.drawable.light_trash_can);
+            trash.setId(View.generateViewId());
+
+
+            ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
+                    70,
+                    70
+            );
+            trash.setLayoutParams(trashParams);
+            layout.addView(trash);
 
             LinearLayout parentLayout = mainActivity.findViewById(R.id.stepsLayout);
             parentLayout.addView(layout);

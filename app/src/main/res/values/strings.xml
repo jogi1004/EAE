@@ -17,7 +17,8 @@
     <string name="NeedToBuy">Das musst du dir noch kaufen!</string>
     <string name="RecipeTxt">Hier deine Rezepte im Überblick!</string>
     <string name="favoritesSwitch">nur Favoriten anzeigen&#32;</string>
-    <string name="recipeDetails">%1$s Portionen | Dauer: %2$s</string> <!--TODO-->
+    <string name="recipeDetails">%1$s Portionen | Dauer: %2$s</string>
+    <string name="NavBarAddText">Rezept erstellen</string> <!--TODO-->
     <string-array name="portionsmenge">
         <item>1</item>
         <item>2</item>

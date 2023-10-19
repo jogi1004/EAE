@@ -78,7 +78,9 @@
             android:layout_height="wrap_content"
             android:background="@color/background"
             android:orientation="vertical"
-            tools:ignore="MissingConstraints">
+            tools:ignore="MissingConstraints"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp">
 
             <LinearLayout
                 android:id="@+id/recipeLayoutinScrollView"
@@ -99,9 +101,9 @@
         android:id="@+id/bottomNavView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/backgroundGreen"
+        app:menu="@menu/bottom_nav_bar"
         android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
-        android:background="@color/darkerYellow"
-        app:menu="@menu/bottom_nav_bar" />
+        android:layout_gravity="bottom" />
 
 </RelativeLayout>
