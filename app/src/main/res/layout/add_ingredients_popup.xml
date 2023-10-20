@@ -177,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_add_picture"
                 android:padding="10dp"
-                android:text="Abbrechen"
+                android:text="Erstellen"
                 android:textColor="#884D29"
                 android:textSize="20sp"
                 android:textStyle="bold"
