@@ -8,14 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.eaeprojekt.R;
-import com.example.eaeprojekt.PopupSteps;
+import com.example.eaeprojekt.popups.PopupSteps;
 import com.example.eaeprojekt.database.DatabaseManager;
 
 

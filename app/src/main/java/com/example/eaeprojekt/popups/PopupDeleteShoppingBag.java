@@ -1,47 +1,49 @@
-package com.example.eaeprojekt;
+package com.example.eaeprojekt.popups;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.eaeprojekt.activity.NewRecipeActivity;
+import com.example.eaeprojekt.R;
+import com.example.eaeprojekt.activity.ShoppingBagActivity;
+import com.example.eaeprojekt.activity.ShoppingBagUpdateListener;
 import com.example.eaeprojekt.database.DatabaseManager;
 
-public class PopupSteps implements View.OnClickListener {
+public class PopupDeleteShoppingBag implements View.OnClickListener {
 
     DatabaseManager db;
 
-    ConstraintLayout buttonAdd;
+    ConstraintLayout buttonDelete;
     ConstraintLayout buttonBack;
-    NewRecipeActivity mainActivity;
+    ShoppingBagActivity mainActivity;
     View view;
     PopupWindow popupWindow;
     FrameLayout frame;
-    ConstraintLayout layoutAddStep;
+    private ShoppingBagUpdateListener updateListener;
 
     private Context context;
 
-    public PopupSteps(Context context) {
+    public PopupDeleteShoppingBag(Context context, ShoppingBagUpdateListener listener) {
         this.context = context;
+        this.updateListener = listener;
     }
 
 
-    public void showPopupWindow(final View view, NewRecipeActivity newRecipeActivity) {
+    public void showPopupWindow(final View view, ShoppingBagActivity shoppingBagActivity) {
 
-        mainActivity = newRecipeActivity;
+        mainActivity = shoppingBagActivity;
+        frame = mainActivity.findViewById(R.id.FrameLayoutShoppingBag);
+        frame.getForeground().setAlpha(220);
 
             LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
-            View popupView = inflater.inflate(R.layout.add_steps_popup, null);
+            View popupView = inflater.inflate(R.layout.delete_shopping_bag_popup, null);
             this.view = popupView;
 
             //length and width from the Window
@@ -56,8 +58,8 @@ public class PopupSteps implements View.OnClickListener {
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
             //Buttons
-            buttonAdd = popupView.findViewById(R.id.add_button);
-            buttonAdd.setOnClickListener(this);
+            buttonDelete = popupView.findViewById(R.id.deleteAllButton);
+            buttonDelete.setOnClickListener(this);
 
             buttonBack = popupView.findViewById(R.id.cancel_button);
             buttonBack.setOnClickListener(this);
@@ -67,29 +69,29 @@ public class PopupSteps implements View.OnClickListener {
     @Override
     public void onClick(View viewClick) {
 
-        frame = mainActivity.findViewById(R.id.mainmenu);
 
         if(viewClick == buttonBack){
 
             frame.getForeground().setAlpha(0);
             popupWindow.dismiss();
 
-        } else if (viewClick == buttonAdd) {
+        } else if (viewClick == buttonDelete) {
 
             //datenbankzugriff
             db = new DatabaseManager(context);
             db.open();
 
-            EditText stepDescription = (EditText) view.findViewById(R.id.step_description);
-
-            db.insertStep(-1, stepDescription.getText().toString());
-
+            db.emptyShoppingList();
+            db.close();
             frame.getForeground().setAlpha(0);
             popupWindow.dismiss();
+            if (updateListener != null) {
+                updateListener.onUpdateShoppingBag();
+            }
 
 
 
-            //schrittbeschreibung in der view hinzufügen
+            //text in der view hinzufügen
 
             RelativeLayout layout = new RelativeLayout(context);
 
@@ -99,14 +101,6 @@ public class PopupSteps implements View.OnClickListener {
             );
 
             layout.setLayoutParams(layoutParams);
-
-            TextView stepDiscriptionText = new TextView(context);
-            stepDiscriptionText.setText(stepDescription.getText().toString());
-
-            layout.addView(stepDiscriptionText);
-
-            LinearLayout parentLayout = mainActivity.findViewById(R.id.stepsLayout);
-            parentLayout.addView(layout);
 
         }
     }

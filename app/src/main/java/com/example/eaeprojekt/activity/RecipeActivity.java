@@ -55,7 +55,6 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     private void updateRecipeList(List<RecipeDTO> recipes) {
-        Log.d("HSKL", "updateList");
         recipeLayout.removeAllViews();
 
         for (RecipeDTO recipe : recipes) {
@@ -121,12 +120,6 @@ public class RecipeActivity extends AppCompatActivity {
         if (id == R.id.AddButtonNavBar) {
             Intent i = new Intent(this, NewRecipeActivity.class);
             startActivity(i);
-        }
-        if (id == R.id.recipeListButtonNavBar) {
-            //Beim andrücken des Buttons öffnen der RecipeActivity
-            Intent i = new Intent(this, RecipeActivity.class);
-            startActivity(i);
-            return true;
         }
         if (id == R.id.shoppingBagButtonNavBar) {
             //Öffnen der Einkaufsliste
