@@ -76,7 +76,9 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             shape.setCornerRadius(30); // Radius for rounded corners in pixels
             shape.setColor(getColor(R.color.darkerYellow));
 
-            // Creating Layout for a single Ingredient
+            /**
+             * Layout for single Ingredient
+             */
             RelativeLayout ingredientAmountItem = new RelativeLayout(this);
             ingredientAmountItem.setLayoutParams(new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -107,19 +109,26 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             ingNameTextView.setTextSize(20);
             ingNameTextView.setTextColor(getResources().getColor(R.color.fontColor));
             ingNameTextView.setId(View.generateViewId());
+
             TextView ingAmountTextView = new TextView(this);
             String amountTXT = String.valueOf(ingredientAmountAmount);
             ingAmountTextView.setText(amountTXT);
             ingAmountTextView.setTextSize(20);
             ingAmountTextView.setTextColor(getResources().getColor(R.color.fontColor));
             ingAmountTextView.setId(View.generateViewId());
+
             TextView ingUnitTextView = new TextView(this);
             ingUnitTextView.setText(ingredientUnit);
             ingUnitTextView.setTextSize(20);
             ingUnitTextView.setTextColor(getResources().getColor(R.color.fontColor));
             ingUnitTextView.setId(View.generateViewId());
+
             ImageView trashCanIconImageView = new ImageView(this);
             trashCanIconImageView.setImageResource(R.drawable.trash_can);
+            trashCanIconImageView.setId(View.generateViewId());
+
+            CheckBox checkBox = new CheckBox(this);
+
 
             /**
              * Changing Layout with params
@@ -146,12 +155,27 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             textViewParamsUnit.setMargins(30, 20, 0, 10);
 
             RelativeLayout.LayoutParams trashCanParams = new RelativeLayout.LayoutParams(
-                    100,
-                    100
+                    75,
+                    75
             );
+
+            /**
+             * Adding some rules for the Layout of trashcan
+             */
             trashCanParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             trashCanParams.setMargins(0, 0, 20, 0);
 
+            RelativeLayout.LayoutParams checkBoxparams = new RelativeLayout.LayoutParams(
+                    85,
+                    85
+            );
+            checkBoxparams.addRule(RelativeLayout.LEFT_OF, trashCanIconImageView.getId());
+            checkBoxparams.setMargins(0,0,15,0);
+
+            /**
+             * Adding Rules for the Checkbox
+             */
+            checkBox.setLayoutParams(checkBoxparams);
             /**
              * Adding LayoutParams to TextViews
              */
@@ -166,6 +190,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             ingredientAmountItem.addView(ingAmountTextView);
             ingredientAmountItem.addView(ingUnitTextView);
             ingredientAmountItem.addView(trashCanIconImageView);
+            ingredientAmountItem.addView(checkBox);
             /**
              * Adding Layout to ScrollView
              */
@@ -178,8 +203,9 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
         int id = item.getItemId();
         if (id == R.id.AddButtonNavBar) {
             /**
-             * Creating Intent for starting NewRecipeActivity
-             */
+             Creating Intent for starting NewRecipeActivity
+             **/
+
             Intent i = new Intent(this, NewRecipeActivity.class);
             startActivity(i);
         }

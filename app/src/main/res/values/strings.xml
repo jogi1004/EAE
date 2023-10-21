@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EAEProjekt</string>
+    <string name="app_name">Cook It</string>
     <string name="recipeButton">Rezeptliste</string>
     <string name="shoppingBag">Einkaufsliste</string>
     <string name="ImageViewDescription">Logo der App, ein Burger mit Augen</string>
@@ -26,7 +26,9 @@
     <string name="add">Hinzufügen</string>
     <string name="stepDescription">Schrittbeschreibung</string>
     <string name="step">Zubereitungsschritt</string>
-    <string-array name="portionsmenge"> <!-- TODO: Das muss schöner gehen -->
+    <string name="recipeDetails">%1$s Portionen | Dauer: %2$s</string>
+    <string name="NavBarAddText">Rezept erstellen</string> <!--TODO-->
+    <string-array name="portionsmenge"> <!-- TODO: Das sollte schöner werden -->
         <item>1</item>
         <item>2</item>
         <item>3</item>
