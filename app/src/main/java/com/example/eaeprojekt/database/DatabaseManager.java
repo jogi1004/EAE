@@ -403,6 +403,14 @@ public class DatabaseManager {
         return ingredientsOnShoppingList;
     }
 
+    public void emptyShoppingList() {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_IS_ON_SHOPPING_LIST, 0);
+
+        database.update(TABLE_INGREDIENT_QUANTITY, values, null, null);
+    }
+
+
 
     // CRUD-Operationen für Schritte
 

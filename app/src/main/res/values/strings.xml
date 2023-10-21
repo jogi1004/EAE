@@ -17,9 +17,18 @@
     <string name="NeedToBuy">Das musst du dir noch kaufen!</string>
     <string name="RecipeTxt">Hier deine Rezepte im Überblick!</string>
     <string name="favoritesSwitch">nur Favoriten anzeigen&#32;</string>
+    <string name="recipeDetails">%1$s Portionen | Dauer: %2$s</string> <!--TODO-->
+    <string name="DeleteSymbolDescription">Mülleimer-Icon am oberen Bildschirmrand zum Leeren der gesamten Einkaufsliste.</string>
+    <string name="deleteShoppingList">Einkaufsliste leeren</string>
+    <string name="deleteShoppingListYouSure">Möchtest du deine Einkaufliste wirklich leeren?</string>
+    <string name="deleteConfirmation">Löschen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="add">Hinzufügen</string>
+    <string name="stepDescription">Schrittbeschreibung</string>
+    <string name="step">Zubereitungsschritt</string>
     <string name="recipeDetails">%1$s Portionen | Dauer: %2$s</string>
     <string name="NavBarAddText">Rezept erstellen</string> <!--TODO-->
-    <string-array name="portionsmenge">
+    <string-array name="portionsmenge"> <!-- TODO: Das sollte schöner werden -->
         <item>1</item>
         <item>2</item>
         <item>3</item>

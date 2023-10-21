@@ -4,10 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,20 +21,24 @@ import com.example.eaeprojekt.IngredientAmountDTO;
 import com.example.eaeprojekt.IngredientDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
+import com.example.eaeprojekt.popups.PopupDeleteShoppingBag;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
 /**
- * Activity for Showing the ShoppingList with Ingriedients in it, has also an NavBar for Navigation
+ * Activity for showing the ShoppingList with ingredients in it, also has a navigation bar for navigation
  */
-public class ShoppingBagActivity extends AppCompatActivity {
+public class ShoppingBagActivity extends AppCompatActivity implements View.OnClickListener,ShoppingBagUpdateListener {
 
     FloatingActionButton newShoppingBagItem;
+    ImageButton deleteAllIcon;
+    PopupDeleteShoppingBag deleteShoppingBagPopup;
     LinearLayout shoppingLayout;
     DatabaseManager db;
     BottomNavigationView b;
+    FrameLayout dimmableLayoutShoppingBag;
 
     @SuppressLint({"MissingInflatedId", "ResourceAsColor"})
     @Override
@@ -42,13 +47,22 @@ public class ShoppingBagActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shopping_bag);
 
         shoppingLayout = findViewById(R.id.shoppingLayoutinScrollView);
+        deleteAllIcon = findViewById(R.id.deleteAllIcon);
+        deleteAllIcon.setOnClickListener(this);
+        deleteShoppingBagPopup = new PopupDeleteShoppingBag(this, this);
+        dimmableLayoutShoppingBag = findViewById(R.id.FrameLayoutShoppingBag);
+        dimmableLayoutShoppingBag.getForeground().setAlpha(0);
         b = findViewById(R.id.bottomNavView);
         b.setSelectedItemId(R.id.AddButtonNavBar);
         b.setOnItemSelectedListener(this::onNavigationItemSelected);
+        updateShoppingBag();
+    }
+
+    public void updateShoppingBag() {
+        shoppingLayout.removeAllViews();
         db = new DatabaseManager(this);
         db.open();
         List<IngredientAmountDTO> ingredientsOnShoppingList = db.getIngredientsOnShoppingList();
-
 
         /**
          * Using DTO to get all Ingredients from the DB
@@ -60,8 +74,8 @@ public class ShoppingBagActivity extends AppCompatActivity {
              */
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
-            shape.setCornerRadius(30); // Radius für abgerundete Ecken in Pixeln
-            shape.setColor(getResources().getColor(R.color.darkerYellow));
+            shape.setCornerRadius(30); // Radius for rounded corners in pixels
+            shape.setColor(getColor(R.color.darkerYellow));
 
             /**
              * Layout for single Ingredient
@@ -72,18 +86,18 @@ public class ShoppingBagActivity extends AppCompatActivity {
                     RelativeLayout.LayoutParams.WRAP_CONTENT
             ));
             ingredientAmountItem.setBackground(shape);
-            ingredientAmountItem.setPadding(0,20,0,30);
+            ingredientAmountItem.setPadding(0, 20, 0, 30);
             RelativeLayout.LayoutParams MarginBetween = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT
             );
-            MarginBetween.setMargins(0,20,0,0);
+            MarginBetween.setMargins(0, 20, 0, 0);
             ingredientAmountItem.setLayoutParams(MarginBetween);
 
             long ingredientId = ingredientAmount.getIngredientId();
             IngredientDTO ingredient = db.getIngredientById((int) ingredientId);
 
-            // Saving name, unit and amount of ingredient
+            // Saving name, unit, and amount of the ingredient
             String ingredientName = ingredient.getName();
             String ingredientUnit = ingredient.getUnit();
             double ingredientAmountAmount = ingredientAmount.getAmount();
@@ -125,21 +139,21 @@ public class ShoppingBagActivity extends AppCompatActivity {
                     RelativeLayout.LayoutParams.WRAP_CONTENT
             );
             textViewParamsName.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            textViewParamsName.setMargins(60,10,0,0);
+            textViewParamsName.setMargins(25, 20, 0, 10);
 
             RelativeLayout.LayoutParams textViewParamsAmount = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT
             );
-            textViewParamsAmount.addRule(RelativeLayout.ALIGN_START);
-            textViewParamsAmount.setMargins(500,10,0,0);
+            textViewParamsAmount.addRule(RelativeLayout.RIGHT_OF, ingNameTextView.getId());
+            textViewParamsAmount.setMargins(50, 20, 0, 10);
 
             RelativeLayout.LayoutParams textViewParamsUnit = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT
             );
             textViewParamsUnit.addRule(RelativeLayout.RIGHT_OF, ingAmountTextView.getId());
-            textViewParamsUnit.setMargins(30,10,0,0);
+            textViewParamsUnit.setMargins(30, 20, 0, 10);
 
             RelativeLayout.LayoutParams trashCanParams = new RelativeLayout.LayoutParams(
                     75,
@@ -150,8 +164,7 @@ public class ShoppingBagActivity extends AppCompatActivity {
              * Adding some rules for the Layout of trashcan
              */
             trashCanParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            trashCanParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-            trashCanParams.setMargins(0,0,20,0);
+            trashCanParams.setMargins(0, 0, 20, 0);
 
             RelativeLayout.LayoutParams checkBoxparams = new RelativeLayout.LayoutParams(
                     85,
@@ -186,6 +199,7 @@ public class ShoppingBagActivity extends AppCompatActivity {
         }
         db.close();
     }
+
     private boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.AddButtonNavBar) {
@@ -203,14 +217,19 @@ public class ShoppingBagActivity extends AppCompatActivity {
             Intent i = new Intent(this, RecipeActivity.class);
             startActivity(i);
         }
-        if (id == R.id.shoppingBagButtonNavBar) {
-            /**
-             * Creating Intent for starting ShoppingBagActivity
-             */
-            Intent i = new Intent(this, ShoppingBagActivity.class);
-            startActivity(i);
-
-        }
         return false;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == deleteAllIcon) {
+            deleteShoppingBagPopup.showPopupWindow(view, this);
+            FrameLayout dimmableLayoutShoppingBag = findViewById(R.id.FrameLayoutShoppingBag);
+        }
+    }
+
+    @Override
+    public void onUpdateShoppingBag() {
+        updateShoppingBag();
     }
 }

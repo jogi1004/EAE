@@ -155,11 +155,6 @@ public class RecipeActivity extends AppCompatActivity {
             Intent i = new Intent(this, NewRecipeActivity.class);
             startActivity(i);
         }
-        if (id == R.id.recipeListButtonNavBar) {
-            Intent i = new Intent(this, RecipeActivity.class);
-            startActivity(i);
-            return true;
-        }
         if (id == R.id.shoppingBagButtonNavBar) {
             Intent i = new Intent(this, ShoppingBagActivity.class);
             startActivity(i);
