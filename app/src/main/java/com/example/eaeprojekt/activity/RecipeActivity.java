@@ -124,7 +124,7 @@ public class RecipeActivity extends AppCompatActivity {
                     recipe.setIsFavorite(1);
                     favIcon.setImageResource(R.drawable.favorite_on);
                 }
-                db.updateRecipe(recipe.getId(), recipe.getTitle(), recipe.getPortions(), recipe.getDuration(), recipe.getIsFavorite() == 1 ? 0 : 1);
+                db.updateRecipe(recipe.getId(), recipe.getTitle(), recipe.getPortions(), recipe.getDuration(), recipe.getIsFavorite() == 1 ? 0 : 1, recipe.getImagePath());
             });
 
             /**

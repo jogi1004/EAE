@@ -83,7 +83,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             db = new DatabaseManager(this);
             db.open();
 
-            db.insertRecipe(title.getText().toString(), portionsmenge, time.getText().toString(), 0);
+            db.insertRecipe(title.getText().toString(), portionsmenge, time.getText().toString(), 0, "-1"); //TODO
             Log.d("NewRecipe", "Rezept erstellt " + title.getText().toString() + " " +
                     portionsmenge + " " + time.getText().toString());
 

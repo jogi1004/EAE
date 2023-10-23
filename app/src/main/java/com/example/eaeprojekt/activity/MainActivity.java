@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
         String zutatName2 = "Milch";
         String zutatEinheit1 = "g";
         String zutatEinheit2 = "ml";
-        dbMan.insertRecipe("Pasta", 3, "45 Minuten", 0);
-        dbMan.insertRecipe("Pfannkuchen", 8, "eine Stunde", 1);
+        dbMan.insertRecipe("Pasta", 3, "45 Minuten", 0, "-1");
+        dbMan.insertRecipe("Pfannkuchen", 8, "eine Stunde", 1, "-1");
         // Datenbank löschen
         //deleteDatabase(DatabaseManager.DATABASE_NAME);
         List<Long> ids = new ArrayList<>();
