@@ -26,7 +26,6 @@
     <string name="add">Hinzufügen</string>
     <string name="stepDescription">Schrittbeschreibung</string>
     <string name="step">Zubereitungsschritt</string>
-    <string name="recipeDetails">%1$s Portionen | Dauer: %2$s</string>
     <string name="NavBarAddText">Rezept erstellen</string> <!--TODO-->
     <string-array name="portionsmenge"> <!-- TODO: Das sollte schöner werden -->
         <item>1</item>
