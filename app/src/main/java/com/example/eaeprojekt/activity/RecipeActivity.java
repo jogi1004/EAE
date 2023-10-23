@@ -6,7 +6,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -27,6 +26,7 @@ public class RecipeActivity extends AppCompatActivity {
 
     private LinearLayout recipeLayout;
     private DatabaseManager db;
+    private SwitchCompat favSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +41,9 @@ public class RecipeActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.recipeListButtonNavBar);
         bottomNavigationView.setOnItemSelectedListener(this::onNavigationItemSelected);
 
-        SwitchCompat mySwitch = findViewById(R.id.switch1);
+        favSwitch = findViewById(R.id.switch1);
         updateRecipeList(db.getAllRecipes());
-        mySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        favSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 updateRecipeList(db.getFavoritenRezepte());
             } else {
@@ -99,7 +99,6 @@ public class RecipeActivity extends AppCompatActivity {
             recipeName.setText(recipe.getTitle());
             recipeName.setTextSize(25);
             recipeName.setTypeface(null, Typeface.BOLD);
-
             TextView recipeDetails = new TextView(this);
             recipeDetails.setText(String.format(Locale.GERMANY, "%d Portionen %nDauer: %dmin", recipe.getPortions(), recipe.getDuration()));
             recipeDetails.setTextSize(16);
@@ -124,7 +123,10 @@ public class RecipeActivity extends AppCompatActivity {
                     recipe.setIsFavorite(1);
                     favIcon.setImageResource(R.drawable.favorite_on);
                 }
-                db.updateRecipe(recipe.getId(), recipe.getTitle(), recipe.getPortions(), recipe.getDuration(), recipe.getIsFavorite() == 1 ? 0 : 1, recipe.getImagePath());
+                db.updateRecipe(recipe.getId(), recipe.getTitle(), recipe.getPortions(), recipe.getDuration(), recipe.getIsFavorite(), recipe.getImagePath());
+                if (favSwitch.isChecked()) {
+                    updateRecipeList(db.getFavoritenRezepte());
+                }
             });
 
             /**
@@ -149,6 +151,7 @@ public class RecipeActivity extends AppCompatActivity {
         }
 
     }
+
     private boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.AddButtonNavBar) {
