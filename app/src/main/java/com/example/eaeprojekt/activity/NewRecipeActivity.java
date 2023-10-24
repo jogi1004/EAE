@@ -21,6 +21,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.example.eaeprojekt.IngredientAmountDTO;
+import com.example.eaeprojekt.IngredientDTO;
 import com.example.eaeprojekt.PopupIngredients;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.PopupSteps;
@@ -108,10 +110,9 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         spinner_portionsmenge.setOnItemSelectedListener(this);
 
 
-
+        addIngredients();
 
         //schrittbeschreibungen in der view hinzufügen
-        Log.d("recreate", "das kann ja nicht sein" + (int) newRecipeId);
         List<StepDTO> stepss = db.getAllStepsForRecipe((int) newRecipeId);
 
         for(StepDTO step: stepss) {
@@ -180,13 +181,11 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             parentLayout.addView(layout);
 
             trash.setOnClickListener(v ->{
-                Log.d("delete","here normal");
                 db.deleteStep(step.getId());
                 parentLayout.removeView(layout);
             });
 
         }
-
 
     }
 
@@ -247,4 +246,139 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     public void onNothingSelected(AdapterView<?> adapterView) {
         portionsmenge = 1;
     }
+
+
+    public void addIngredients(){
+        List<IngredientAmountDTO> ingredientDTOs = db.getIngredientsForRecipe((int) newRecipeId);
+
+        Log.d("Fehlersuche", "Liste");
+
+        for(IngredientAmountDTO ingredient : ingredientDTOs){
+
+            Log.d("Fehlersuche", "IngredientID gibt mir aber die Menger(Amount) " + ingredient.getIngredientId());
+            Log.d("Fehlersuche", "Amount gibt mir aber die Id vom Rezept? " + (int) ingredient.getAmount());
+            Log.d("Fehlersuche", "RecipeID gibt mir aber die Id von der Zutat " + ingredient.getRecipeId());
+
+            IngredientDTO ingredientBare = db.getIngredientById((int) ingredient.getRecipeId());
+            Log.d("Fehlersuche", "aha: " + ingredientBare.getName());
+
+            /*
+            schrittbeschreibung in der view hinzufügen
+             */
+            ConstraintLayout layout = new ConstraintLayout(this);
+
+            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
+                    ConstraintLayout.LayoutParams.MATCH_PARENT,
+                    ConstraintLayout.LayoutParams.WRAP_CONTENT
+            );
+            layout.setPadding(20,20,20,20);
+            layout.setLayoutParams(layoutParams);
+            layoutParams.setMargins(40, 0, 40, 0);
+
+            /*
+            Zutat
+             */
+            TextView ingredientText = new TextView(this);
+            ingredientText.setId(View.generateViewId());
+            ingredientText.setText(ingredientBare.getName());
+            ingredientText.setGravity(Gravity.CENTER);
+            ingredientText.setTextColor(Color.parseColor("#FFFFFF"));
+
+            ViewGroup.LayoutParams ingredientParams = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            ingredientText.setLayoutParams(ingredientParams);
+
+            layout.addView(ingredientText);
+            Log.d("Fehlersuche", "aha2: " + ingredientBare.getName());
+
+            /*
+            Menge
+             */
+            TextView amountText = new TextView(this);
+            amountText.setId(View.generateViewId());
+            amountText.setText("" + ingredient.getIngredientId());
+            amountText.setGravity(Gravity.CENTER);
+            amountText.setTextColor(Color.parseColor("#FFFFFF"));
+
+            ViewGroup.LayoutParams amountParams = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            amountText.setLayoutParams(amountParams);
+
+            layout.addView(amountText);
+            Log.d("Fehlersuche", "aha Amount: " + ingredient.getIngredientId());
+
+            /*
+            Einheit
+             */
+            TextView unitText = new TextView(this);
+            unitText.setId(View.generateViewId());
+            unitText.setText(ingredientBare.getUnit());
+            unitText.setGravity(Gravity.CENTER);
+            unitText.setTextColor(Color.parseColor("#FFFFFF"));
+
+            ViewGroup.LayoutParams unitParams = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            unitText.setLayoutParams(unitParams);
+
+            layout.addView(unitText);
+            Log.d("Fehlersuche", "aha3: " + ingredientBare.getUnit());
+
+            /*
+            Mülleimer
+             */
+            ImageView trash = new ImageView(this);
+            trash.setImageResource(R.drawable.light_trash_can);
+            trash.setId(View.generateViewId());
+
+            ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
+                    50,
+                    50
+            );
+            trash.setLayoutParams(trashParams);
+            layout.addView(trash);
+            Log.d("Fehlersuche", "aha4: ");
+            /*
+            Constraints
+             */
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.clone(layout);
+
+            //Zutat
+            constraintSet.connect(ingredientText.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+            constraintSet.connect(ingredientText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(ingredientText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+            //Menge
+            constraintSet.connect(amountText.getId(), ConstraintSet.START, ingredientText.getId(), ConstraintSet.START, 200);
+            constraintSet.connect(amountText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(amountText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+            //Einheit
+            constraintSet.connect(unitText.getId(), ConstraintSet.START, amountText.getId(), ConstraintSet.START, 50);
+            constraintSet.connect(unitText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(unitText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+            //Mülleimer
+            constraintSet.connect(trash.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+            constraintSet.connect(trash.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(trash.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+
+            constraintSet.applyTo(layout);
+
+
+            LinearLayout parentLayout = findViewById(R.id.ingredientsLayout);
+            parentLayout.addView(layout);
+
+            trash.setOnClickListener(v ->{
+                db.deleteStep(ingredient.getId());
+                parentLayout.removeView(layout);
+            });
+
+        }
+
+    }
 }
+

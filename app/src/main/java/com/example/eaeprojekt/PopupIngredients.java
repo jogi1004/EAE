@@ -28,7 +28,7 @@ import com.example.eaeprojekt.IngredientDTO;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PopupIngredients implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+public class PopupIngredients implements View.OnClickListener {
 
     DatabaseManager db;
 
@@ -53,6 +53,9 @@ public class PopupIngredients implements AdapterView.OnItemSelectedListener, Vie
 
 
     ImageView addIngredientCross;
+
+    String choosedIngredient;
+    String choosedUnit;
 
     public void showPopupWindow(final View view, NewRecipeActivity newRecipeActivity) {
 
@@ -99,9 +102,26 @@ public class PopupIngredients implements AdapterView.OnItemSelectedListener, Vie
         adapterIngredients = new ArrayAdapter<>(mainActivity, android.R.layout.simple_spinner_dropdown_item, ingredientList);
         ingredients.setAdapter(adapterIngredients);
 
-        //Spinner gefüllt
-        ingredients.setOnItemSelectedListener(mainActivity);
+        ingredients.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
 
+                String selectedItem = ingredientList.get(position);
+                String[] separated = selectedItem.split(", ");
+                choosedIngredient = separated[0];
+                choosedUnit = separated[1];
+
+                Log.d("Selected Ingredient", selectedItem);
+
+                Log.d("Selected Ingredient", choosedIngredient);
+                Log.d("Selected Ingredient", choosedUnit);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                // Wird aufgerufen, wenn nichts ausgewählt ist
+            }
+        });
 
         addIngredientCross = popupView.findViewById(R.id.addIngredientCross);
         addIngredientCross.setOnClickListener(this);
@@ -119,17 +139,6 @@ public class PopupIngredients implements AdapterView.OnItemSelectedListener, Vie
 
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-        Log.d("Was", "Hallo? " + adapterView.getItemAtPosition(position));
-
-
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
 
     @Override
     public void onClick(View view) {
@@ -175,61 +184,114 @@ public class PopupIngredients implements AdapterView.OnItemSelectedListener, Vie
             frame.getForeground().setAlpha(0);
             popupWindow.dismiss();
 
-            //TODO
 
-            long ingredientId = db.insertIngredientQuantity(NewRecipeActivity.newRecipeId, );
+            IngredientDTO ingredientToAdd = db.getIngredientByNameAndUnit(choosedIngredient, choosedUnit);
+            Log.d("Selected Ingredient", "Ingredient" + ingredientToAdd.getId() + " " + ingredientToAdd.getName()
+                    + " " + ingredientToAdd.getUnit());
 
-            //schrittbeschreibung in der view hinzufügen
+            EditText amount = popupView.findViewById(R.id.amount);
 
+            // Zutat zum Rezept hinzufügen
+            long ingredientId = db.insertIngredientQuantity(NewRecipeActivity.newRecipeId, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()),0);
+            /*
+            schrittbeschreibung in der view hinzufügen
+             */
             ConstraintLayout layout = new ConstraintLayout(mainActivity);
 
             ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
                     ConstraintLayout.LayoutParams.MATCH_PARENT,
                     ConstraintLayout.LayoutParams.WRAP_CONTENT
             );
-            layout.setBackgroundResource(R.drawable.background_with_rounded_corners_green);
             layout.setPadding(20,20,20,20);
             layout.setLayoutParams(layoutParams);
-            layoutParams.setMargins(40, 10, 40, 10);
+            layoutParams.setMargins(40, 0, 40, 0);
 
-            // Text der Schrittbeschreibung
-            TextView stepDescriptionText = new TextView(mainActivity);
-            stepDescriptionText.setId(View.generateViewId());
-            stepDescriptionText.setText(nameTextString);
-            stepDescriptionText.setGravity(Gravity.CENTER);
-            stepDescriptionText.setTextColor(Color.parseColor("#FFFFFF"));
+            /*
+            Zutat
+             */
+            TextView ingredientText = new TextView(mainActivity);
+            ingredientText.setId(View.generateViewId());
+            ingredientText.setText(ingredientToAdd.getName());
+            ingredientText.setGravity(Gravity.CENTER);
+            ingredientText.setTextColor(Color.parseColor("#FFFFFF"));
 
-            ViewGroup.LayoutParams textViewParams = new ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams ingredientParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             );
-            stepDescriptionText.setLayoutParams(textViewParams);
+            ingredientText.setLayoutParams(ingredientParams);
 
-            layout.addView(stepDescriptionText);
+            layout.addView(ingredientText);
 
-            //Mülleimer
+            /*
+            Menge
+             */
+            TextView amountText = new TextView(mainActivity);
+            amountText.setId(View.generateViewId());
+            amountText.setText(amount.getText().toString());
+            amountText.setGravity(Gravity.CENTER);
+            amountText.setTextColor(Color.parseColor("#FFFFFF"));
+
+            ViewGroup.LayoutParams amountParams = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            amountText.setLayoutParams(amountParams);
+
+            layout.addView(amountText);
+
+            /*
+            Einheit
+             */
+            TextView unitText = new TextView(mainActivity);
+            unitText.setId(View.generateViewId());
+            unitText.setText(ingredientToAdd.getUnit());
+            unitText.setGravity(Gravity.CENTER);
+            unitText.setTextColor(Color.parseColor("#FFFFFF"));
+
+            ViewGroup.LayoutParams unitParams = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            unitText.setLayoutParams(unitParams);
+
+            layout.addView(unitText);
+
+            /*
+            Mülleimer
+             */
             ImageView trash = new ImageView(mainActivity);
             trash.setImageResource(R.drawable.light_trash_can);
             trash.setId(View.generateViewId());
 
             ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
-                    70,
-                    70
+                    50,
+                    50
             );
             trash.setLayoutParams(trashParams);
             layout.addView(trash);
 
+            Log.d("inhalt", "" + ingredientToAdd.getName() + " " + amount + " " + ingredientToAdd.getUnit());
 
-            //Constraints
+            /*
+            Constraints
+             */
             ConstraintSet constraintSet = new ConstraintSet();
             constraintSet.clone(layout);
 
-            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
-            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.END, trash.getId(), ConstraintSet.START);
-            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
-
-
+            //Zutat
+            constraintSet.connect(ingredientText.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+            constraintSet.connect(ingredientText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(ingredientText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+            //Menge
+            constraintSet.connect(amountText.getId(), ConstraintSet.START, ingredientText.getId(), ConstraintSet.START, 200);
+            constraintSet.connect(amountText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(amountText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+            //Einheit
+            constraintSet.connect(unitText.getId(), ConstraintSet.START, amountText.getId(), ConstraintSet.START, 50);
+            constraintSet.connect(unitText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(unitText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+            //Mülleimer
             constraintSet.connect(trash.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
             constraintSet.connect(trash.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
             constraintSet.connect(trash.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
@@ -237,13 +299,14 @@ public class PopupIngredients implements AdapterView.OnItemSelectedListener, Vie
             constraintSet.applyTo(layout);
 
 
-            LinearLayout parentLayout = mainActivity.findViewById(R.id.stepsLayout);
+            LinearLayout parentLayout = mainActivity.findViewById(R.id.ingredientsLayout);
             parentLayout.addView(layout);
 
             trash.setOnClickListener(v ->{
-                db.deleteStep(ingredientId);
+                db.deleteIngredientQuantity(ingredientId);
                 parentLayout.removeView(layout);
             });
+
 
         }
     }

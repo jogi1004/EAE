@@ -158,7 +158,7 @@ public class ShoppingBagActivity extends AppCompatActivity {
              */
             shoppingLayout.addView(ingredientAmountItem);
         }
-        db.close();
+        //db.close();
     }
     private boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();

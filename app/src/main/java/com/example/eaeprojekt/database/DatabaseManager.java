@@ -290,6 +290,34 @@ public class DatabaseManager {
         return result;
     }
 
+    public IngredientDTO getIngredientByNameAndUnit(String name, String unit) {
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENTS +
+                " WHERE " + COLUMN_INGREDIENT_NAME + " = ? AND " +
+                COLUMN_INGREDIENT_UNIT + " = ?", new String[]{name, unit});
+
+        IngredientDTO ingredientDTO = null;
+
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_ID);
+            int nameIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_NAME);
+            int unitIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_UNIT);
+
+            if (idIndex >= 0 && nameIndex >= 0 && unitIndex >= 0) {
+                int id = cursor.getInt(idIndex);
+                String foundName = cursor.getString(nameIndex);
+                String foundUnit = cursor.getString(unitIndex);
+
+                if (unit.equals(foundUnit)) {
+                    // Eintrag mit passendem Namen und Einheit gefunden
+                    ingredientDTO = new IngredientDTO(id, foundName, foundUnit);
+                }
+            }
+        }
+
+        cursor.close();
+        return ingredientDTO;
+    }
+
 
     public int updateIngredient(long ingredientId, String newName, String newUnit) {
         ContentValues values = new ContentValues();
