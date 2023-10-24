@@ -112,80 +112,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
         addIngredients();
 
-        //schrittbeschreibungen in der view hinzufügen
-        List<StepDTO> stepss = db.getAllStepsForRecipe((int) newRecipeId);
-
-        for(StepDTO step: stepss) {
-
-            Log.d("recreate", "" + step.getText());
-
-            //schrittbeschreibung in der view hinzufügen
-
-            ConstraintLayout layout = new ConstraintLayout(this);
-
-            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
-                    ConstraintLayout.LayoutParams.MATCH_PARENT,
-                    ConstraintLayout.LayoutParams.WRAP_CONTENT
-            );
-            layout.setBackgroundResource(R.drawable.background_with_rounded_corners_green);
-            layout.setPadding(20,20,20,20);
-            layout.setLayoutParams(layoutParams);
-            layoutParams.setMargins(40, 10, 40, 10);
-
-            // Text der Schrittbeschreibung
-            TextView stepDescriptionText = new TextView(this);
-            stepDescriptionText.setId(View.generateViewId());
-            stepDescriptionText.setText(step.getText());
-            stepDescriptionText.setGravity(Gravity.CENTER);
-            stepDescriptionText.setTextColor(Color.parseColor("#FFFFFF"));
-
-            ViewGroup.LayoutParams textViewParams = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
-            stepDescriptionText.setLayoutParams(textViewParams);
-
-            layout.addView(stepDescriptionText);
-
-            //Mülleimer
-            ImageView trash = new ImageView(this);
-            trash.setImageResource(R.drawable.light_trash_can);
-            trash.setId(View.generateViewId());
-
-            ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
-                    70,
-                    70
-            );
-            trash.setLayoutParams(trashParams);
-            layout.addView(trash);
-
-
-            //Constraints
-            ConstraintSet constraintSet = new ConstraintSet();
-            constraintSet.clone(layout);
-
-            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
-            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.END, trash.getId(), ConstraintSet.START);
-            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
-
-
-            constraintSet.connect(trash.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
-            constraintSet.connect(trash.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-            constraintSet.connect(trash.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
-
-            constraintSet.applyTo(layout);
-
-
-            LinearLayout parentLayout = findViewById(R.id.stepsLayout);
-            parentLayout.addView(layout);
-
-            trash.setOnClickListener(v ->{
-                db.deleteStep(step.getId());
-                parentLayout.removeView(layout);
-            });
-
-        }
+        addSteps();
 
     }
 
@@ -379,6 +306,83 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
         }
 
+    }
+
+    public void addSteps(){
+        //schrittbeschreibungen in der view hinzufügen
+        List<StepDTO> stepss = db.getAllStepsForRecipe((int) newRecipeId);
+
+        for(StepDTO step: stepss) {
+
+            Log.d("recreate", "" + step.getText());
+
+            //schrittbeschreibung in der view hinzufügen
+
+            ConstraintLayout layout = new ConstraintLayout(this);
+
+            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
+                    ConstraintLayout.LayoutParams.MATCH_PARENT,
+                    ConstraintLayout.LayoutParams.WRAP_CONTENT
+            );
+            layout.setBackgroundResource(R.drawable.background_with_rounded_corners_green);
+            layout.setPadding(20,20,20,20);
+            layout.setLayoutParams(layoutParams);
+            layoutParams.setMargins(40, 10, 40, 10);
+
+            // Text der Schrittbeschreibung
+            TextView stepDescriptionText = new TextView(this);
+            stepDescriptionText.setId(View.generateViewId());
+            stepDescriptionText.setText(step.getText());
+            stepDescriptionText.setGravity(Gravity.CENTER);
+            stepDescriptionText.setTextColor(Color.parseColor("#FFFFFF"));
+
+            ViewGroup.LayoutParams textViewParams = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            stepDescriptionText.setLayoutParams(textViewParams);
+
+            layout.addView(stepDescriptionText);
+
+            //Mülleimer
+            ImageView trash = new ImageView(this);
+            trash.setImageResource(R.drawable.light_trash_can);
+            trash.setId(View.generateViewId());
+
+            ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
+                    70,
+                    70
+            );
+            trash.setLayoutParams(trashParams);
+            layout.addView(trash);
+
+
+            //Constraints
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.clone(layout);
+
+            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.END, trash.getId(), ConstraintSet.START);
+            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+
+
+            constraintSet.connect(trash.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+            constraintSet.connect(trash.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(trash.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+
+            constraintSet.applyTo(layout);
+
+
+            LinearLayout parentLayout = findViewById(R.id.stepsLayout);
+            parentLayout.addView(layout);
+
+            trash.setOnClickListener(v ->{
+                db.deleteStep(step.getId());
+                parentLayout.removeView(layout);
+            });
+
+        }
     }
 }
 
