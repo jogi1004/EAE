@@ -37,6 +37,7 @@ public class PopupIngredients implements View.OnClickListener {
     PopupWindow popupWindow;
     //Adapter für Zutaten
     Spinner ingredients;
+    TextView unitTV;
     ArrayAdapter<String> adapterIngredients;
 
     FrameLayout frame;
@@ -106,6 +107,9 @@ public class PopupIngredients implements View.OnClickListener {
                 choosedIngredient = separated[0];
                 choosedUnit = separated[1];
 
+                unitTV = popupView.findViewById(R.id.textViewUnit);
+                unitTV.setText(choosedUnit.toString());
+
                 Log.d("Selected Ingredient", selectedItem);
 
                 Log.d("Selected Ingredient", choosedIngredient);
@@ -114,7 +118,10 @@ public class PopupIngredients implements View.OnClickListener {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                // Wird aufgerufen, wenn nichts ausgewählt ist
+                String selectedItem = ingredientList.get(0);
+                String[] separated = selectedItem.split(", ");
+                choosedIngredient = separated[0];
+                choosedUnit = separated[1];
             }
         });
 
@@ -123,7 +130,6 @@ public class PopupIngredients implements View.OnClickListener {
 
         createIngredient = popupView.findViewById(R.id.createIngredient);
         createIngredient.setOnClickListener(this);
-        
         
         
         cancelButtonIngredient = popupView.findViewById(R.id.cancel_button_ingredient);
