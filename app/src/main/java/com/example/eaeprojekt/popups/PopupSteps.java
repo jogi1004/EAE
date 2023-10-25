@@ -1,6 +1,7 @@
-package com.example.eaeprojekt;
+package com.example.eaeprojekt.popups;
 
 import android.graphics.Color;
+import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.activity.NewRecipeActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
 
@@ -28,6 +30,13 @@ public class PopupSteps implements View.OnClickListener {
     View view;
     PopupWindow popupWindow;
     FrameLayout frame;
+
+    private Context context;
+
+    public PopupSteps(Context context) {
+        this.context = context;
+    }
+
 
     public void showPopupWindow(final View view, NewRecipeActivity newRecipeActivity) {
 

@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.eaeprojekt.DTO.IngredientAmountDTO;
-import com.example.eaeprojekt.IngredientDTO;
+import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.RecipeDTO;
 import com.example.eaeprojekt.StepDTO;
 
@@ -28,6 +28,8 @@ public class DatabaseManager {
     public static final String COLUMN_RECIPE_PORTIONSMENGE = "Portionsmenge";
     public static final String COLUMN_RECIPE_DAUER = "Dauer";
     public static final String COLUMN_IS_FAVORITE = "istFavorit";
+    public static final String COLUMN_RECIPE_IMAGE_PATH = "Bildspeicherort";
+
 
     // Tabelle für Zutaten
     public static final String TABLE_INGREDIENTS = "Zutaten";
@@ -66,12 +68,13 @@ public class DatabaseManager {
 
     // CRUD-Operationen für Rezepte
 
-    public long insertRecipe(String title, int portionsmenge, String dauer, int istFavorit) {
+    public long insertRecipe(String title, int portionsmenge, String dauer, int istFavorit, String bildpfad) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_RECIPE_TITLE, title);
         values.put(COLUMN_RECIPE_PORTIONSMENGE, portionsmenge);
         values.put(COLUMN_RECIPE_DAUER, dauer);
         values.put(COLUMN_IS_FAVORITE, istFavorit);
+        values.put(COLUMN_RECIPE_IMAGE_PATH, bildpfad);
         return database.insert(TABLE_RECIPES, null, values);
     }
 
@@ -86,15 +89,17 @@ public class DatabaseManager {
                 int portionsmengeIndex = cursor.getColumnIndex(COLUMN_RECIPE_PORTIONSMENGE);
                 int dauerIndex = cursor.getColumnIndex(COLUMN_RECIPE_DAUER);
                 int istFavoritIndex = cursor.getColumnIndex(COLUMN_IS_FAVORITE);
+                int bildpfadIndex = cursor.getColumnIndex(COLUMN_RECIPE_IMAGE_PATH);
 
-                if (idIndex >= 0 && titleIndex >= 0 && portionsmengeIndex >= 0 && dauerIndex >= 0 && istFavoritIndex >= 0) {
+                if (idIndex >= 0 && titleIndex >= 0 && portionsmengeIndex >= 0 && dauerIndex >= 0 && istFavoritIndex >= 0 && bildpfadIndex >= 0) {
                     int id = cursor.getInt(idIndex);
                     String title = cursor.getString(titleIndex);
                     int portionsmenge = cursor.getInt(portionsmengeIndex);
                     int dauer = cursor.getInt(dauerIndex);
                     int istFavorit = cursor.getInt(istFavoritIndex);
+                    String bildpfad = cursor.getString(bildpfadIndex);
 
-                    RecipeDTO recipeDTO = new RecipeDTO(id, title, portionsmenge, dauer, istFavorit);
+                    RecipeDTO recipeDTO = new RecipeDTO(id, title, portionsmenge, dauer, istFavorit, bildpfad);
                     recipes.add(recipeDTO);
                 }
             } while (cursor.moveToNext());
@@ -115,14 +120,16 @@ public class DatabaseManager {
             int portionsmengeIndex = cursor.getColumnIndex(COLUMN_RECIPE_PORTIONSMENGE);
             int dauerIndex = cursor.getColumnIndex(COLUMN_RECIPE_DAUER);
             int istFavoritIndex = cursor.getColumnIndex(COLUMN_IS_FAVORITE);
+            int bildpfadIndex = cursor.getColumnIndex(COLUMN_RECIPE_IMAGE_PATH);
 
-            if (idIndex >= 0 && titleIndex >= 0 && portionsmengeIndex >= 0 && dauerIndex >= 0 && istFavoritIndex >= 0) {
+            if (idIndex >= 0 && titleIndex >= 0 && portionsmengeIndex >= 0 && dauerIndex >= 0 && istFavoritIndex >= 0 && bildpfadIndex >= 0) {
                 String title = cursor.getString(titleIndex);
                 int portionsmenge = cursor.getInt(portionsmengeIndex);
                 int dauer = cursor.getInt(dauerIndex);
                 int istFavorit = cursor.getInt(istFavoritIndex);
+                String bildpfad = cursor.getString(bildpfadIndex);
 
-                recipeDTO = new RecipeDTO(id, title, portionsmenge, dauer, istFavorit);
+                recipeDTO = new RecipeDTO(id, title, portionsmenge, dauer, istFavorit, bildpfad);
             }
         }
 
@@ -137,17 +144,21 @@ public class DatabaseManager {
 
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(COLUMN_RECIPE_ID);
+            int titelIndex = cursor.getColumnIndex(COLUMN_RECIPE_TITLE);
             int portionsmengeIndex = cursor.getColumnIndex(COLUMN_RECIPE_PORTIONSMENGE);
             int dauerIndex = cursor.getColumnIndex(COLUMN_RECIPE_DAUER);
             int istFavoritIndex = cursor.getColumnIndex(COLUMN_IS_FAVORITE);
+            int bildpfadIndex = cursor.getColumnIndex(COLUMN_RECIPE_IMAGE_PATH);
 
-            if (idIndex >= 0 && portionsmengeIndex >= 0 && dauerIndex >= 0 && istFavoritIndex >= 0) {
+            if (idIndex >= 0 && titelIndex >= 0 && portionsmengeIndex >= 0 && dauerIndex >= 0 && istFavoritIndex >= 0 && bildpfadIndex >= 0) {
                 int id = cursor.getInt(idIndex);
+                String title = cursor.getString(titelIndex);
                 int portionsmenge = cursor.getInt(portionsmengeIndex);
                 int dauer = cursor.getInt(dauerIndex);
                 int istFavorit = cursor.getInt(istFavoritIndex);
+                String bildpfad = cursor.getString(bildpfadIndex);
 
-                recipeDTO = new RecipeDTO(id, name, portionsmenge, dauer, istFavorit);
+                recipeDTO = new RecipeDTO(id, title, portionsmenge, dauer, istFavorit, bildpfad);
             }
         }
 
@@ -157,12 +168,13 @@ public class DatabaseManager {
     }
 
 
-    public int updateRecipe(long recipeId, String newTitle, int newPortionsmenge,int newDauer, int newIstFavorit) {
+    public int updateRecipe(long recipeId, String newTitle, int newPortionsmenge,int newDauer, int newIstFavorit, String newBildpfad) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_RECIPE_TITLE, newTitle);
         values.put(COLUMN_RECIPE_PORTIONSMENGE, newPortionsmenge);
         values.put(COLUMN_RECIPE_DAUER, newDauer);
         values.put(COLUMN_IS_FAVORITE, newIstFavorit);
+        values.put(COLUMN_RECIPE_IMAGE_PATH, newBildpfad);
         return database.update(
                 TABLE_RECIPES,
                 values,
@@ -184,15 +196,25 @@ public class DatabaseManager {
 
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_RECIPES + " WHERE " + COLUMN_IS_FAVORITE + " = 1", new String[]{});
         if (cursor.moveToFirst()) {
-            do {
-                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RECIPE_ID));
-                String title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RECIPE_TITLE));
-                int portionsmenge = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RECIPE_PORTIONSMENGE));
-                int dauer = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RECIPE_DAUER));
-                int istFavorit = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_FAVORITE));
+            int recipeIdColumnIndex = cursor.getColumnIndex(COLUMN_RECIPE_ID);
+            int titleColumnIndex = cursor.getColumnIndex(COLUMN_RECIPE_TITLE);
+            int portionsmengeColumnIndex = cursor.getColumnIndex(COLUMN_RECIPE_PORTIONSMENGE);
+            int dauerColumnIndex = cursor.getColumnIndex(COLUMN_RECIPE_DAUER);
+            int istFavoritColumnIndex = cursor.getColumnIndex(COLUMN_IS_FAVORITE);
+            int bildpfadColumnIndex = cursor.getColumnIndex(COLUMN_RECIPE_IMAGE_PATH);
 
-                RecipeDTO recipeDTO = new RecipeDTO(id, title, portionsmenge, dauer, istFavorit);
-                favoriten.add(recipeDTO);
+            do {
+                if (recipeIdColumnIndex != -1) {
+                    int id = cursor.getInt(recipeIdColumnIndex);
+                    String title = cursor.getString(titleColumnIndex);
+                    int portionsmenge = cursor.getInt(portionsmengeColumnIndex);
+                    int dauer = cursor.getInt(dauerColumnIndex);
+                    int istFavorit = cursor.getInt(istFavoritColumnIndex);
+                    String bildpfad = cursor.getString(bildpfadColumnIndex);
+
+                    RecipeDTO recipeDTO = new RecipeDTO(id, title, portionsmenge, dauer, istFavorit, bildpfad);
+                    favoriten.add(recipeDTO);
+                }
             } while (cursor.moveToNext());
         }
 
@@ -245,7 +267,7 @@ public class DatabaseManager {
         return ingredients;
     }
 
-    public IngredientDTO getIngredientById(int id) {
+    public IngredientDTO getIngredientById(long id) {
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENTS + " WHERE " + COLUMN_INGREDIENT_ID + " = ?", new String[]{String.valueOf(id)});
         IngredientDTO ingredientDTO = null;
         if (cursor.moveToFirst()) {
@@ -431,6 +453,14 @@ public class DatabaseManager {
         return ingredientsOnShoppingList;
     }
 
+    public void emptyShoppingList() {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_IS_ON_SHOPPING_LIST, 0);
+
+        database.update(TABLE_INGREDIENT_QUANTITY, values, null, null);
+    }
+
+
 
     // CRUD-Operationen für Schritte
 
@@ -523,7 +553,8 @@ public class DatabaseManager {
                     COLUMN_RECIPE_TITLE + " TEXT, " +
                     COLUMN_RECIPE_PORTIONSMENGE + " TEXT, " +
                     COLUMN_RECIPE_DAUER + " TEXT, " +
-                    COLUMN_IS_FAVORITE + " INTEGER)";
+                    COLUMN_IS_FAVORITE + " INTEGER, " +
+                    COLUMN_RECIPE_IMAGE_PATH + " TEXT)";
             db.execSQL(createRecipeTableQuery);
 
             // Tabelle für Zutaten erstellen

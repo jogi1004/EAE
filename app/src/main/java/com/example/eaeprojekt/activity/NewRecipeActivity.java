@@ -21,10 +21,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.eaeprojekt.DTO.IngredientAmountDTO;
-import com.example.eaeprojekt.IngredientDTO;
+import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.PopupIngredients;
 import com.example.eaeprojekt.R;
-import com.example.eaeprojekt.PopupSteps;
+import com.example.eaeprojekt.popups.PopupSteps;
 import com.example.eaeprojekt.RecipeDTO;
 import com.example.eaeprojekt.StepDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
@@ -71,7 +71,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         }
 
         if(!foundRecipe) {
-            newRecipeId = db.insertRecipe("", 1, "", -1);
+            newRecipeId = db.insertRecipe("", 1, "", -1, "-1");
         }
 
         //ZurückButton behandeln
@@ -118,7 +118,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
         if(view == button_add_steps){
-            PopupSteps popup = new PopupSteps();
+            PopupSteps popup = new PopupSteps(this);
             popup.showPopupWindow(view, this);
 
             //background-dimming
@@ -139,7 +139,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             db = new DatabaseManager(this);
             db.open();
             //Rezepteinträge aktuallisieren
-            db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), 0);
+            db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), 0, "-1");
 
             Intent intent = new Intent(this, RecipeActivity.class);
             startActivity(intent);
@@ -178,7 +178,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         List<IngredientAmountDTO> ingredientDTOs = db.getIngredientsForRecipe(newRecipeId);
 
         for(IngredientAmountDTO ingredient : ingredientDTOs){
-            IngredientDTO ingredientBare = db.getIngredientById((int) ingredient.getRecipeId());
+            IngredientDTO ingredientBare = db.getIngredientById(ingredient.getRecipeId());
 
             /*
             schrittbeschreibung in der view hinzufügen
@@ -370,4 +370,3 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         }
     }
 }
-

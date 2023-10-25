@@ -1,13 +1,13 @@
 package com.example.eaeprojekt.DTO;
 
 public class IngredientAmountDTO {
-    private int id;
+    private long id;
     private double amount;
     private long recipeId;
     private long ingredientId;
     private int onShoppingList;
 
-    public IngredientAmountDTO(int id, double amount, long recipeId, long ingredientId, int onShoppingList) {
+    public IngredientAmountDTO(long id, double amount, long recipeId, long ingredientId, int onShoppingList) {
         this.id = id;
         this.amount = amount;
         this.recipeId = recipeId;
@@ -15,7 +15,7 @@ public class IngredientAmountDTO {
         this.onShoppingList = onShoppingList;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

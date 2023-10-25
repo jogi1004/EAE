@@ -23,7 +23,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.eaeprojekt.activity.NewRecipeActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
-import com.example.eaeprojekt.IngredientDTO;
+import com.example.eaeprojekt.DTO.IngredientDTO;
 
 import java.util.ArrayList;
 import java.util.List;
