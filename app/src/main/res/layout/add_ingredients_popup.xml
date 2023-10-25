@@ -42,6 +42,7 @@
         android:background="@drawable/background_with_rounded_corners_green"
         android:popupBackground="@color/backgroundGreen"
         android:textAlignment="center"
+        
         app:layout_constraintBottom_toBottomOf="@+id/chooseIngredient"
         app:layout_constraintStart_toEndOf="@+id/chooseIngredient"
         app:layout_constraintTop_toTopOf="@+id/chooseIngredient" />
@@ -81,14 +82,14 @@
         android:inputType="number"
         android:textAlignment="center"/>
 
-    <Spinner
-        android:id="@+id/spinnerUnit"
+    <TextView
+        android:id="@+id/textViewUnit"
         android:layout_width="80dp"
         android:layout_height="40dp"
         android:layout_marginStart="5dp"
         android:background="@drawable/background_with_rounded_corners_green"
-        android:popupBackground="@color/backgroundGreen"
-        android:textAlignment="center"
+        android:gravity="center_horizontal|center_vertical"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/amount"
         app:layout_constraintStart_toEndOf="@+id/amount"
         app:layout_constraintTop_toTopOf="@+id/amount" />
@@ -135,7 +136,7 @@
         <EditText
             android:id="@+id/nameText"
             android:layout_width="180dp"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:layout_marginStart="50dp"
             app:layout_constraintBottom_toBottomOf="@+id/name"
             app:layout_constraintStart_toEndOf="@+id/name"
@@ -157,7 +158,7 @@
         <EditText
             android:id="@+id/unitText"
             android:layout_width="100dp"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             app:layout_constraintBottom_toBottomOf="@+id/unit"
             app:layout_constraintStart_toStartOf="@+id/nameText"
             app:layout_constraintTop_toTopOf="@+id/unit" />
