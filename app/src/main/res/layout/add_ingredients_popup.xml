@@ -42,7 +42,7 @@
         android:background="@drawable/background_with_rounded_corners_green"
         android:popupBackground="@color/backgroundGreen"
         android:textAlignment="center"
-        
+
         app:layout_constraintBottom_toBottomOf="@+id/chooseIngredient"
         app:layout_constraintStart_toEndOf="@+id/chooseIngredient"
         app:layout_constraintTop_toTopOf="@+id/chooseIngredient" />
