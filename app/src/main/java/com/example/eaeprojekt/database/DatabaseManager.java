@@ -7,7 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.eaeprojekt.IngredientAmountDTO;
+import com.example.eaeprojekt.DTO.IngredientAmountDTO;
 import com.example.eaeprojekt.IngredientDTO;
 import com.example.eaeprojekt.RecipeDTO;
 import com.example.eaeprojekt.StepDTO;
@@ -370,7 +370,7 @@ public class DatabaseManager {
         );
     }
 
-    public List<IngredientAmountDTO> getIngredientsForRecipe(int recipeId) {
+    public List<IngredientAmountDTO> getIngredientsForRecipe(long recipeId) {
         List<IngredientAmountDTO> ingredientAmounts = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENT_QUANTITY + " WHERE " + COLUMN_INGREDIENT_QUANTITY_RECIPE_ID + " = ?", new String[]{String.valueOf(recipeId)});
 
@@ -387,7 +387,7 @@ public class DatabaseManager {
                     int ingredientId = cursor.getInt(ingredientIdIndex);
                     int isOnShoppingList = cursor.getInt(isOnShoppingListIndex);
 
-                    IngredientAmountDTO ingredientAmountDTO = new IngredientAmountDTO(id, recipeId, ingredientId, amount, isOnShoppingList);
+                    IngredientAmountDTO ingredientAmountDTO = new IngredientAmountDTO(id, amount, recipeId, ingredientId, isOnShoppingList);
                     ingredientAmounts.add(ingredientAmountDTO);
                 }
 
