@@ -84,11 +84,6 @@ public class PopupIngredients implements View.OnClickListener {
         //Spinner Zutaten
         ingredients = popupView.findViewById(R.id.spinnerIngredient);
 
-/*
-        adapterIngredients = ArrayAdapter.createFromResource(mainActivity, R.array.zutat, android.R.layout.simple_spinner_dropdown_item);
-        ingredients.setAdapter(adapterIngredients);
- */
-
         //Spinner mit daten aus db füllen
         ingredientList = new ArrayList<>();
 
