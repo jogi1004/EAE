@@ -10,12 +10,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.eaeprojekt.IngredientDTO;
+import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,29 +30,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_navbar);
-
-        // Beispieldaten hinzufügen
-        DatabaseManager dbMan = new DatabaseManager(this);
-        dbMan.open();
-        // Datenbank löschen
-        //deleteDatabase(DatabaseManager.DATABASE_NAME);
-        String zutatName1 = "Mehl";
-        String zutatName2 = "Milch";
-        String zutatEinheit1 = "g";
-        String zutatEinheit2 = "ml";
-        dbMan.insertRecipe("Pasta", 3, "45 Minuten", 0, "-1");
-        dbMan.insertRecipe("Pfannkuchen", 8, "eine Stunde", 1, "-1");
-        // Datenbank löschen
-        //deleteDatabase(DatabaseManager.DATABASE_NAME);
-        List<Long> ids = new ArrayList<>();
-        ids.add(dbMan.insertIngredient(zutatName1, zutatEinheit1));
-        ids.add(dbMan.insertIngredient(zutatName2, zutatEinheit2));
-        List<Long> idds = new ArrayList<>();
-        idds.add(dbMan.insertIngredientQuantity(-1, ids.get(0), 201, 1));
-        idds.add(dbMan.insertIngredientQuantity(-1, ids.get(1), 350, 1));
-
-        // Optional: Schließe die Datenbankverbindung
-        dbMan.close();
 
         b = findViewById(R.id.bottomNavView);
         b.setSelectedItemId(R.id.AddButtonNavBar);

@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.eaeprojekt.IngredientAmountDTO;
-import com.example.eaeprojekt.IngredientDTO;
+import com.example.eaeprojekt.DTO.IngredientAmountDTO;
+import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.example.eaeprojekt.popups.PopupDeleteShoppingBag;
@@ -197,7 +197,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
              */
             shoppingLayout.addView(ingredientAmountItem);
         }
-        db.close();
+        //db.close();
     }
 
     private boolean onNavigationItemSelected(MenuItem item) {

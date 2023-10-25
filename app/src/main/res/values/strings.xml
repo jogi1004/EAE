@@ -27,6 +27,7 @@
     <string name="stepDescription">Schrittbeschreibung</string>
     <string name="step">Zubereitungsschritt</string>
     <string name="NavBarAddText">Rezept erstellen</string> <!--TODO-->
+    <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge"> <!-- TODO: Das sollte schöner werden -->
         <item>1</item>
         <item>2</item>
@@ -40,5 +41,8 @@
         <item>10</item>
         <item>11</item>
         <item>12</item>
+    </string-array>
+    <!--Spinner Zutat-->
+    <string-array name="zutat">
     </string-array>
 </resources>
