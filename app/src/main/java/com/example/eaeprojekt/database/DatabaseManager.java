@@ -13,6 +13,7 @@ import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.DTO.StepDTO;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DatabaseManager {
@@ -106,7 +107,7 @@ public class DatabaseManager {
         }
 
         cursor.close();
-
+        Collections.reverse(recipes);
         return recipes;
     }
 
@@ -219,6 +220,7 @@ public class DatabaseManager {
         }
 
         cursor.close();
+        Collections.reverse(favoriten);
         return favoriten;
     }
 
