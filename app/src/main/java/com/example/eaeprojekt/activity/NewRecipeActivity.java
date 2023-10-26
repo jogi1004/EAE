@@ -25,8 +25,8 @@ import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.PopupIngredients;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.popups.PopupSteps;
-import com.example.eaeprojekt.RecipeDTO;
-import com.example.eaeprojekt.StepDTO;
+import com.example.eaeprojekt.DTO.RecipeDTO;
+import com.example.eaeprojekt.DTO.StepDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
 
 import java.util.List;

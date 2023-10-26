@@ -1,4 +1,4 @@
-package com.example.eaeprojekt;
+package com.example.eaeprojekt.DTO;
 
 public class RecipeDTO {
     private int id;

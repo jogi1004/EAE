@@ -39,6 +39,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
     DatabaseManager db;
     BottomNavigationView b;
     FrameLayout dimmableLayoutShoppingBag;
+    TextView helperTextView;
 
     @SuppressLint({"MissingInflatedId", "ResourceAsColor"})
     @Override
@@ -52,6 +53,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
         deleteShoppingBagPopup = new PopupDeleteShoppingBag(this, this);
         dimmableLayoutShoppingBag = findViewById(R.id.FrameLayoutShoppingBag);
         dimmableLayoutShoppingBag.getForeground().setAlpha(0);
+        helperTextView = findViewById(R.id.helperTextBox);
         b = findViewById(R.id.bottomNavView);
         b.setSelectedItemId(R.id.AddButtonNavBar);
         b.setOnItemSelectedListener(this::onNavigationItemSelected);
@@ -63,6 +65,10 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
         db = new DatabaseManager(this);
         db.open();
         List<IngredientAmountDTO> ingredientsOnShoppingList = db.getIngredientsOnShoppingList();
+        /**
+         * Show helper-text while list is empty
+         */
+        helperTextView.setVisibility(ingredientsOnShoppingList.isEmpty()? View.VISIBLE : View.INVISIBLE);
 
         /**
          * Using DTO to get all Ingredients from the DB
