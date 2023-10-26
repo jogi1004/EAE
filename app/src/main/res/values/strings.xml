@@ -27,6 +27,7 @@
     <string name="stepDescription">Schrittbeschreibung</string>
     <string name="step">Zubereitungsschritt</string>
     <string name="NavBarAddText">Rezept erstellen</string> <!--TODO-->
+    <string name="shoppingBagHelperText">Deine Einkaufsliste ist leer!</string>
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge"> <!-- TODO: Das sollte schöner werden -->
         <item>1</item>

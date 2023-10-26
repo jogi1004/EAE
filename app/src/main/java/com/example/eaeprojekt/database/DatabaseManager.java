@@ -9,8 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.eaeprojekt.DTO.IngredientAmountDTO;
 import com.example.eaeprojekt.DTO.IngredientDTO;
-import com.example.eaeprojekt.RecipeDTO;
-import com.example.eaeprojekt.StepDTO;
+import com.example.eaeprojekt.DTO.RecipeDTO;
+import com.example.eaeprojekt.DTO.StepDTO;
 
 import java.util.ArrayList;
 import java.util.List;

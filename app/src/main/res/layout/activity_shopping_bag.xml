@@ -92,6 +92,17 @@
         android:layout_above="@id/bottomNavView"
         android:layout_below="@id/RelativeLayoutShoppingBag">
 
+        <TextView
+            android:id="@+id/helperTextBox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:padding="8dp"
+            android:text="@string/shoppingBagHelperText"
+            android:textColor="@color/fontColor"
+            android:textStyle="italic"
+            android:textSize="20sp" />
+
         <ScrollView
             android:id="@+id/ScrollViewRecipes"
             android:layout_width="match_parent"
@@ -110,9 +121,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView">
-
-            </LinearLayout>
+                app:layout_constraintTop_toBottomOf="@id/imageView" />
 
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
