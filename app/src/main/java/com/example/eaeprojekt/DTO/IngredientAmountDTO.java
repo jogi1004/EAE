@@ -54,5 +54,16 @@ public class IngredientAmountDTO {
     public void setOnShoppingList(int onShoppingList) {
         this.onShoppingList = onShoppingList;
     }
+
+    @Override
+    public String toString() {
+        return "IngredientAmountDTO{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", recipeId=" + recipeId +
+                ", ingredientId=" + ingredientId +
+                ", onShoppingList=" + onShoppingList +
+                '}';
+    }
 }
 

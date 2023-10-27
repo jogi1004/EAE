@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -14,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -40,6 +40,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
     BottomNavigationView b;
     FrameLayout dimmableLayoutShoppingBag;
     TextView helperTextView;
+    ImageView trashCanIconImageView;
 
     @SuppressLint({"MissingInflatedId", "ResourceAsColor"})
     @Override
@@ -100,8 +101,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             MarginBetween.setMargins(0, 20, 0, 0);
             ingredientAmountItem.setLayoutParams(MarginBetween);
 
-            long ingredientId = ingredientAmount.getIngredientId();
-            IngredientDTO ingredient = db.getIngredientById((int) ingredientId);
+            IngredientDTO ingredient = db.getIngredientById(ingredientAmount.getIngredientId());
 
             // Saving name, unit, and amount of the ingredient
             String ingredientName = ingredient.getName();
@@ -114,26 +114,33 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             TextView ingNameTextView = new TextView(this);
             ingNameTextView.setText(ingredientName);
             ingNameTextView.setTextSize(20);
-            ingNameTextView.setTextColor(getResources().getColor(R.color.fontColor));
+            ingNameTextView.setTextColor(getColor(R.color.fontColor));
             ingNameTextView.setId(View.generateViewId());
 
             TextView ingAmountTextView = new TextView(this);
             String amountTXT = String.valueOf(ingredientAmountAmount);
             ingAmountTextView.setText(amountTXT);
             ingAmountTextView.setTextSize(20);
-            ingAmountTextView.setTextColor(getResources().getColor(R.color.fontColor));
+            ingAmountTextView.setTextColor(getColor(R.color.fontColor));
             ingAmountTextView.setId(View.generateViewId());
 
             TextView ingUnitTextView = new TextView(this);
             ingUnitTextView.setText(ingredientUnit);
             ingUnitTextView.setTextSize(20);
-            ingUnitTextView.setTextColor(getResources().getColor(R.color.fontColor));
+            ingUnitTextView.setTextColor(getColor(R.color.fontColor));
             ingUnitTextView.setId(View.generateViewId());
 
-            ImageView trashCanIconImageView = new ImageView(this);
+            trashCanIconImageView = new ImageView(this);
             trashCanIconImageView.setImageResource(R.drawable.trash_can);
             trashCanIconImageView.setId(View.generateViewId());
 
+            // Set an OnClickListener for the trash can icons
+            trashCanIconImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    handleItemDeletion(ingredientAmount.getId(), ingredientAmount.getIngredientId(), ingredientName, ingredientAmountAmount, ingredientUnit);
+                }
+            });
             CheckBox checkBox = new CheckBox(this);
 
 
@@ -203,7 +210,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
              */
             shoppingLayout.addView(ingredientAmountItem);
         }
-        //db.close();
+        db.close();
     }
 
     private boolean onNavigationItemSelected(MenuItem item) {
@@ -230,7 +237,6 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         if (view == deleteAllIcon) {
             deleteShoppingBagPopup.showPopupWindow(view, this);
-            FrameLayout dimmableLayoutShoppingBag = findViewById(R.id.FrameLayoutShoppingBag);
         }
     }
 
@@ -238,4 +244,16 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
     public void onUpdateShoppingBag() {
         updateShoppingBag();
     }
+
+        // Method to handle the deletion of a shopping bag item
+        private void handleItemDeletion(long id, long ingredientId, String name, double amount, String unit) {
+            db.open();
+            db.updateIngredientQuantity(id, ingredientId, amount, 0);
+            updateShoppingBag();
+            Toast toast = new Toast(this);
+            toast.setText(amount + " " + unit + " " + name + " wurde entfernt.");
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.show();
+            db.close();
+        }
 }

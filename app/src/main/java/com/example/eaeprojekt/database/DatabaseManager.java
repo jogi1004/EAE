@@ -365,6 +365,31 @@ public class DatabaseManager {
 
     // CRUD-Operationen für ZutatenMenge
 
+    public IngredientAmountDTO getIngredientQuantity(long ingredientId) {
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENT_QUANTITY + " WHERE " + COLUMN_INGREDIENT_QUANTITY_ID + " = ?", new String[]{String.valueOf(ingredientId)});
+        IngredientAmountDTO ingredientAmountDTO = null;
+
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_ID);
+            int amountIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_AMOUNT);
+            int recipeIdIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_RECIPE_ID);
+            int isOnShoppingListIndex = cursor.getColumnIndex(COLUMN_IS_ON_SHOPPING_LIST);
+
+            if (idIndex >= 0 && amountIndex >= 0 && recipeIdIndex >= 0 && isOnShoppingListIndex >= 0) {
+                long id = cursor.getLong(idIndex);
+                double amount = cursor.getDouble(amountIndex);
+                long recipeId = cursor.getLong(recipeIdIndex);
+                int isOnShoppingList = cursor.getInt(isOnShoppingListIndex);
+
+                ingredientAmountDTO = new IngredientAmountDTO(id, amount, recipeId, ingredientId, isOnShoppingList);
+            }
+        }
+
+        cursor.close();
+        return ingredientAmountDTO;
+    }
+
+
     public long insertIngredientQuantity(long recipeId, long ingredientId, double amount, int isOnShoppingList) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_INGREDIENT_QUANTITY_AMOUNT, amount);
@@ -374,8 +399,9 @@ public class DatabaseManager {
         return database.insert(TABLE_INGREDIENT_QUANTITY, null, values);
     }
 
-    public int updateIngredientQuantity(long ingredientQuantityId, double newAmount, int newIsOnShoppingList) {
+    public int updateIngredientQuantity(long ingredientQuantityId, long newIngredientId, double newAmount, int newIsOnShoppingList) {
         ContentValues values = new ContentValues();
+        values.put(COLUMN_INGREDIENT_QUANTITY_INGREDIENT_ID, newIngredientId);
         values.put(COLUMN_INGREDIENT_QUANTITY_AMOUNT, newAmount);
         values.put(COLUMN_IS_ON_SHOPPING_LIST, newIsOnShoppingList);
         return database.update(
