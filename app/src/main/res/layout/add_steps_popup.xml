@@ -24,8 +24,9 @@
     <EditText
         android:id="@+id/step_description"
         android:layout_width="300dp"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
+        android:minHeight="80dp"
         android:background="@drawable/background_popup_steps"
         android:gravity="top|left"
         android:hint="@string/stepDescription"
@@ -68,7 +69,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cancel_button"
+        android:id="@+id/cancel_button_ingredient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"

@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
 import com.example.eaeprojekt.R;
-import com.example.eaeprojekt.RecipeDTO;
+import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

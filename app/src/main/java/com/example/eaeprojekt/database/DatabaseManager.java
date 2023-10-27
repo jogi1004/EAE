@@ -7,12 +7,13 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.eaeprojekt.IngredientAmountDTO;
-import com.example.eaeprojekt.IngredientDTO;
-import com.example.eaeprojekt.RecipeDTO;
-import com.example.eaeprojekt.StepDTO;
+import com.example.eaeprojekt.DTO.IngredientAmountDTO;
+import com.example.eaeprojekt.DTO.IngredientDTO;
+import com.example.eaeprojekt.DTO.RecipeDTO;
+import com.example.eaeprojekt.DTO.StepDTO;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DatabaseManager {
@@ -106,7 +107,7 @@ public class DatabaseManager {
         }
 
         cursor.close();
-
+        Collections.reverse(recipes);
         return recipes;
     }
 
@@ -219,6 +220,7 @@ public class DatabaseManager {
         }
 
         cursor.close();
+        Collections.reverse(favoriten);
         return favoriten;
     }
 
@@ -267,7 +269,7 @@ public class DatabaseManager {
         return ingredients;
     }
 
-    public IngredientDTO getIngredientById(int id) {
+    public IngredientDTO getIngredientById(long id) {
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENTS + " WHERE " + COLUMN_INGREDIENT_ID + " = ?", new String[]{String.valueOf(id)});
         IngredientDTO ingredientDTO = null;
         if (cursor.moveToFirst()) {
@@ -310,6 +312,34 @@ public class DatabaseManager {
 
         cursor.close();
         return result;
+    }
+
+    public IngredientDTO getIngredientByNameAndUnit(String name, String unit) {
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENTS +
+                " WHERE " + COLUMN_INGREDIENT_NAME + " = ? AND " +
+                COLUMN_INGREDIENT_UNIT + " = ?", new String[]{name, unit});
+
+        IngredientDTO ingredientDTO = null;
+
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_ID);
+            int nameIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_NAME);
+            int unitIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_UNIT);
+
+            if (idIndex >= 0 && nameIndex >= 0 && unitIndex >= 0) {
+                int id = cursor.getInt(idIndex);
+                String foundName = cursor.getString(nameIndex);
+                String foundUnit = cursor.getString(unitIndex);
+
+                if (unit.equals(foundUnit)) {
+                    // Eintrag mit passendem Namen und Einheit gefunden
+                    ingredientDTO = new IngredientDTO(id, foundName, foundUnit);
+                }
+            }
+        }
+
+        cursor.close();
+        return ingredientDTO;
     }
 
 
@@ -364,7 +394,7 @@ public class DatabaseManager {
         );
     }
 
-    public List<IngredientAmountDTO> getIngredientsForRecipe(int recipeId) {
+    public List<IngredientAmountDTO> getIngredientsForRecipe(long recipeId) {
         List<IngredientAmountDTO> ingredientAmounts = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENT_QUANTITY + " WHERE " + COLUMN_INGREDIENT_QUANTITY_RECIPE_ID + " = ?", new String[]{String.valueOf(recipeId)});
 
@@ -381,7 +411,7 @@ public class DatabaseManager {
                     int ingredientId = cursor.getInt(ingredientIdIndex);
                     int isOnShoppingList = cursor.getInt(isOnShoppingListIndex);
 
-                    IngredientAmountDTO ingredientAmountDTO = new IngredientAmountDTO(id, recipeId, ingredientId, amount, isOnShoppingList);
+                    IngredientAmountDTO ingredientAmountDTO = new IngredientAmountDTO(id, amount, recipeId, ingredientId, isOnShoppingList);
                     ingredientAmounts.add(ingredientAmountDTO);
                 }
 
@@ -491,6 +521,17 @@ public class DatabaseManager {
         );
     }
 
+    public int updateStepRecipeId(long stepId, long recipeId) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_RECIPE_ID, recipeId);
+        return database.update(
+                TABLE_STEPS,
+                values,
+                COLUMN_STEP_ID + " = ?",
+                new String[]{String.valueOf(stepId)}
+        );
+    }
+
     public int deleteStep(long stepId) {
         return database.delete(
                 TABLE_STEPS,
@@ -536,8 +577,6 @@ public class DatabaseManager {
                     "FOREIGN KEY (" + COLUMN_INGREDIENT_QUANTITY_INGREDIENT_ID + ") REFERENCES " + TABLE_INGREDIENTS + "(" + COLUMN_INGREDIENT_ID + ")" +
                     ")";
             db.execSQL(createIngredientQuantityTableQuery);
-
-
 
             // Tabelle für Schritte in Rezepten erstellen
             String createStepsTableQuery = "CREATE TABLE " + TABLE_STEPS + " (" +

@@ -10,12 +10,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.eaeprojekt.IngredientDTO;
+import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +24,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView b;
+    DatabaseManager db;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -47,6 +47,13 @@ public class MainActivity extends AppCompatActivity {
         b = findViewById(R.id.bottomNavView);
         b.setSelectedItemId(R.id.AddButtonNavBar);
         b.setOnItemSelectedListener(this::onNavigationItemSelected);
+/*
+        DatabaseManager db = new DatabaseManager(this);
+        db.open();
+        long x = db.insertIngredient("Spargel", "Stangen");
+        db.insertIngredientQuantity(-1, x, 300, 1);
+        db.close();
+*/
 
     }
 
