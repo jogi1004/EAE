@@ -1,9 +1,11 @@
 package com.example.eaeprojekt.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -55,7 +57,9 @@ public class RecipeActivity extends AppCompatActivity {
     private void updateRecipeList(List<RecipeDTO> recipes) {
         recipeLayout.removeAllViews();
 
+
         for (RecipeDTO recipe : recipes) {
+            int recipeid = recipe.getId();
             RelativeLayout recipeItem = new RelativeLayout(this);
             recipeItem.setLayoutParams(new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -132,12 +136,12 @@ public class RecipeActivity extends AppCompatActivity {
             /**
              * Layout for adding Margins between Recipes
              */
-            RelativeLayout.LayoutParams margingLayout = new RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams marginLayout = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT
             );
-            margingLayout.setMargins(0,0,0,15);
-            recipeItem.setLayoutParams(margingLayout);
+            marginLayout.setMargins(0,0,0,15);
+            recipeItem.setLayoutParams(marginLayout);
 
 
             recipeItem.setBackground(shape);
@@ -146,8 +150,25 @@ public class RecipeActivity extends AppCompatActivity {
             dataLayout.addView(recipeDetails);
             recipeItem.addView(dataLayout);
             recipeItem.addView(favIcon);
+            /**
+             * Use Recipe ID to identify which Layout got which Recipe
+             */
+            recipeItem.setId(recipeid);
+            Log.d("CookIt", "Gesetzte ID: " + String.valueOf(recipeItem.getId()));
+            /**
+             * OnClickListener for opening DetailView of Recipe
+             */
+            recipeItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = v.getContext();
+                    Intent i = new Intent(context, RecipeDetailView.class);
+                    i.putExtra("ID", recipeItem.getId());
+                    Log.d("CookIt", "Id in Intent gemacht: "+recipeItem.getId());
+                    startActivity(i);
+                }
+            });
             recipeLayout.addView(recipeItem);
-
         }
 
     }
