@@ -95,7 +95,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
         //Layout zum dimmen
         FrameLayout layout_MainMenu = (FrameLayout) findViewById( R.id.mainmenu);
-        layout_MainMenu.getForeground().setAlpha( 0);
+        layout_MainMenu.getForeground().setAlpha(0);
 
 
         //für db eintrag
