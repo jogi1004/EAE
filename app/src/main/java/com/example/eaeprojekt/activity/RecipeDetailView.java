@@ -9,23 +9,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.eaeprojekt.IngredientAmountDTO;
-import com.example.eaeprojekt.IngredientDTO;
-import com.example.eaeprojekt.RecipeDTO;
+import com.example.eaeprojekt.DTO.IngredientAmountDTO;
+import com.example.eaeprojekt.DTO.IngredientDTO;
+import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.w3c.dom.Text;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeDetailView extends AppCompatActivity {
@@ -39,6 +36,8 @@ public class RecipeDetailView extends AppCompatActivity {
     GridLayout durationLayout;
     List<IngredientAmountDTO> iADTO;
     List<IngredientDTO> iDTO;
+    long idUsed = 0;
+    List<IngredientDTO> ingredientsForRecipe = new ArrayList<>();
 
     @SuppressLint("ResourceAsColor")
     @Override
@@ -49,16 +48,33 @@ public class RecipeDetailView extends AppCompatActivity {
         b.setSelectedItemId(R.id.AddButtonNavBar);
         b.setOnItemSelectedListener(this::onNavigationItemSelected);
         Intent receive = getIntent();
-        recipeid = receive.getIntExtra("ID",0);
-        Log.d("CookIt", "Id aus Intent geholt: "+ recipeid);
+        recipeid = receive.getIntExtra("ID", 0);
+        Log.d("CookIt", "Id aus Intent geholt: " + recipeid);
         /**
          * Open and close DB for getting Ingredients
          */
         db = new DatabaseManager(this);
         db.open();
         Log.d("CookIt", "DB geöffnet und DBManager erstellt.");
-        iADTO = db.getIngredientsForRecipe(recipeid);
+        //Alle Zutaten aus DB lesen
         iDTO = db.getAllIngredients();
+        //Alle Zutaten, die für das Rezept benötigt werden (Name und Unit)
+        iADTO = db.getIngredientsForRecipe(recipeid);
+
+        for (IngredientDTO ingredient : iDTO) {
+            long id = ingredient.getId();
+            for (IngredientAmountDTO i : iADTO) {
+                idUsed = i.getIngredientId();
+
+                if (id == idUsed) {
+                    ingredientsForRecipe.add(ingredient);
+                }
+            }
+        }
+
+        for (IngredientDTO ingredient : ingredientsForRecipe) {
+            Log.d("CookIt", "ingredientsForRecipe: " + ingredient.getName() + "\n");
+        }
         rDTO = db.getRecipeById(recipeid);
         recipeTitle = rDTO.getTitle();
         time = rDTO.getDuration();
@@ -80,7 +96,7 @@ public class RecipeDetailView extends AppCompatActivity {
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         );
         textViewParamsName.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        textViewParamsName.setMargins(25, 10, 0, 10);
+        textViewParamsName.setMargins(25, 10, 60, 10);
 
         RelativeLayout.LayoutParams textViewParamsIngredientHeader = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -88,7 +104,7 @@ public class RecipeDetailView extends AppCompatActivity {
         );
         textViewParamsIngredientHeader.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         textViewParamsIngredientHeader.setMargins(50, 10, 0, 10);
-        
+
         /**
          * Set Title to Recipe Name
          */
@@ -106,8 +122,6 @@ public class RecipeDetailView extends AppCompatActivity {
         ingredientsLinearLayout.setOrientation(LinearLayout.VERTICAL);
         ingredientsLayout.addView(ingredientsLinearLayout);
 
-
-
         /**
          * Creating TextViews and Icons for durationView
          */
@@ -117,15 +131,16 @@ public class RecipeDetailView extends AppCompatActivity {
         durationView.setTextColor(Color.WHITE);
         TextView portionsView = new TextView(this);
         portionsView.setLayoutParams(textViewParamsName);
-        if(portions > 1) {
+        if (portions > 1) {
             portionsView.setText(portions + " Portionen");
-        } else{
+        } else {
             portionsView.setText(portions + " Portion");
         }
         portionsView.setTextColor(Color.WHITE);
 
         ImageView durationIcon = new ImageView(this);
         durationIcon.setImageResource(R.drawable.baseline_timer_24);
+        durationIcon.setPadding(20, 0, 0, 0);
         ImageView portionsIcon = new ImageView(this);
         portionsIcon.setImageResource(R.drawable.baseline_person_24);
 
@@ -139,21 +154,46 @@ public class RecipeDetailView extends AppCompatActivity {
         durationLayout.addView(portionsView);
 
 
-        for (IngredientAmountDTO ingredient : iADTO) {
-            long ingredientid = ingredient.getIngredientId();
-            for (IngredientDTO i : iDTO) {
-                TextView t = new TextView(this);
-                t.setText(i.getName());
-                t.setId(View.generateViewId());
-                t.setPadding(75, 10, 0, 10); // Hier können Sie die gewünschten Abstände anpassen
-                /**
-                 * Adding TextViews to vertical LinearLayout and then the LinearLayout to the ingredientLayout
-                 */
-                ingredientsLinearLayout.addView(t);
+        for (IngredientDTO ingredient : ingredientsForRecipe) {
+            // Erstellen Sie ein horizontales Layout für Name, Einheit und Menge
+            LinearLayout ingredientLayout = new LinearLayout(this);
+            ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+            // TextView für den Namen
+            TextView ingredientName = new TextView(this);
+            ingredientName.setText(ingredient.getName());
+            ingredientName.setPadding(75, 10, 0, 10);
+
+            // TextView für die Einheit
+            TextView ingredientUnit = new TextView(this);
+            ingredientUnit.setText(ingredient.getUnit());
+            ingredientUnit.setPadding(20, 0, 0, 0); // Ändern Sie die Padding-Werte nach Bedarf
+
+            ingredientLayout.addView(ingredientName);
+
+            // Durchlaufen Sie iADTO, um die Menge für das aktuelle IngredientDTO zu finden
+            for (IngredientAmountDTO i : iADTO) {
+                if (i.getIngredientId() == ingredient.getId()) {
+                    // TextView für die Menge
+                    TextView ingredientAmount = new TextView(this);
+                    ingredientAmount.setText(String.valueOf(i.getAmount()));
+                    ingredientAmount.setPadding(20, 0, 0, 0); // Ändern Sie die Padding-Werte nach Bedarf
+
+                    // Fügen Sie den TextView für die Menge zum horizontalen Layout hinzu
+                    ingredientLayout.addView(ingredientAmount);
+                    break;
+                }
             }
+
+            // Fügen Sie die TextViews für Name und Einheit zum horizontalen Layout hinzu
+
+            ingredientLayout.addView(ingredientUnit);
+
+            // Fügen Sie das horizontale Layout zum vertikalen Layout hinzu
+            ingredientsLinearLayout.addView(ingredientLayout);
         }
     }
-    private boolean onNavigationItemSelected(MenuItem item) {
+        private boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.AddButtonNavBar) {
             /**
