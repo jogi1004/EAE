@@ -18,6 +18,77 @@
         android:textSize="25sp"
         android:gravity="center"/>
 
+    <ImageButton
+        android:id="@+id/deleteRecipeButton"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        android:src="@drawable/trash_can"
+        android:background="@color/background"
+        android:scaleType="fitCenter"
+        android:layout_toEndOf="@id/circleViewRecipe"
+        android:layout_marginTop="250sp"
+        android:layout_marginStart="30sp"/>
+    <ImageButton
+        android:id="@+id/favIcon"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        android:src="@drawable/favorite_off"
+        android:background="@color/background"
+        android:scaleType="fitCenter"
+        android:layout_toStartOf="@id/circleViewRecipe"
+        android:layout_marginTop="250sp"
+        android:layout_marginEnd="30sp"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow_down"
+        android:backgroundTint="@color/background"
+        android:layout_marginTop="70sp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="25sp"
+        app:elevation="0dp"/>
+    <LinearLayout
+        android:id="@+id/menu_drawer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Favoriten"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:onClick="onMenuItemClick" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Bearbeiten"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:onClick="onMenuItemClick" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Löschen"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:onClick="onMenuItemClick" />
+    </LinearLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/circleViewRecipe"
@@ -29,61 +100,71 @@
         android:layout_below="@id/RecipeName"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15sp"/>
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_below="@id/circleViewRecipe"
-    android:layout_marginTop="10sp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <GridLayout
-            android:id="@+id/durationLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="4"
-            android:rowCount="1"
-            android:background="@color/backgroundGreen"
-            android:layout_marginTop="5sp"
-            android:layout_marginStart="5sp"
-            android:layout_marginEnd="5sp"
-            android:paddingTop="5sp"
-            android:paddingBottom="5sp"/>
-
-        <LinearLayout
-            android:id="@+id/ingredientsLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5sp"
-            android:layout_marginStart="5sp"
-            android:background="@color/darkerYellow"
-            android:orientation="vertical"
-            android:layout_marginTop="7sp"
-            android:layout_below="@id/durationLayout"
-            style = "@style"
-            />
-
-        <LinearLayout
-            android:id="@+id/stepsLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5sp"
-            android:layout_marginStart="5sp"
-            android:background="@color/darkerYellow"
-            android:orientation="vertical"
-            android:layout_marginTop="15sp"/>
-    </RelativeLayout>
-</ScrollView>
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavView"
+    <ScrollView
+        android:id="@+id/recipeScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/backgroundGreen"
-        app:menu="@menu/bottom_nav_bar"
-        android:layout_gravity="bottom"
-        android:layout_alignParentBottom="true">
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+        android:layout_below="@id/circleViewRecipe"
+        android:layout_above="@+id/bottomNavView"
+        android:layout_marginTop="10sp"
+        android:layout_marginBottom="7sp">
 
-</RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <GridLayout
+                android:id="@+id/durationLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="4"
+                android:rowCount="1"
+                android:background="@color/backgroundGreen"
+                android:layout_marginTop="7sp"
+                android:layout_marginStart="5sp"
+                android:layout_marginEnd="5sp"
+                android:paddingTop="5sp"
+                android:paddingBottom="5sp"/>
+
+            <LinearLayout
+                android:id="@+id/ingredientsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5sp"
+                android:layout_marginStart="5sp"
+                android:background="@color/darkerYellow"
+                android:orientation="vertical"
+                android:layout_marginTop="7sp"
+                android:layout_below="@id/durationLayout"
+                />
+
+            <LinearLayout
+                android:id="@+id/stepsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5sp"
+                android:layout_marginStart="5sp"
+                android:background="@color/backgroundGreen"
+                android:orientation="vertical"
+                android:layout_below="@id/ingredientsLayout"
+                android:layout_marginTop="7sp"/>
+        </RelativeLayout>
+</ScrollView>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_above="@+id/bottomNavView"
+android:layout_below="@id/recipeScrollView" />
+
+<com.google.android.material.bottomnavigation.BottomNavigationView
+android:id="@+id/bottomNavView"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:background="@color/backgroundGreen"
+app:menu="@menu/bottom_nav_bar"
+android:layout_gravity="bottom"
+android:layout_alignParentBottom="true">
+</com.google.android.material.bottomnavigation.BottomNavigationView>
+    </RelativeLayout>
