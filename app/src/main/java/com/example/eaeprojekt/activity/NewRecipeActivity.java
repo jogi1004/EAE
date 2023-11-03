@@ -3,7 +3,6 @@ package com.example.eaeprojekt.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +20,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
-import com.example.eaeprojekt.IngredientAmountDTO;
-import com.example.eaeprojekt.IngredientDTO;
+import com.example.eaeprojekt.DTO.IngredientAmountDTO;
+import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.PopupIngredients;
 import com.example.eaeprojekt.R;
-import com.example.eaeprojekt.PopupSteps;
+import com.example.eaeprojekt.popups.PopupSteps;
 import com.example.eaeprojekt.RecipeDTO;
 import com.example.eaeprojekt.StepDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
@@ -72,7 +71,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         }
 
         if(!foundRecipe) {
-            newRecipeId = db.insertRecipe("", 1, "", -1);
+            newRecipeId = db.insertRecipe("", 1, "", -1, "-1");
         }
 
         //ZurückButton behandeln
@@ -119,7 +118,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
         if(view == button_add_steps){
-            PopupSteps popup = new PopupSteps();
+            PopupSteps popup = new PopupSteps(this);
             popup.showPopupWindow(view, this);
 
             //background-dimming
@@ -140,7 +139,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             db = new DatabaseManager(this);
             db.open();
             //Rezepteinträge aktuallisieren
-            db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), 0);
+            db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), 0, "-1");
 
             Intent intent = new Intent(this, RecipeActivity.class);
             startActivity(intent);
@@ -176,18 +175,10 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
 
     public void addIngredients(){
-        List<IngredientAmountDTO> ingredientDTOs = db.getIngredientsForRecipe((int) newRecipeId);
-
-        Log.d("Fehlersuche", "Liste");
+        List<IngredientAmountDTO> ingredientDTOs = db.getIngredientsForRecipe(newRecipeId);
 
         for(IngredientAmountDTO ingredient : ingredientDTOs){
-
-            Log.d("Fehlersuche", "IngredientID gibt mir aber die Menger(Amount) " + ingredient.getIngredientId());
-            Log.d("Fehlersuche", "Amount gibt mir aber die Id vom Rezept? " + (int) ingredient.getAmount());
-            Log.d("Fehlersuche", "RecipeID gibt mir aber die Id von der Zutat " + ingredient.getRecipeId());
-
-            IngredientDTO ingredientBare = db.getIngredientById((int) ingredient.getRecipeId());
-            Log.d("Fehlersuche", "aha: " + ingredientBare.getName());
+            IngredientDTO ingredientBare = db.getIngredientById(ingredient.getRecipeId());
 
             /*
             schrittbeschreibung in der view hinzufügen
@@ -218,7 +209,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             ingredientText.setLayoutParams(ingredientParams);
 
             layout.addView(ingredientText);
-            Log.d("Fehlersuche", "aha2: " + ingredientBare.getName());
 
             /*
             Menge
@@ -236,7 +226,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             amountText.setLayoutParams(amountParams);
 
             layout.addView(amountText);
-            Log.d("Fehlersuche", "aha Amount: " + ingredient.getIngredientId());
 
             /*
             Einheit
@@ -254,7 +243,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             unitText.setLayoutParams(unitParams);
 
             layout.addView(unitText);
-            Log.d("Fehlersuche", "aha3: " + ingredientBare.getUnit());
 
             /*
             Mülleimer
@@ -269,7 +257,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             );
             trash.setLayoutParams(trashParams);
             layout.addView(trash);
-            Log.d("Fehlersuche", "aha4: ");
             /*
             Constraints
              */
@@ -313,8 +300,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         List<StepDTO> stepss = db.getAllStepsForRecipe((int) newRecipeId);
 
         for(StepDTO step: stepss) {
-
-            Log.d("recreate", "" + step.getText());
 
             //schrittbeschreibung in der view hinzufügen
 
@@ -385,4 +370,3 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         }
     }
 }
-

@@ -1,18 +1,18 @@
-package com.example.eaeprojekt;
+package com.example.eaeprojekt.DTO;
 
 public class IngredientDTO {
 
-    private int id;
+    private long id;
     private String name;
     private String unit;
 
-    public IngredientDTO(int id, String name, String unit) {
+    public IngredientDTO(long id, String name, String unit) {
         this.id = id;
         this.name = name;
         this.unit = unit;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

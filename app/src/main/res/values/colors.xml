@@ -7,4 +7,5 @@
     <color name="fontColor">#884D20</color>
     <color name = "darkerYellow">#EEC131</color>
     <color name ="backgroundGreen">#4D713D</color>
+    <color name ="errorDelete">#f70202</color>
 </resources>

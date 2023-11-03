@@ -8,8 +8,20 @@
     android:background="@color/background"
     tools:context=".activity.RecipeActivity">
 
+    <FrameLayout
+        android:id="@+id/FrameLayoutShoppingBag"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:foreground="@drawable/dimming"
+        android:elevation="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        /> <!-- Später noch löschen -->
+
     <RelativeLayout
-        android:id="@+id/WelcomeLinearLayoutRecipes"
+        android:id="@+id/RelativeLayoutShoppingBag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background"
@@ -30,12 +42,12 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="107dp"
+            android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_marginStart="20sp"
             android:layout_marginTop="60sp"
-            android:layout_marginStart="10sp"
-            app:srcCompat="@drawable/burger_andre"
-            android:contentDescription="@string/ImageViewDescription"/>
+            android:contentDescription="@string/ImageViewDescription"
+            app:srcCompat="@drawable/burger_andre" />
 
         <TextView
             android:id="@+id/textView4"
@@ -62,7 +74,7 @@
             android:background="@color/background"/>
 
         <ImageButton
-            android:id="@+id/deleteAllButton"
+            android:id="@+id/deleteAllIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginTop="100sp"
@@ -78,7 +90,8 @@
         android:layout_width="match_parent"
         android:layout_height="0sp"
         android:layout_above="@id/bottomNavView"
-        android:layout_below="@id/WelcomeLinearLayoutRecipes">
+        android:layout_below="@id/RelativeLayoutShoppingBag">
+
         <ScrollView
             android:id="@+id/ScrollViewRecipes"
             android:layout_width="match_parent"
@@ -99,13 +112,10 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView">
 
-
-
             </LinearLayout>
 
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavView"

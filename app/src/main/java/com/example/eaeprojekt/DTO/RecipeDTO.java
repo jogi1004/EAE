@@ -6,13 +6,15 @@ public class RecipeDTO {
     private int portions;
     private int duration;
     private int isFavorite;
+    private String imagePath;
 
-    public RecipeDTO(int id, String title, int portions, int duration, int isFavorite) {
+    public RecipeDTO(int id, String title, int portions, int duration, int isFavorite, String imagePath) {
         this.id = id;
         this.title = title;
         this.portions = portions;
         this.duration = duration;
         this.isFavorite = isFavorite;
+        this.imagePath = imagePath;
     }
 
     public int getId() {
@@ -53,6 +55,14 @@ public class RecipeDTO {
 
     public void setIsFavorite(int isFavorite) {
         this.isFavorite = isFavorite;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }
 
