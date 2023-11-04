@@ -117,21 +117,25 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View view) {
+
+        FrameLayout layout_MainMenu = (FrameLayout) findViewById( R.id.mainmenu);
+
         if(view == button_add_steps){
-            PopupSteps popup = new PopupSteps(this);
+            PopupSteps popup = new PopupSteps();
             popup.showPopupWindow(view, this);
 
+
             //background-dimming
-            FrameLayout layout_MainMenu = (FrameLayout) findViewById( R.id.mainmenu);
             layout_MainMenu.getForeground().setAlpha(220);
+            layout_MainMenu.setElevation(1);
 
         } else if (view == button_add_ingredients) {
             PopupIngredients popup = new PopupIngredients();
             popup.showPopupWindow(view, this);
 
             //background-dimming
-            FrameLayout layout_MainMenu = (FrameLayout) findViewById( R.id.mainmenu);
             layout_MainMenu.getForeground().setAlpha(220);
+            layout_MainMenu.setElevation(1);
 
         } else if (view == button_add_recipe) {
 

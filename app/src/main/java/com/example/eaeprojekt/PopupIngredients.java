@@ -138,13 +138,13 @@ public class PopupIngredients implements View.OnClickListener {
         addButtonIngredient = popupView.findViewById(R.id.add_button_ingredient);
         addButtonIngredient.setOnClickListener(this);
 
+        frame = mainActivity.findViewById(R.id.mainmenu);
     }
 
 
     @Override
     public void onClick(View view) {
 
-        frame = mainActivity.findViewById(R.id.mainmenu);
         ConstraintLayout layoutAddIngredient = popupView.findViewById(R.id.addIngredientLayout);
 
         nameText = popupView.findViewById(R.id.nameText);
@@ -179,11 +179,15 @@ public class PopupIngredients implements View.OnClickListener {
 
         }else if (view == cancelButtonIngredient) {
             frame.getForeground().setAlpha(0);
+            frame.setElevation(0);
             popupWindow.dismiss();
+            frame.performClick();
         } else if (view == addButtonIngredient) {
 
             frame.getForeground().setAlpha(0);
+            frame.setElevation(0);
             popupWindow.dismiss();
+            frame.performClick();
 
 
             IngredientDTO ingredientToAdd = db.getIngredientByNameAndUnit(choosedIngredient, choosedUnit);
@@ -308,7 +312,9 @@ public class PopupIngredients implements View.OnClickListener {
                 parentLayout.removeView(layout);
             });
 
-
+        }else if (view == frame) {
+            frame.getForeground().setAlpha(0);
+            frame.setElevation(0);
         }
     }
 }

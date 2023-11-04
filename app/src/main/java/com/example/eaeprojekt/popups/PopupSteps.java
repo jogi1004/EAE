@@ -31,13 +31,6 @@ public class PopupSteps implements View.OnClickListener {
     PopupWindow popupWindow;
     FrameLayout frame;
 
-    private Context context;
-
-    public PopupSteps(Context context) {
-        this.context = context;
-    }
-
-
     public void showPopupWindow(final View view, NewRecipeActivity newRecipeActivity) {
 
         mainActivity = newRecipeActivity;
@@ -64,17 +57,20 @@ public class PopupSteps implements View.OnClickListener {
             buttonBack = popupView.findViewById(R.id.cancel_button_ingredient);
             buttonBack.setOnClickListener(this);
 
+            frame = mainActivity.findViewById(R.id.mainmenu);
+            frame.setOnClickListener(this);
         }
 
     @Override
     public void onClick(View viewClick) {
 
-        frame = mainActivity.findViewById(R.id.mainmenu);
 
         if(viewClick == buttonBack){
 
             frame.getForeground().setAlpha(0);
+            frame.setElevation(0);
             popupWindow.dismiss();
+            frame.performClick();
 
         } else if (viewClick == buttonAdd) {
 
@@ -87,7 +83,9 @@ public class PopupSteps implements View.OnClickListener {
             long stepId = db.insertStep(NewRecipeActivity.newRecipeId, stepDescription.getText().toString());
 
             frame.getForeground().setAlpha(0);
+            frame.setElevation(0);
             popupWindow.dismiss();
+            frame.performClick();
 
 
             //schrittbeschreibung in der view hinzufügen
@@ -156,6 +154,9 @@ public class PopupSteps implements View.OnClickListener {
                 parentLayout.removeView(layout);
             });
 
+        } else if (viewClick == frame) {
+            frame.getForeground().setAlpha(0);
+            frame.setElevation(0);
         }
     }
 }
