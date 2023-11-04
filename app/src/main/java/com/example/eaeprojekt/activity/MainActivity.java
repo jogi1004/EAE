@@ -32,6 +32,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_navbar);
 
+        // Beispieldaten hinzufügen
+        DatabaseManager dbMan = new DatabaseManager(this);
+        dbMan.open();
+        // Datenbank löschen
+        //deleteDatabase(DatabaseManager.DATABASE_NAME);
+        // Datenbank löschen
+        //deleteDatabase(DatabaseManager.DATABASE_NAME);
+
+        // Optional: Schließe die Datenbankverbindung
+        dbMan.close();
+        dbMan.open();
+
         b = findViewById(R.id.bottomNavView);
         b.setSelectedItemId(R.id.AddButtonNavBar);
         b.setOnItemSelectedListener(this::onNavigationItemSelected);

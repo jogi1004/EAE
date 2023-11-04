@@ -2,11 +2,15 @@
     <!-- Base application theme. -->
     <attr name="buttonCornerRadius" format="dimension" />
     <style name="Base.Theme.EAEProjekt" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name ="colorPrimary">#FFECAF</item>
-        <item name ="colorSecondary">#EEC131</item>
-        <item name="colorAccent">#4D713D</item>
+        <item name ="colorPrimary">@color/background</item>
+        <item name ="colorSecondary">@color/darkerYellow</item>
+        <item name="colorAccent">@color/backgroundGreen</item>
+        <item name="android:fontFamily">@font/russo_one_regular</item>
+        <item name="android:textColor">@color/fontColor</item>
         <!-- Einstellung für ganze App das Buttons einene Corner Radius haben -->
         <item name="buttonCornerRadius">20dp</item>
+        <!-- Hintergrund des PopupMenüs -->
+        <item name ="android:popupMenuStyle">@style/popupBGMenu</item>
 
 
     </style>
@@ -19,8 +23,13 @@
         <item name ="android:backgroundTint">#EEC131</item>
         <item name="android:textColor">@android:color/black</item>
 
+
         <!-- Hier verwenden wir das benutzerdefinierte Attribut für den Eckenradius -->
         <item name="android:background">@drawable/custom_button_background</item>
+    </style>
+    <style name="popupBGMenu" parent ="Widget.MaterialComponents.PopupMenu">
+
+        <item name ="android:popupBackground">@drawable/menu_background</item>
     </style>
 
 </resources>
