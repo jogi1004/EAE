@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -159,12 +160,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                 toast.show();
             }
 
-        }/*else if (view == spinner_portionsmenge){
-            hideKeyboard(this);
-
-        }
-        */
-        else if (view == backButton || view == button_cancel) {
+        } else if (view == backButton || view == button_cancel) {
             Intent intent = new Intent(this, RecipeActivity.class);
             startActivity(intent);
 
@@ -189,31 +185,16 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     public void onNothingSelected(AdapterView<?> adapterView) {
         portionsmenge = 1;
     }
-/*
-
-    public static void hideKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        //Find the currently focused view, so we can grab the correct window token from it.
-        View view = activity.getCurrentFocus();
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        if (view == null) {
-            view = new View(activity);
-        }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
- */
 
 
     public void addIngredients(){
         List<IngredientAmountDTO> ingredientDTOs = db.getIngredientsForRecipe(newRecipeId);
+        Log.d("Fehler: ", "RezeptId " + newRecipeId);
+
 
         for(IngredientAmountDTO ingredient : ingredientDTOs){
-            IngredientDTO ingredientBare = db.getIngredientById(ingredient.getRecipeId());
+            IngredientDTO ingredientBare = db.getIngredientById(ingredient.getIngredientId());
 
-            /*
-            schrittbeschreibung in der view hinzufügen
-             */
             ConstraintLayout layout = new ConstraintLayout(this);
 
             ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
@@ -246,7 +227,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
              */
             TextView amountText = new TextView(this);
             amountText.setId(View.generateViewId());
-            amountText.setText("" + ingredient.getIngredientId());
+            amountText.setText("" + ingredient.getAmount());
             amountText.setGravity(Gravity.CENTER);
             amountText.setTextColor(Color.parseColor("#FFFFFF"));
 
@@ -318,7 +299,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             parentLayout.addView(layout);
 
             trash.setOnClickListener(v ->{
-                db.deleteStep(ingredient.getId());
+                db.deleteIngredientQuantity(ingredient.getId());
                 parentLayout.removeView(layout);
             });
 

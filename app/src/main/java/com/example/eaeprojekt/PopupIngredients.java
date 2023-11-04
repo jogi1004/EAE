@@ -149,16 +149,17 @@ public class PopupIngredients implements View.OnClickListener {
         unitText = popupView.findViewById(R.id.unitText);
         String unitTextString = unitText.getText().toString();
 
+        ConstraintLayout ja = popupView.findViewById(R.id.ja);
+
         if (view == addIngredientCross){
 
-                ConstraintLayout ja = popupView.findViewById(R.id.ja);
 
             if(layoutAddIngredient.getVisibility() == View.VISIBLE){
                 layoutAddIngredient.setVisibility(View.INVISIBLE);
 
 
                 ConstraintSet constraintSet = new ConstraintSet();
-                constraintSet.clone(ja); // 'constraintLayout' ist das übergeordnete ConstraintLayout
+                constraintSet.clone(ja);
 
                 constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.START, R.id.ja, ConstraintSet.START, 30);
                 constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.TOP, R.id.chooseAmount, ConstraintSet.BOTTOM, 40); // Hier wird die obere View referenziert
@@ -170,7 +171,7 @@ public class PopupIngredients implements View.OnClickListener {
                 layoutAddIngredient.setVisibility(View.VISIBLE);
 
                 ConstraintSet constraintSet = new ConstraintSet();
-                constraintSet.clone(ja); // 'constraintLayout' ist das übergeordnete ConstraintLayout
+                constraintSet.clone(ja);
 
                 constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.START, R.id.ja, ConstraintSet.START, 30);
                 constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.TOP, R.id.addIngredientLayout, ConstraintSet.BOTTOM, 40); // Hier wird die obere View referenziert
@@ -185,10 +186,19 @@ public class PopupIngredients implements View.OnClickListener {
 
                 ingredientList.add(nameTextString + ", " + unitTextString);
                 adapterIngredients.notifyDataSetChanged();
+                ingredients.setSelection(ingredientList.size()-1);
 
                 layoutAddIngredient.setVisibility(View.INVISIBLE);
 
+                ConstraintSet constraintSet = new ConstraintSet();
+                constraintSet.clone(ja);
 
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.START, R.id.ja, ConstraintSet.START, 30);
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.TOP, R.id.chooseAmount, ConstraintSet.BOTTOM, 40); // Hier wird die obere View referenziert
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.BOTTOM, R.id.ja, ConstraintSet.BOTTOM, 30);
+
+                constraintSet.applyTo(ja);
+                
             }else{
                 Toast toast = new Toast(mainActivity);
                 toast.setText("Füllen sie zuerst die Felder aus");
