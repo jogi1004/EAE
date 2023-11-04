@@ -9,6 +9,7 @@
         <item name="android:textColor">@color/fontColor</item>
         <!-- Einstellung für ganze App das Buttons einene Corner Radius haben -->
         <item name="buttonCornerRadius">20dp</item>
+        <item name ="android:popupMenuStyle">@style/popupBGMenu</item>
 
 
     </style>

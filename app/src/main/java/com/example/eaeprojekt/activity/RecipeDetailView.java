@@ -1,11 +1,19 @@
 package com.example.eaeprojekt.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
+import static com.example.eaeprojekt.R.id.menu_edit;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuPopupHelper;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import android.view.View;
@@ -13,6 +21,7 @@ import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +35,7 @@ import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.LineNumberInputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +43,7 @@ import java.util.List;
  * RecipeDetail View provides all functional Methods for showing
  * Image, Ingredients and Steps of your recipe
  */
-public class RecipeDetailView extends AppCompatActivity implements View.OnClickListener {
+public class RecipeDetailView extends AppCompatActivity implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
     private DatabaseManager db;
     RecipeDTO rDTO;
@@ -48,7 +58,7 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
     List<IngredientDTO> ingredientsForRecipe = new ArrayList<>();
 
     List<StepDTO> steps;
-    ImageButton delete, favorite;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +87,7 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
         //Alle Zutaten, die für das Rezept benötigt werden (Name und Unit)
         iADTO = db.getIngredientsForRecipe(recipeid);
 
-        delete = findViewById(R.id.deleteRecipeButton);
-        delete.setOnClickListener(this);
-        favorite = findViewById(R.id.favIcon);
-        favorite.setOnClickListener(this);
+
 
         /**
          * Getting all Ingredients for RecipeID
@@ -150,6 +157,8 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
         ingredientsHeader.setLayoutParams(textViewParamsIngredientHeader);
         ingredientsLayout.addView(ingredientsHeader);
 
+
+
         LinearLayout ingredientsLinearLayout = new LinearLayout(this);
         ingredientsLinearLayout.setOrientation(LinearLayout.VERTICAL);
         ingredientsLayout.addView(ingredientsLinearLayout);
@@ -209,7 +218,7 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
                 if (i.getIngredientId() == ingredient.getId()) {
                     // TextView für die Menge
                     TextView ingredientAmount = new TextView(this);
-                    ingredientAmount.setText(String.valueOf(i.getAmount()));
+                    ingredientAmount.setText(String.valueOf((int)i.getAmount()));
                     ingredientAmount.setPadding(20, 0, 0, 0); // Ändern Sie die Padding-Werte nach Bedarf
 
                     // Fügen Sie den TextView für die Menge zum horizontalen Layout hinzu
@@ -231,6 +240,13 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
          */
 
         stepsLayout = findViewById(R.id.stepsLayout);
+
+        TextView StepsHeader= new TextView(this);
+        StepsHeader.setText("Zubereitungsschritte");
+        StepsHeader.setLayoutParams(textViewParamsIngredientHeader);
+        StepsHeader.setTextColor(Color.WHITE);
+        stepsLayout.addView(StepsHeader);
+
         for(StepDTO s : steps){
             LinearLayout singleStepLayout = new LinearLayout(this);
 
@@ -276,7 +292,7 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
         }
         return false;
     }
-
+/**
     @Override
     public void onClick(View v) {
         if(delete == v){
@@ -300,5 +316,35 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
             db.updateRecipe(recipeid,recipeTitle,portions,time,isFavorite,imagePath);
 
         }
+    }
+**/
+@RequiresApi(api = Build.VERSION_CODES.Q)
+@SuppressLint({"RestrictedApi", "NonConstantResourceId"})
+public void showMenu(View v) {
+    PopupMenu popupMenu = new PopupMenu(this, v);
+    MenuInflater inflater = popupMenu.getMenuInflater();
+    inflater.inflate(R.menu.burger_menu, popupMenu.getMenu());
+
+    popupMenu.setOnMenuItemClickListener(item -> {
+        if (item.getItemId() == menu_edit) {
+            Toast.makeText(this, "Bearbeiten", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (item.getItemId() == R.id.menu_delete) {
+            Toast.makeText(this, "Löschen", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    });
+
+    popupMenu.show();
+}
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        return false;
     }
 }

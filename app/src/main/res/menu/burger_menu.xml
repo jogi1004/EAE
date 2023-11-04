@@ -1,8 +1,6 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/menu_favorite"
-        android:icon="@drawable/favorite_off"
-        android:title="Favoriten" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/menu_edit"
         android:icon="@drawable/logo"

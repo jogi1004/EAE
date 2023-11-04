@@ -9,6 +9,8 @@
         <item name="android:textColor">@color/fontColor</item>
         <!-- Einstellung für ganze App das Buttons einene Corner Radius haben -->
         <item name="buttonCornerRadius">20dp</item>
+        <!-- Hintergrund des PopupMenüs -->
+        <item name ="android:popupMenuStyle">@style/popupBGMenu</item>
 
 
     </style>
@@ -24,6 +26,10 @@
 
         <!-- Hier verwenden wir das benutzerdefinierte Attribut für den Eckenradius -->
         <item name="android:background">@drawable/custom_button_background</item>
+    </style>
+    <style name="popupBGMenu" parent ="Widget.MaterialComponents.PopupMenu">
+
+        <item name ="android:popupBackground">@drawable/menu_background</item>
     </style>
 
 </resources>
