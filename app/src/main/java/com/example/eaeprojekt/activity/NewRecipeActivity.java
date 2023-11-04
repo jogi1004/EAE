@@ -1,11 +1,13 @@
 package com.example.eaeprojekt.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -117,36 +120,51 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View view) {
+
+        FrameLayout layout_MainMenu = (FrameLayout) findViewById( R.id.mainmenu);
+
         if(view == button_add_steps){
-            PopupSteps popup = new PopupSteps(this);
+            PopupSteps popup = new PopupSteps();
             popup.showPopupWindow(view, this);
 
+
             //background-dimming
-            FrameLayout layout_MainMenu = (FrameLayout) findViewById( R.id.mainmenu);
             layout_MainMenu.getForeground().setAlpha(220);
+            layout_MainMenu.setElevation(1);
 
         } else if (view == button_add_ingredients) {
             PopupIngredients popup = new PopupIngredients();
             popup.showPopupWindow(view, this);
 
             //background-dimming
-            FrameLayout layout_MainMenu = (FrameLayout) findViewById( R.id.mainmenu);
             layout_MainMenu.getForeground().setAlpha(220);
+            layout_MainMenu.setElevation(1);
 
         } else if (view == button_add_recipe) {
 
-            //datenbankzugriff
-            db = new DatabaseManager(this);
-            db.open();
-            //Rezepteinträge aktuallisieren
-            db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), 0, "-1");
+            if(title.getText().length() > 0 && time.getText().length() > 0) {
+                //datenbankzugriff
+                db = new DatabaseManager(this);
+                db.open();
+                //Rezepteinträge aktuallisieren
+                db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), 0, "-1");
 
-            Intent intent = new Intent(this, RecipeActivity.class);
-            startActivity(intent);
+                Intent intent = new Intent(this, RecipeActivity.class);
+                startActivity(intent);
 
-            finish();
+                finish();
+            }else{
+                Toast toast = new Toast(this);
+                toast.setText("Fülle bitte zuerst alle Felder aus 😊");
+                toast.show();
+            }
 
-        } else if (view == backButton || view == button_cancel) {
+        }/*else if (view == spinner_portionsmenge){
+            hideKeyboard(this);
+
+        }
+        */
+        else if (view == backButton || view == button_cancel) {
             Intent intent = new Intent(this, RecipeActivity.class);
             startActivity(intent);
 
@@ -161,7 +179,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-
     //welche portionsmenge ausgewählt wurde
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -172,6 +189,20 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     public void onNothingSelected(AdapterView<?> adapterView) {
         portionsmenge = 1;
     }
+/*
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+ */
 
 
     public void addIngredients(){
@@ -272,7 +303,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             constraintSet.connect(amountText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
             constraintSet.connect(amountText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
             //Einheit
-            constraintSet.connect(unitText.getId(), ConstraintSet.START, amountText.getId(), ConstraintSet.START, 50);
+            constraintSet.connect(unitText.getId(), ConstraintSet.START, amountText.getId(), ConstraintSet.END, 20);
             constraintSet.connect(unitText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
             constraintSet.connect(unitText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
             //Mülleimer

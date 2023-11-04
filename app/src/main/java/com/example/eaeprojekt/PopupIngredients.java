@@ -110,10 +110,6 @@ public class PopupIngredients implements View.OnClickListener {
                 unitTV = popupView.findViewById(R.id.textViewUnit);
                 unitTV.setText(choosedUnit.toString());
 
-                Log.d("Selected Ingredient", selectedItem);
-
-                Log.d("Selected Ingredient", choosedIngredient);
-                Log.d("Selected Ingredient", choosedUnit);
             }
 
             @Override
@@ -138,13 +134,13 @@ public class PopupIngredients implements View.OnClickListener {
         addButtonIngredient = popupView.findViewById(R.id.add_button_ingredient);
         addButtonIngredient.setOnClickListener(this);
 
+        frame = mainActivity.findViewById(R.id.mainmenu);
     }
 
 
     @Override
     public void onClick(View view) {
 
-        frame = mainActivity.findViewById(R.id.mainmenu);
         ConstraintLayout layoutAddIngredient = popupView.findViewById(R.id.addIngredientLayout);
 
         nameText = popupView.findViewById(R.id.nameText);
@@ -155,10 +151,32 @@ public class PopupIngredients implements View.OnClickListener {
 
         if (view == addIngredientCross){
 
+                ConstraintLayout ja = popupView.findViewById(R.id.ja);
+
             if(layoutAddIngredient.getVisibility() == View.VISIBLE){
                 layoutAddIngredient.setVisibility(View.INVISIBLE);
+
+
+                ConstraintSet constraintSet = new ConstraintSet();
+                constraintSet.clone(ja); // 'constraintLayout' ist das übergeordnete ConstraintLayout
+
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.START, R.id.ja, ConstraintSet.START, 30);
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.TOP, R.id.chooseAmount, ConstraintSet.BOTTOM, 40); // Hier wird die obere View referenziert
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.BOTTOM, R.id.ja, ConstraintSet.BOTTOM, 30);
+
+                constraintSet.applyTo(ja);
+
             }else {
                 layoutAddIngredient.setVisibility(View.VISIBLE);
+
+                ConstraintSet constraintSet = new ConstraintSet();
+                constraintSet.clone(ja); // 'constraintLayout' ist das übergeordnete ConstraintLayout
+
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.START, R.id.ja, ConstraintSet.START, 30);
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.TOP, R.id.addIngredientLayout, ConstraintSet.BOTTOM, 40); // Hier wird die obere View referenziert
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.BOTTOM, R.id.ja, ConstraintSet.BOTTOM, 30);
+
+                constraintSet.applyTo(ja);
             }
         }else if(view == createIngredient){
 
@@ -179,16 +197,18 @@ public class PopupIngredients implements View.OnClickListener {
 
         }else if (view == cancelButtonIngredient) {
             frame.getForeground().setAlpha(0);
+            frame.setElevation(0);
             popupWindow.dismiss();
+            frame.performClick();
         } else if (view == addButtonIngredient) {
 
             frame.getForeground().setAlpha(0);
+            frame.setElevation(0);
             popupWindow.dismiss();
+            frame.performClick();
 
 
             IngredientDTO ingredientToAdd = db.getIngredientByNameAndUnit(choosedIngredient, choosedUnit);
-            Log.d("Selected Ingredient", "Ingredient" + ingredientToAdd.getId() + " " + ingredientToAdd.getName()
-                    + " " + ingredientToAdd.getUnit());
 
             EditText amount = popupView.findViewById(R.id.amount);
 
@@ -289,7 +309,7 @@ public class PopupIngredients implements View.OnClickListener {
             constraintSet.connect(amountText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
             constraintSet.connect(amountText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
             //Einheit
-            constraintSet.connect(unitText.getId(), ConstraintSet.START, amountText.getId(), ConstraintSet.START, 50);
+            constraintSet.connect(unitText.getId(), ConstraintSet.START, amountText.getId(), ConstraintSet.END, 20);
             constraintSet.connect(unitText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
             constraintSet.connect(unitText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
             //Mülleimer
@@ -308,7 +328,9 @@ public class PopupIngredients implements View.OnClickListener {
                 parentLayout.removeView(layout);
             });
 
-
+        }else if (view == frame) {
+            frame.getForeground().setAlpha(0);
+            frame.setElevation(0);
         }
     }
 }

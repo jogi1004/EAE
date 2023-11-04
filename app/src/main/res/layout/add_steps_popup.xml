@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_with_rounded_corners">
+    android:background="@drawable/background_with_rounded_corners"
+    android:windowSoftInputMode="adjustPan">
 
     <TextView
         android:id="@+id/zubereitungsschritt"
@@ -28,6 +29,7 @@
         android:layout_marginTop="30dp"
         android:minHeight="80dp"
         android:background="@drawable/background_popup_steps"
+        android:textCursorDrawable="@null"
         android:gravity="top|left"
         android:hint="@string/stepDescription"
         android:inputType="textMultiLine"
