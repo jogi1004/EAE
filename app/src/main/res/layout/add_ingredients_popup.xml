@@ -92,6 +92,7 @@
         android:layout_marginStart="5dp"
         android:gravity="center_horizontal|center_vertical"
         android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/amount"
         app:layout_constraintStart_toEndOf="@+id/amount"
         app:layout_constraintTop_toTopOf="@+id/amount" />

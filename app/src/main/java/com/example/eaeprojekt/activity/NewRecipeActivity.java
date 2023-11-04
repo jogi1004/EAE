@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -207,12 +208,21 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
     public void addIngredients(){
         List<IngredientAmountDTO> ingredientDTOs = db.getIngredientsForRecipe(newRecipeId);
+        Log.d("Fehler: ", "RezeptId " + newRecipeId);
+
 
         for(IngredientAmountDTO ingredient : ingredientDTOs){
-            IngredientDTO ingredientBare = db.getIngredientById(ingredient.getRecipeId());
+            IngredientDTO ingredientBare = db.getIngredientById(ingredient.getIngredientId());
+
+            Log.d("Fehler: ", "IngredientId: " +
+                    ingredient.getIngredientId());
+
+
+            //Log.d("Fehler: ", "Name von der Zutat: " +
+             //       db.getIngredientById(ingredient.getId()).getName());
 
             /*
-            schrittbeschreibung in der view hinzufügen
+            Zutat in der view hinzufügen
              */
             ConstraintLayout layout = new ConstraintLayout(this);
 
@@ -246,7 +256,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
              */
             TextView amountText = new TextView(this);
             amountText.setId(View.generateViewId());
-            amountText.setText("" + ingredient.getIngredientId());
+            amountText.setText("" + ingredient.getAmount());
             amountText.setGravity(Gravity.CENTER);
             amountText.setTextColor(Color.parseColor("#FFFFFF"));
 
@@ -318,7 +328,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             parentLayout.addView(layout);
 
             trash.setOnClickListener(v ->{
-                db.deleteStep(ingredient.getId());
+                db.deleteIngredientQuantity(ingredient.getId());
                 parentLayout.removeView(layout);
             });
 
