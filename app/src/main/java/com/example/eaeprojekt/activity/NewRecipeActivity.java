@@ -2,8 +2,13 @@ package com.example.eaeprojekt.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -19,6 +24,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -33,6 +40,8 @@ import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.DTO.StepDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 
 
@@ -50,19 +59,26 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     Spinner spinner_portionsmenge;
     int portionsmenge;
 
+    ConstraintLayout button_add_image;
+    ImageView pictureView;
+    String imagePath;
     public static long newRecipeId;
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_recipe);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        button_add_ingredients = findViewById(R.id.button_add_ingredients);
 
         //datenbankzugriff
         db = new DatabaseManager(this);
         db.open();
 
-        //Neues Rezept erstellen mit keinen Inhalten (wird gelöscht, falls vorgang abgebrochen wird)
+        //Neues Rezept erstellen ohne Inhalte (wird gelöscht, falls Vorgang abgebrochen wird)
         List<RecipeDTO> alleRezepte = db.getAllRecipes();
 
         boolean foundRecipe = false;
@@ -75,43 +91,113 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         }
 
         if(!foundRecipe) {
-            newRecipeId = db.insertRecipe("", 1, "", -1, "-1");
+            newRecipeId = db.insertRecipe(null, 1, null, -1, null);
         }
 
         //ZurückButton behandeln
-        backButton = (ImageView) findViewById(R.id.backButton);
+        backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(this);
 
 
         //Buttons zum Rezept behandeln
-        button_add_ingredients = (ConstraintLayout) findViewById(R.id.button_add_ingredients);
+        button_add_ingredients = findViewById(R.id.button_add_ingredients);
         button_add_ingredients.setOnClickListener(this);
 
-        button_add_steps = (ConstraintLayout) findViewById(R.id.button_add_steps);
+        button_add_steps = findViewById(R.id.button_add_steps);
         button_add_steps.setOnClickListener(this);
 
 
-        button_add_recipe = (ConstraintLayout) findViewById(R.id.button_add_recipe);
+        button_add_recipe = findViewById(R.id.button_add_recipe);
         button_add_recipe.setOnClickListener(this);
 
-        button_cancel = (ConstraintLayout) findViewById(R.id.button_cancel);
+        button_cancel = findViewById(R.id.button_cancel);
         button_cancel.setOnClickListener(this);
 
+        button_add_image = findViewById(R.id.picture_layout);
+        button_add_image.setOnClickListener(this);
+        pictureView = findViewById(R.id.recipeImageView);
+
         //Layout zum dimmen
-        FrameLayout layout_MainMenu = (FrameLayout) findViewById( R.id.mainmenu);
+        FrameLayout layout_MainMenu = findViewById( R.id.mainmenu);
         layout_MainMenu.getForeground().setAlpha(0);
 
 
         //für db eintrag
-        title = (EditText) findViewById(R.id.title_text);
-        time = (EditText) findViewById(R.id.time_text);
+        title = findViewById(R.id.title_text);
+        time = findViewById(R.id.time_text);
 
         //spinner füllen
-        spinner_portionsmenge = (Spinner) findViewById(R.id.spinner);
+        spinner_portionsmenge = findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.portionsmenge, android.R.layout.simple_spinner_dropdown_item);
         spinner_portionsmenge.setAdapter(adapter);
         spinner_portionsmenge.setOnItemSelectedListener(this);
 
+        // initialisiere den ActivityResultLauncher
+        imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK) {
+                Intent data = result.getData();
+                if (data != null) {
+                    Uri selectedImageUri = data.getData();
+                    //imagePath = selectedImageUri.toString();
+                    pictureView.setImageURI(selectedImageUri);
+                    button_add_image.setVisibility(View.INVISIBLE);
+
+                    Log.d("HSKL", "Speichere Bild");
+                    Bitmap imageToStore;
+                    Log.d("HSKL", "Bitmap erstellt");
+                    try {
+                        imageToStore = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
+                        Log.d("HSKL", "Bitmap beschrieben");
+                    } catch (IOException e) {
+                        Log.d("HSKL", "Im Catch-Block");
+                        throw new RuntimeException(e);
+                    }
+                    Log.d("HSKL", "Versuche, Permissions zu bekommen. selectedImageUri: " +selectedImageUri);
+                    grantUriPermission(
+                            getPackageName(), selectedImageUri,
+                            Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION |
+                                    Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    Log.d("HSKL", "Erste Permission kein Fehler");
+                    getContentResolver().takePersistableUriPermission(
+                            selectedImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION |
+                                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    Log.d("HSKL", "getContentResolver");
+                    pictureView.setImageBitmap(imageToStore);
+                    Log.d("HSKL", "Bild in NewRecipeActivity gesetzt.");
+                    String wholeID = DocumentsContract.getDocumentId(data.getData());
+                    Log.d("HSKL", "Hole wholeId");
+                    String id = wholeID.split(":")[1];
+                    Log.d("HSKL", "ID:" + id);
+                    String[] column = { MediaStore.Images.Media.DATA };
+                    Log.d("HSKL", "Column");
+                    String sel = MediaStore.Images.Media._ID + "=?";
+                    Log.d("HSKL", "sel");
+                    Cursor cursor = getContentResolver().
+                            query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                    column, sel, new String[]{ id }, null);
+                    Log.d("HSKL", "Cursor geholt");
+                    if (cursor != null) {
+                        Log.d("HSKL", "Cursor: " + cursor);
+                        int columnIndex = cursor.getColumnIndex(column[0]);
+                        Log.d("HSKL", "Columnindex: " + columnIndex);
+                        
+                        //if (cursor.moveToFirst()) {
+                        Log.d("HSKL", "Versuche ImagePath auszulesen: ");
+                            imagePath = cursor.getString(columnIndex);
+                            Log.d("HSKL", "ImagePath ist jetzt " + imagePath);
+                        //}
+                        /*else {
+                            Log.d("HSKL", "Cursor.moveToFirst nicht erfolgreich");
+                        }*/
+                        cursor.close();
+                        Log.d("HSKL", "Bild wurde gespeichert");
+                    }
+                    else {
+                        Log.e("HSKL", "Cursor null");
+                    }
+                }
+            }
+        });
 
         addIngredients();
 
@@ -122,9 +208,9 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
 
-        FrameLayout layout_MainMenu = (FrameLayout) findViewById( R.id.mainmenu);
+        FrameLayout layout_MainMenu = findViewById( R.id.mainmenu);
 
-        if(view == button_add_steps){
+        if (view == button_add_steps) {
             PopupSteps popup = new PopupSteps();
             popup.showPopupWindow(view, this);
 
@@ -140,15 +226,16 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             //background-dimming
             layout_MainMenu.getForeground().setAlpha(220);
             layout_MainMenu.setElevation(1);
-
+        } else if (view == button_add_image) {
+            openImagePicker();
         } else if (view == button_add_recipe) {
 
             if(title.getText().length() > 0 && time.getText().length() > 0) {
-                //datenbankzugriff
+                // datenbankzugriff
                 db = new DatabaseManager(this);
                 db.open();
-                //Rezepteinträge aktuallisieren
-                db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), 0, "-1");
+                // Rezepteinträge aktuallisieren
+                db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), 0, imagePath); // TODO
 
                 Intent intent = new Intent(this, RecipeActivity.class);
                 startActivity(intent);
@@ -175,6 +262,13 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
     }
 
+    private void openImagePicker() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        //Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        imagePickerLauncher.launch(intent);
+    }
+
     //welche portionsmenge ausgewählt wurde
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -189,7 +283,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
     public void addIngredients(){
         List<IngredientAmountDTO> ingredientDTOs = db.getIngredientsForRecipe(newRecipeId);
-        Log.d("Fehler: ", "RezeptId " + newRecipeId);
 
 
         for(IngredientAmountDTO ingredient : ingredientDTOs){
@@ -309,9 +402,9 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
     public void addSteps(){
         //schrittbeschreibungen in der view hinzufügen
-        List<StepDTO> stepss = db.getAllStepsForRecipe((int) newRecipeId);
+        List<StepDTO> steps = db.getAllStepsForRecipe((int) newRecipeId);
 
-        for(StepDTO step: stepss) {
+        for(StepDTO step: steps) {
 
             //schrittbeschreibung in der view hinzufügen
 

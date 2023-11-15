@@ -1,14 +1,14 @@
 package com.example.eaeprojekt.DTO;
 
 public class RecipeDTO {
-    private int id;
+    private long id;
     private String title;
     private int portions;
     private int duration;
     private int isFavorite;
     private String imagePath;
 
-    public RecipeDTO(int id, String title, int portions, int duration, int isFavorite, String imagePath) {
+    public RecipeDTO(long id, String title, int portions, int duration, int isFavorite, String imagePath) {
         this.id = id;
         this.title = title;
         this.portions = portions;
@@ -17,7 +17,7 @@ public class RecipeDTO {
         this.imagePath = imagePath;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -37,7 +37,7 @@ public class RecipeDTO {
         return isFavorite;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
