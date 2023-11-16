@@ -497,9 +497,9 @@ public class DatabaseManager {
         database.update(TABLE_INGREDIENT_QUANTITY, values, null, null);
     }
 
-    public void deleteCheckedRecipes() {
+    public int deleteCheckedRecipes() {
         String whereClause = COLUMN_INGREDIENT_QUANTITY_IS_CHECKED + " = 1";
-        database.delete(TABLE_RECIPES, whereClause, null);
+        return database.delete(TABLE_INGREDIENT_QUANTITY, whereClause, null);
     }
 
 

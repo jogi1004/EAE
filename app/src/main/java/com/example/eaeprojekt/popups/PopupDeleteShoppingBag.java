@@ -9,8 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
+import android.widget.Toast;
 
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.activity.ShoppingBagActivity;
@@ -20,7 +19,6 @@ import com.example.eaeprojekt.database.DatabaseManager;
 public class PopupDeleteShoppingBag implements View.OnClickListener {
 
     DatabaseManager db;
-
     TextView buttonDeleteAll;
     TextView buttonDeleteChecked;
     TextView buttonBack;
@@ -29,7 +27,6 @@ public class PopupDeleteShoppingBag implements View.OnClickListener {
     PopupWindow popupWindow;
     FrameLayout frame;
     private final ShoppingBagUpdateListener updateListener;
-
     private final Context context;
 
     public PopupDeleteShoppingBag(Context context, ShoppingBagUpdateListener listener) {
@@ -83,12 +80,22 @@ public class PopupDeleteShoppingBag implements View.OnClickListener {
             //datenbankzugriff
             db = new DatabaseManager(context);
             db.open();
-            db.deleteCheckedRecipes();
+            int rowCount = db.deleteCheckedRecipes();
             db.close();
             frame.getForeground().setAlpha(0);
             popupWindow.dismiss();
             if (updateListener != null) {
                 updateListener.onUpdateShoppingBag();
+            }
+
+            Toast toast = new Toast(context);
+            if (rowCount > 0) {
+                toast.setText(rowCount + " Einträge entfernt.");
+                toast.show();
+            }
+            else {
+                toast.setText("Keine Einträge entfernt.");
+                toast.show();
             }
         }else if (viewClick == buttonDeleteAll) {
 
