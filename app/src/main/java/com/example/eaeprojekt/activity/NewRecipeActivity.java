@@ -1,6 +1,5 @@
 package com.example.eaeprojekt.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -26,7 +24,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.eaeprojekt.DTO.IngredientAmountDTO;
 import com.example.eaeprojekt.DTO.IngredientDTO;
-import com.example.eaeprojekt.PopupIngredients;
+import com.example.eaeprojekt.popups.PopupIngredients;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.popups.PopupSteps;
 import com.example.eaeprojekt.DTO.RecipeDTO;
@@ -111,7 +109,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.portionsmenge, android.R.layout.simple_spinner_dropdown_item);
         spinner_portionsmenge.setAdapter(adapter);
         spinner_portionsmenge.setOnItemSelectedListener(this);
-
 
         addIngredients();
 

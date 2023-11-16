@@ -47,13 +47,12 @@ public class MainActivity extends AppCompatActivity {
         b = findViewById(R.id.bottomNavView);
         b.setSelectedItemId(R.id.AddButtonNavBar);
         b.setOnItemSelectedListener(this::onNavigationItemSelected);
-/*
         DatabaseManager db = new DatabaseManager(this);
         db.open();
         long x = db.insertIngredient("Spargel", "Stangen");
-        db.insertIngredientQuantity(-1, x, 300, 1);
+        db.insertIngredientQuantity(-1, x, 300, 1, 0);
+        db.insertIngredientQuantity(-1, x, 200, 1, 1);
         db.close();
-*/
 
     }
 
