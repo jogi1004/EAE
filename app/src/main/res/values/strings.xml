@@ -21,7 +21,8 @@
     <string name="DeleteSymbolDescription">Mülleimer-Icon am oberen Bildschirmrand zum Leeren der gesamten Einkaufsliste.</string>
     <string name="deleteShoppingList">Einkaufsliste leeren</string>
     <string name="deleteShoppingListYouSure">Möchtest du deine Einkaufliste wirklich leeren?</string>
-    <string name="deleteConfirmation">Löschen</string>
+    <string name="deleteConfirmation">Alle Zutaten löschen</string>
+    <string name="deleteCheckedConfirmation">Markierte Zutaten löschen</string>
     <string name="cancel">Abbrechen</string>
     <string name="add">Hinzufügen</string>
     <string name="stepDescription">Schrittbeschreibung</string>

@@ -135,13 +135,12 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             trashCanIconImageView.setId(View.generateViewId());
 
             // Set an OnClickListener for the trash can icons
-            trashCanIconImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    handleItemDeletion(ingredientAmount.getId(), ingredientAmount.getIngredientId(), ingredientName, ingredientAmountAmount, ingredientUnit);
-                }
-            });
+            trashCanIconImageView.setOnClickListener(view -> handleItemDeletion(ingredientAmount.getId(), ingredientAmount.getIngredientId(), ingredientName, ingredientAmountAmount, ingredientUnit));
             CheckBox checkBox = new CheckBox(this);
+            if (ingredientAmount.getIsChecked() == 1) {
+                checkBox.setChecked(true);
+            }
+            checkBox.setOnClickListener(view -> handleCheckboxClick(ingredientAmount));
 
 
             /**
@@ -248,12 +247,17 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
         // Method to handle the deletion of a shopping bag item
         private void handleItemDeletion(long id, long ingredientId, String name, double amount, String unit) {
             db.open();
-            db.updateIngredientQuantity(id, ingredientId, amount, 0);
+            db.updateIngredientQuantity(id, ingredientId, amount, 0, 0);
             updateShoppingBag();
             Toast toast = new Toast(this);
             toast.setText(amount + " " + unit + " " + name + " wurde entfernt.");
             toast.setDuration(Toast.LENGTH_SHORT);
             toast.show();
+            db.close();
+        }
+        private void handleCheckboxClick(IngredientAmountDTO ingredientAmount) {
+            db.open();
+            db.updateIngredientQuantity(ingredientAmount.getId(), ingredientAmount.getIngredientId(), ingredientAmount.getAmount(), ingredientAmount.getOnShoppingList(), ingredientAmount.getIsChecked()==0? 1:0 );
             db.close();
         }
 }
