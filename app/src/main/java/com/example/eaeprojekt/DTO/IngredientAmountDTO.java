@@ -6,13 +6,15 @@ public class IngredientAmountDTO {
     private long recipeId;
     private long ingredientId;
     private int onShoppingList;
+    private int isChecked;
 
-    public IngredientAmountDTO(long id, double amount, long recipeId, long ingredientId, int onShoppingList) {
+    public IngredientAmountDTO(long id, double amount, long recipeId, long ingredientId, int onShoppingList, int isChecked) {
         this.id = id;
         this.amount = amount;
         this.recipeId = recipeId;
         this.ingredientId = ingredientId;
         this.onShoppingList = onShoppingList;
+        this.isChecked = isChecked;
     }
 
     public long getId() {
@@ -34,6 +36,7 @@ public class IngredientAmountDTO {
     public int getOnShoppingList() {
         return onShoppingList;
     }
+    public int getIsChecked() { return isChecked; }
 
     public void setId(int id) {
         this.id = id;
@@ -54,6 +57,7 @@ public class IngredientAmountDTO {
     public void setOnShoppingList(int onShoppingList) {
         this.onShoppingList = onShoppingList;
     }
+    public void setIsChecked(int isChecked) { this.isChecked = isChecked; }
 
     @Override
     public String toString() {
@@ -63,6 +67,7 @@ public class IngredientAmountDTO {
                 ", recipeId=" + recipeId +
                 ", ingredientId=" + ingredientId +
                 ", onShoppingList=" + onShoppingList +
+                ", isChecked=" + isChecked +
                 '}';
     }
 }

@@ -8,8 +8,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.activity.ShoppingBagActivity;
@@ -19,16 +19,15 @@ import com.example.eaeprojekt.database.DatabaseManager;
 public class PopupDeleteShoppingBag implements View.OnClickListener {
 
     DatabaseManager db;
-
-    ConstraintLayout buttonDelete;
-    ConstraintLayout buttonBack;
+    TextView buttonDeleteAll;
+    TextView buttonDeleteChecked;
+    TextView buttonBack;
     ShoppingBagActivity mainActivity;
     View view;
     PopupWindow popupWindow;
     FrameLayout frame;
-    private ShoppingBagUpdateListener updateListener;
-
-    private Context context;
+    private final ShoppingBagUpdateListener updateListener;
+    private final Context context;
 
     public PopupDeleteShoppingBag(Context context, ShoppingBagUpdateListener listener) {
         this.context = context;
@@ -42,28 +41,30 @@ public class PopupDeleteShoppingBag implements View.OnClickListener {
         frame = mainActivity.findViewById(R.id.FrameLayoutShoppingBag);
         frame.getForeground().setAlpha(220);
 
-            LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
-            View popupView = inflater.inflate(R.layout.delete_shopping_bag_popup, null);
-            this.view = popupView;
+        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.delete_shopping_bag_popup, null);
+        this.view = popupView;
 
-            //length and width from the Window
-            int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-            int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-            boolean focusable = true;
+        //length and width from the Window
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true;
 
-            //Create window
-            popupWindow = new PopupWindow(popupView, width, height, focusable);
+        //Create window
+        popupWindow = new PopupWindow(popupView, width, height, focusable);
 
-            //Set the location of the window on the screen
-            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        //Set the location of the window on the screen
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
-            //Buttons
-            buttonDelete = popupView.findViewById(R.id.deleteAllButton);
-            buttonDelete.setOnClickListener(this);
+        //Buttons
+        buttonDeleteAll = popupView.findViewById(R.id.deleteAllButton);
+        buttonDeleteAll.setOnClickListener(this);
 
-            buttonBack = popupView.findViewById(R.id.cancel_button);
-            buttonBack.setOnClickListener(this);
+        buttonDeleteChecked = popupView.findViewById(R.id.deleteCheckedButton);
+        buttonDeleteChecked.setOnClickListener(this);
 
+        buttonBack = popupView.findViewById(R.id.cancel_button);
+        buttonBack.setOnClickListener(this);
         }
 
     @Override
@@ -75,7 +76,28 @@ public class PopupDeleteShoppingBag implements View.OnClickListener {
             frame.getForeground().setAlpha(0);
             popupWindow.dismiss();
 
-        } else if (viewClick == buttonDelete) {
+        } else if (viewClick == buttonDeleteChecked) {
+            //datenbankzugriff
+            db = new DatabaseManager(context);
+            db.open();
+            int rowCount = db.deleteCheckedRecipes();
+            db.close();
+            frame.getForeground().setAlpha(0);
+            popupWindow.dismiss();
+            if (updateListener != null) {
+                updateListener.onUpdateShoppingBag();
+            }
+
+            Toast toast = new Toast(context);
+            if (rowCount > 0) {
+                toast.setText(rowCount + " Einträge entfernt.");
+                toast.show();
+            }
+            else {
+                toast.setText("Keine Einträge entfernt.");
+                toast.show();
+            }
+        }else if (viewClick == buttonDeleteAll) {
 
             //datenbankzugriff
             db = new DatabaseManager(context);
@@ -88,8 +110,6 @@ public class PopupDeleteShoppingBag implements View.OnClickListener {
             if (updateListener != null) {
                 updateListener.onUpdateShoppingBag();
             }
-
-
 
             //text in der view hinzufügen
 
