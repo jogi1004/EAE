@@ -2,6 +2,8 @@ package com.example.eaeprojekt.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
@@ -83,7 +86,11 @@ public class RecipeActivity extends AppCompatActivity {
 
             if (recipe.getImagePath()!= null) {
                 Log.d("HSKL", "Da wird ein Bild eingefügt");
-                //picture.setImageURI(Uri.parse(recipe.getImagePath()));
+                File imgFile = new File(recipe.getImagePath());
+                if(imgFile.exists()){
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    picture.setImageBitmap(myBitmap);
+                }
             }
             else {
                 picture.setImageResource(R.drawable.camera);

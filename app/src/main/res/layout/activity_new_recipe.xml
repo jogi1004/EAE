@@ -91,7 +91,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <!--android:background="@drawable/burger_andre"-->
 
         <ScrollView
             android:id="@+id/scrollView2"

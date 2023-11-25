@@ -1,12 +1,23 @@
 package com.example.eaeprojekt.activity;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.media.Image;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -26,23 +37,31 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.example.eaeprojekt.DTO.IngredientAmountDTO;
 import com.example.eaeprojekt.DTO.IngredientDTO;
-import com.example.eaeprojekt.PopupIngredients;
+import com.example.eaeprojekt.popups.PopupIngredients;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.popups.PopupSteps;
 import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.DTO.StepDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
 
+import java.io.File;
 import java.io.IOException;
-import java.net.URI;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class NewRecipeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -64,6 +83,10 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     String imagePath;
     public static long newRecipeId;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
+
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 10;
+    //private static final int MY_PERMISSIONS_REQUEST_CAMERA = 11;
+    private static final int MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES = 12;
 
 
     @Override
@@ -136,64 +159,37 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK) {
                 Intent data = result.getData();
-                if (data != null) {
+                if (data != null && data.getData() != null) {
                     Uri selectedImageUri = data.getData();
-                    //imagePath = selectedImageUri.toString();
-                    pictureView.setImageURI(selectedImageUri);
                     button_add_image.setVisibility(View.INVISIBLE);
-
-                    Log.d("HSKL", "Speichere Bild");
                     Bitmap imageToStore;
-                    Log.d("HSKL", "Bitmap erstellt");
                     try {
                         imageToStore = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
-                        Log.d("HSKL", "Bitmap beschrieben");
-                    } catch (IOException e) {
-                        Log.d("HSKL", "Im Catch-Block");
-                        throw new RuntimeException(e);
-                    }
-                    Log.d("HSKL", "Versuche, Permissions zu bekommen. selectedImageUri: " +selectedImageUri);
-                    grantUriPermission(
-                            getPackageName(), selectedImageUri,
-                            Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION |
-                                    Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    Log.d("HSKL", "Erste Permission kein Fehler");
-                    getContentResolver().takePersistableUriPermission(
-                            selectedImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION |
-                                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                    Log.d("HSKL", "getContentResolver");
-                    pictureView.setImageBitmap(imageToStore);
-                    Log.d("HSKL", "Bild in NewRecipeActivity gesetzt.");
-                    String wholeID = DocumentsContract.getDocumentId(data.getData());
-                    Log.d("HSKL", "Hole wholeId");
-                    String id = wholeID.split(":")[1];
-                    Log.d("HSKL", "ID:" + id);
-                    String[] column = { MediaStore.Images.Media.DATA };
-                    Log.d("HSKL", "Column");
-                    String sel = MediaStore.Images.Media._ID + "=?";
-                    Log.d("HSKL", "sel");
-                    Cursor cursor = getContentResolver().
-                            query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                    column, sel, new String[]{ id }, null);
-                    Log.d("HSKL", "Cursor geholt");
-                    if (cursor != null) {
-                        Log.d("HSKL", "Cursor: " + cursor);
-                        int columnIndex = cursor.getColumnIndex(column[0]);
-                        Log.d("HSKL", "Columnindex: " + columnIndex);
-                        
-                        //if (cursor.moveToFirst()) {
-                        Log.d("HSKL", "Versuche ImagePath auszulesen: ");
-                            imagePath = cursor.getString(columnIndex);
-                            Log.d("HSKL", "ImagePath ist jetzt " + imagePath);
-                        //}
-                        /*else {
-                            Log.d("HSKL", "Cursor.moveToFirst nicht erfolgreich");
-                        }*/
-                        cursor.close();
-                        Log.d("HSKL", "Bild wurde gespeichert");
-                    }
-                    else {
-                        Log.e("HSKL", "Cursor null");
+                        grantUriPermission(
+                                getPackageName(), selectedImageUri,
+                                Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION |
+                                        Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        getContentResolver().takePersistableUriPermission(
+                                selectedImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION |
+                                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                        pictureView.setImageBitmap(imageToStore);
+                        String wholeID = DocumentsContract.getDocumentId(data.getData());
+                        String id = wholeID.split(":")[1];
+                        String[] column = {MediaStore.Images.Media.DATA};
+                        String sel = MediaStore.Images.Media._ID + "=?";
+                        Cursor cursor = getContentResolver().
+                                query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                        column, sel, new String[]{id}, null);
+                        if (cursor != null) {
+                            int columnIndex = cursor.getColumnIndex(column[0]);
+
+                            if (cursor.moveToFirst()) {
+                                imagePath = cursor.getString(columnIndex);
+                            }
+                            cursor.close();
+                        }
+                    }catch(IOException e){
+                            throw new RuntimeException(e);
                     }
                 }
             }
@@ -214,7 +210,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             PopupSteps popup = new PopupSteps();
             popup.showPopupWindow(view, this);
 
-
             //background-dimming
             layout_MainMenu.getForeground().setAlpha(220);
             layout_MainMenu.setElevation(1);
@@ -234,7 +229,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                 // datenbankzugriff
                 db = new DatabaseManager(this);
                 db.open();
-                // Rezepteinträge aktuallisieren
+                // Rezepteinträge aktualisieren
                 db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), 0, imagePath); // TODO
 
                 Intent intent = new Intent(this, RecipeActivity.class);
@@ -263,11 +258,106 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void openImagePicker() {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        //Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        imagePickerLauncher.launch(intent);
+        if (checkPermission(this)) {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.setType("image/*");
+            imagePickerLauncher.launch(intent);
+        }
     }
+
+    public static boolean checkPermission(final Context context)
+    {
+        int currentAPIVersion = Build.VERSION.SDK_INT;
+        if(currentAPIVersion>=android.os.Build.VERSION_CODES.M)
+        {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                Log.d("HSKL", "Permission not granted");
+                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_MEDIA_IMAGES)) {
+                    Log.d("HSKL", "Soll Permission abfragen");
+                    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+                    alertBuilder.setCancelable(true);
+                    alertBuilder.setTitle("Berechtigung notwendig");
+                    alertBuilder.setMessage("Bitte erlaube den Zugriff auf die Galerie in den Einstellungen");
+                    alertBuilder.setPositiveButton(android.R.string.ok, (dialog, which) -> ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES));
+                    AlertDialog alert = alertBuilder.create();
+                    alert.show();
+
+                } else {
+                    Log.d("HSKL", "Frage an ohne Abfrage");
+                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES);
+                }
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.d("HSKL", "RequestPermissionResult");
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openImagePicker();
+                } else {
+                    // Permission denied
+                    Toast.makeText(this, "Permission denied. Cannot pick image.", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            /*case MY_PERMISSIONS_REQUEST_CAMERA:
+                Log.d("HSKL", "case Camera");
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openCamera();
+                } else {
+                    // Permission denied
+                    Toast.makeText(this, "Permission denied. Cannot open camera.", Toast.LENGTH_SHORT).show();
+                }
+                break;*/
+        }
+    }
+
+/*    private void openCamera() {
+        if (checkPermissionForCamera()) {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                File photoFile = createImageFile();
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(this, "com.your.package.name.fileprovider", photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    imagePickerLauncher.launch(takePictureIntent);
+                }
+            }
+        }
+    }*/
+
+/*    private boolean checkPermissionForCamera() {
+        int cameraPermissionResult = checkSelfPermission(Manifest.permission.CAMERA);
+        if (cameraPermissionResult != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+            return false;
+        } else {
+            return true;
+        }
+    }*/
+
+/*    private File createImageFile() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        try {
+            return File.createTempFile(imageFileName, ".jpg", storageDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }*/
+
 
     //welche portionsmenge ausgewählt wurde
     @Override
@@ -320,7 +410,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
              */
             TextView amountText = new TextView(this);
             amountText.setId(View.generateViewId());
-            amountText.setText("" + ingredient.getAmount());
+            amountText.setText((int)ingredient.getAmount());
             amountText.setGravity(Gravity.CENTER);
             amountText.setTextColor(Color.parseColor("#FFFFFF"));
 
@@ -387,7 +477,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
             constraintSet.applyTo(layout);
 
-
             LinearLayout parentLayout = findViewById(R.id.ingredientsLayout);
             parentLayout.addView(layout);
 
@@ -395,16 +484,14 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                 db.deleteIngredientQuantity(ingredient.getId());
                 parentLayout.removeView(layout);
             });
-
         }
-
     }
 
-    public void addSteps(){
+    public void addSteps() {
         //schrittbeschreibungen in der view hinzufügen
         List<StepDTO> steps = db.getAllStepsForRecipe((int) newRecipeId);
 
-        for(StepDTO step: steps) {
+        for (StepDTO step : steps) {
 
             //schrittbeschreibung in der view hinzufügen
 
@@ -415,7 +502,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                     ConstraintLayout.LayoutParams.WRAP_CONTENT
             );
             layout.setBackgroundResource(R.drawable.background_with_rounded_corners_green);
-            layout.setPadding(20,20,20,20);
+            layout.setPadding(20, 20, 20, 20);
             layout.setLayoutParams(layoutParams);
             layoutParams.setMargins(40, 10, 40, 10);
 
@@ -467,11 +554,22 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             LinearLayout parentLayout = findViewById(R.id.stepsLayout);
             parentLayout.addView(layout);
 
-            trash.setOnClickListener(v ->{
+            trash.setOnClickListener(v -> {
                 db.deleteStep(step.getId());
                 parentLayout.removeView(layout);
             });
 
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (db != null) {
+            try {
+                db.close();
+            } catch (Exception ignore) {
+            }
         }
     }
 }
