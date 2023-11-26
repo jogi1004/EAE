@@ -317,9 +317,9 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
 
         }
     }
-**/
+**//*
 @RequiresApi(api = Build.VERSION_CODES.Q)
-@SuppressLint({"RestrictedApi", "NonConstantResourceId"})
+@SuppressLint({"RestrictedApi", "NonConstantResourceId"})*/
 public void showMenu(View v) {
     PopupMenu popupMenu = new PopupMenu(this, v);
     MenuInflater inflater = popupMenu.getMenuInflater();
@@ -330,7 +330,15 @@ public void showMenu(View v) {
             Toast.makeText(this, "Bearbeiten", Toast.LENGTH_SHORT).show();
             return true;
         } else if (item.getItemId() == R.id.menu_delete) {
-            Toast.makeText(this, "Löschen", Toast.LENGTH_SHORT).show();
+            db.open();
+            db.deleteRecipe(recipeid);
+            Log.d("CookIt", "Rezept gelöscht");
+            db.close();
+            Intent back = new Intent(this, RecipeActivity.class);
+            Toast toast = new Toast(this);
+            toast.setText("Rezept gelöscht");
+            toast.show();
+            startActivity(back);
         }
         return false;
     });

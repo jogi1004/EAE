@@ -112,7 +112,7 @@ public class DatabaseManager {
         return recipes;
     }
 
-    public RecipeDTO getRecipeById(int id) {
+    public RecipeDTO getRecipeById(long id) {
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_RECIPES + " WHERE " + COLUMN_RECIPE_ID + " = ?", new String[]{String.valueOf(id)});
         RecipeDTO recipeDTO = null;
 
@@ -238,34 +238,34 @@ public class DatabaseManager {
                 return ingredient.getId();
             }
         }
-                ContentValues values = new ContentValues();
-                values.put(COLUMN_INGREDIENT_NAME, name);
-                values.put(COLUMN_INGREDIENT_UNIT, unit);
-                return database.insert(TABLE_INGREDIENTS, null, values);
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_INGREDIENT_NAME, name);
+        values.put(COLUMN_INGREDIENT_UNIT, unit);
+        return database.insert(TABLE_INGREDIENTS, null, values);
     }
 
     public List<IngredientDTO> getAllIngredients() {
         List<IngredientDTO> ingredients = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENTS, null);
 
-            if (cursor.moveToFirst()) {
-                do {
-                    int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_ID);
-                    int nameIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_NAME);
-                    int unitIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_UNIT);
+        if (cursor.moveToFirst()) {
+            do {
+                int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_ID);
+                int nameIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_NAME);
+                int unitIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_UNIT);
 
-                    if (idIndex >= 0 && nameIndex >= 0 && unitIndex >= 0) {
-                        int id = cursor.getInt(idIndex);
-                        String name = cursor.getString(nameIndex);
-                        String unit = cursor.getString(unitIndex);
+                if (idIndex >= 0 && nameIndex >= 0 && unitIndex >= 0) {
+                    int id = cursor.getInt(idIndex);
+                    String name = cursor.getString(nameIndex);
+                    String unit = cursor.getString(unitIndex);
 
-                        IngredientDTO ingredientDTO = new IngredientDTO(id, name, unit);
-                        ingredients.add(ingredientDTO);
-                    }
-                } while (cursor.moveToNext());
-            }
+                    IngredientDTO ingredientDTO = new IngredientDTO(id, name, unit);
+                    ingredients.add(ingredientDTO);
+                }
+            } while (cursor.moveToNext());
+        }
 
-            cursor.close();
+        cursor.close();
 
         return ingredients;
     }
@@ -283,12 +283,12 @@ public class DatabaseManager {
                 String unit = cursor.getString(unitIndex);
 
                 cursor.close();
-                ingredientDTO = new IngredientDTO(id, name, unit);
+                return(new IngredientDTO(id, name, unit));
             }
         }
 
         cursor.close();
-        return ingredientDTO;
+        return null;
     }
 
 

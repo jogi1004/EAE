@@ -2,6 +2,8 @@ package com.example.eaeprojekt.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
@@ -59,7 +62,8 @@ public class RecipeActivity extends AppCompatActivity {
 
 
         for (RecipeDTO recipe : recipes) {
-            int recipeid = recipe.getId();
+            Log.d("HSKL", "Rezept " + recipe.getTitle() + " hat ImagePath " + recipe.getImagePath());
+            long recipeid = recipe.getId();
             RelativeLayout recipeItem = new RelativeLayout(this);
             recipeItem.setLayoutParams(new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -71,20 +75,35 @@ public class RecipeActivity extends AppCompatActivity {
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
             shape.setCornerRadius(30); // Radius für abgerundete Ecken in Pixeln
-            shape.setColor(getResources().getColor(R.color.darkerYellow));
+            shape.setColor(getColor(R.color.darkerYellow));
 
             /**
              * Picture of the Recipe
              */
             ImageView picture = new ImageView(this);
-            picture.setImageResource(R.drawable.testbild1);
-            picture.setId(View.generateViewId());  // Set a unique ID for the picture
+            //picture.setImageResource(R.drawable.testbild1);
+            //picture.setId(View.generateViewId());  // Set a unique ID for the picture
+
+            if (recipe.getImagePath()!= null) {
+                Log.d("HSKL", "Da wird ein Bild eingefügt");
+                File imgFile = new File(recipe.getImagePath());
+                if(imgFile.exists()){
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    picture.setImageBitmap(myBitmap);
+                }
+            }
+            else {
+                picture.setImageResource(R.drawable.camera);
+            }
+
+            LinearLayout llayout = new LinearLayout(this);
+            llayout.setOrientation(LinearLayout.HORIZONTAL);
 
             RelativeLayout.LayoutParams pictureParams = new RelativeLayout.LayoutParams(300, 300);
             pictureParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);  // Align the picture to the left
             pictureParams.addRule(RelativeLayout.CENTER_VERTICAL);  // Center the picture vertically
             picture.setLayoutParams(pictureParams);
-            picture.setPadding(30, 20, 0, 20);
+            picture.setPadding(30, 20, 0, 20); //TODO das war weg
 
             LinearLayout dataLayout = new LinearLayout(this);
             dataLayout.setOrientation(LinearLayout.VERTICAL);
@@ -145,15 +164,18 @@ public class RecipeActivity extends AppCompatActivity {
 
 
             recipeItem.setBackground(shape);
-            recipeItem.addView(picture);
+            //recipeItem.addView(picture);
             dataLayout.addView(recipeName);
             dataLayout.addView(recipeDetails);
-            recipeItem.addView(dataLayout);
+            //recipeItem.addView(dataLayout);
+            llayout.addView(picture);
+            llayout.addView(dataLayout);
+            recipeItem.addView(llayout);
             recipeItem.addView(favIcon);
             /**
              * Use Recipe ID to identify which Layout got which Recipe
              */
-            recipeItem.setId(recipeid);
+            recipeItem.setId((int)  recipeid);
             Log.d("CookIt", "Gesetzte ID: " + String.valueOf(recipeItem.getId()));
             /**
              * OnClickListener for opening DetailView of Recipe
