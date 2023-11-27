@@ -41,6 +41,7 @@ import java.io.LineNumberInputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * RecipeDetail View provides all functional Methods for showing
@@ -51,8 +52,8 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
     private DatabaseManager db;
     RecipeDTO rDTO;
     BottomNavigationView b;
-    String recipeTitle, imagePath;
-    int portions, time, isFavorite, recipeid;
+    String recipeTitle, imagePath, time;
+    int portions, isFavorite, recipeid;
     LinearLayout ingredientsLayout, stepsLayout;
     GridLayout durationLayout;
     ImageView circleViewImage;
@@ -125,7 +126,18 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
         rDTO = db.getRecipeById(recipeid);
         recipeTitle = rDTO.getTitle();
         steps = db.getAllStepsForRecipe(recipeid);
-        time = rDTO.getDuration();
+
+        int duration = recipe.getDuration();
+        int hours = duration / 60;
+        int minutes = duration % 60;
+
+        if (hours > 0 && minutes > 0) {
+            time = String.format(Locale.GERMANY, "%d Std %d Min", hours, minutes);
+        } else if (hours > 0) {
+            time = String.format(Locale.GERMANY, "%d Std", hours);
+        } else {
+            time = String.format(Locale.GERMANY, "%d Min", minutes);
+        }
         portions = rDTO.getPortions();
         isFavorite = rDTO.getIsFavorite();
         imagePath = rDTO.getImagePath();
@@ -184,8 +196,7 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
          */
         TextView durationView = new TextView(this);
         durationView.setLayoutParams(textViewParamsName);
-        String zeit = time + "min";
-        durationView.setText(zeit);
+        durationView.setText(time);
         durationView.setTextColor(Color.WHITE);
         TextView portionsView = new TextView(this);
         portionsView.setLayoutParams(textViewParamsName);
@@ -193,7 +204,7 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
             String portionen = portions + " Portionen";
             portionsView.setText(portionen);
         } else {
-            String portion = portions + " Portion";
+            String portion = "Eine Portion";
             portionsView.setText(portion);
         }
         portionsView.setTextColor(Color.WHITE);
