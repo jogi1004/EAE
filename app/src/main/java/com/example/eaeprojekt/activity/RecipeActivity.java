@@ -120,7 +120,29 @@ public class RecipeActivity extends AppCompatActivity {
             recipeName.setTextSize(25);
             recipeName.setTypeface(null, Typeface.BOLD);
             TextView recipeDetails = new TextView(this);
-            recipeDetails.setText(String.format(Locale.GERMANY, "%d Portionen %nDauer: %dmin", recipe.getPortions(), recipe.getDuration()));
+            int duration = recipe.getDuration();
+            int hours = duration / 60;
+            int minutes = duration % 60;
+
+            String durationText;
+
+            if (hours > 0 && minutes > 0) {
+                durationText = String.format(Locale.GERMANY, "%d Std %d Min", hours, minutes);
+            } else if (hours > 0) {
+                durationText = String.format(Locale.GERMANY, "%d Std", hours);
+            } else {
+                durationText = String.format(Locale.GERMANY, "%d Min", minutes);
+            }
+
+            int portionen = recipe.getPortions();
+            String portion;
+            if (portionen > 1) {
+                portion = portionen + " Portionen";
+            } else {
+                portion = "Eine Portion";
+            }
+
+            recipeDetails.setText(String.format(Locale.GERMANY, "%s %nDauer: %s", portion, durationText));
             recipeDetails.setTextSize(16);
 
             ImageView favIcon = new ImageView(this);
@@ -170,8 +192,7 @@ public class RecipeActivity extends AppCompatActivity {
             /**
              * Use Recipe ID to identify which Layout got which Recipe
              */
-            recipeItem.setId((int)  recipeid);
-            Log.d("CookIt", "Gesetzte ID: " + recipeItem.getId());
+            recipeItem.setId((int) recipeid);
             /**
              * OnClickListener for opening DetailView of Recipe
              */
