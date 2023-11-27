@@ -81,11 +81,8 @@ public class RecipeActivity extends AppCompatActivity {
              * Picture of the Recipe
              */
             ImageView picture = new ImageView(this);
-            //picture.setImageResource(R.drawable.testbild1);
-            //picture.setId(View.generateViewId());  // Set a unique ID for the picture
 
             if (recipe.getImagePath()!= null) {
-                Log.d("HSKL", "Da wird ein Bild eingefügt");
                 File imgFile = new File(recipe.getImagePath());
                 if(imgFile.exists()){
                     Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
@@ -164,10 +161,8 @@ public class RecipeActivity extends AppCompatActivity {
 
 
             recipeItem.setBackground(shape);
-            //recipeItem.addView(picture);
             dataLayout.addView(recipeName);
             dataLayout.addView(recipeDetails);
-            //recipeItem.addView(dataLayout);
             llayout.addView(picture);
             llayout.addView(dataLayout);
             recipeItem.addView(llayout);
@@ -176,7 +171,7 @@ public class RecipeActivity extends AppCompatActivity {
              * Use Recipe ID to identify which Layout got which Recipe
              */
             recipeItem.setId((int)  recipeid);
-            Log.d("CookIt", "Gesetzte ID: " + String.valueOf(recipeItem.getId()));
+            Log.d("CookIt", "Gesetzte ID: " + recipeItem.getId());
             /**
              * OnClickListener for opening DetailView of Recipe
              */

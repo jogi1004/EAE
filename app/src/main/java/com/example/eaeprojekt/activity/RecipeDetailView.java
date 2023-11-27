@@ -8,6 +8,8 @@ import androidx.appcompat.view.menu.MenuPopupHelper;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.File;
 import java.io.LineNumberInputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -52,6 +55,7 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
     int portions, time, isFavorite, recipeid;
     LinearLayout ingredientsLayout, stepsLayout;
     GridLayout durationLayout;
+    ImageView circleViewImage;
     List<IngredientAmountDTO> iADTO;
     List<IngredientDTO> iDTO;
     long idUsed = 0;
@@ -75,6 +79,7 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
          */
         Intent receive = getIntent();
         recipeid = receive.getIntExtra("ID", 0);
+        circleViewImage = findViewById(R.id.circleViewRecipe);
         Log.d("CookIt", "Id aus Intent geholt: " + recipeid);
         /**
          * Open and close DB for getting Ingredients
@@ -86,7 +91,18 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
         iDTO = db.getAllIngredients();
         //Alle Zutaten, die für das Rezept benötigt werden (Name und Unit)
         iADTO = db.getIngredientsForRecipe(recipeid);
-
+        //Bild aus DB holen
+        RecipeDTO recipe = db.getRecipeById(recipeid);
+        if (recipe.getImagePath()!= null) {
+            File imgFile = new File(recipe.getImagePath());
+            if(imgFile.exists()){
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                circleViewImage.setImageBitmap(myBitmap);
+            }
+        }
+        else {
+            circleViewImage.setImageResource(R.drawable.camera);
+        }
 
 
         /**
@@ -168,14 +184,17 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
          */
         TextView durationView = new TextView(this);
         durationView.setLayoutParams(textViewParamsName);
-        durationView.setText(time + "min");
+        String zeit = time + "min";
+        durationView.setText(zeit);
         durationView.setTextColor(Color.WHITE);
         TextView portionsView = new TextView(this);
         portionsView.setLayoutParams(textViewParamsName);
         if (portions > 1) {
-            portionsView.setText(portions + " Portionen");
+            String portionen = portions + " Portionen";
+            portionsView.setText(portionen);
         } else {
-            portionsView.setText(portions + " Portion");
+            String portion = portions + " Portion";
+            portionsView.setText(portion);
         }
         portionsView.setTextColor(Color.WHITE);
 
