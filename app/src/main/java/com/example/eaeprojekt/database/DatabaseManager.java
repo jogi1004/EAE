@@ -70,7 +70,7 @@ public class DatabaseManager {
 
     // CRUD-Operationen für Rezepte
 
-    public long insertRecipe(String title, int portionsmenge, String dauer, int istFavorit, String bildpfad) {
+    public long insertRecipe(String title, int portionsmenge, int dauer, int istFavorit, String bildpfad) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_RECIPE_TITLE, title);
         values.put(COLUMN_RECIPE_PORTIONSMENGE, portionsmenge);

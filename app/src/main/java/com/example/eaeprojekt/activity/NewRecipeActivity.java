@@ -114,7 +114,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         }
 
         if(!foundRecipe) {
-            newRecipeId = db.insertRecipe(null, 1, null, -1, null);
+            newRecipeId = db.insertRecipe(null, 1, 0, -1, null);
         }
 
         //ZurückButton behandeln
