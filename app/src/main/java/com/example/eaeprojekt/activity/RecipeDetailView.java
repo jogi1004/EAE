@@ -2,25 +2,18 @@ package com.example.eaeprojekt.activity;
 
 import static com.example.eaeprojekt.R.id.menu_edit;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuPopupHelper;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.Build;
+import androidx.exifinterface.media.ExifInterface;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import android.view.View;
 import android.widget.GridLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -37,8 +30,7 @@ import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.File;
-import java.io.LineNumberInputStream;
-import java.lang.reflect.Field;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -81,13 +73,11 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
         Intent receive = getIntent();
         recipeid = receive.getIntExtra("ID", 0);
         circleViewImage = findViewById(R.id.circleViewRecipe);
-        Log.d("CookIt", "Id aus Intent geholt: " + recipeid);
         /**
          * Open and close DB for getting Ingredients
          */
         db = new DatabaseManager(this);
         db.open();
-        Log.d("CookIt", "DB geöffnet und DBManager erstellt.");
         //Alle Zutaten aus DB lesen
         iDTO = db.getAllIngredients();
         //Alle Zutaten, die für das Rezept benötigt werden (Name und Unit)
@@ -96,9 +86,28 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
         RecipeDTO recipe = db.getRecipeById(recipeid);
         if (recipe.getImagePath()!= null) {
             File imgFile = new File(recipe.getImagePath());
-            if(imgFile.exists()){
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                circleViewImage.setImageBitmap(myBitmap);
+            if(imgFile.exists()) {
+                try {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    int rotate = 0;
+                    ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
+                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                    switch (orientation) {
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            rotate = 270;
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            rotate = 180;
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            rotate = 90;
+                            break;
+                    }
+                    circleViewImage.setImageBitmap(myBitmap);
+                    circleViewImage.setRotation(rotate);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
         else {
@@ -120,9 +129,6 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
             }
         }
 
-        for (IngredientDTO ingredient : ingredientsForRecipe) {
-            Log.d("CookIt", "ingredientsForRecipe: " + ingredient.getName() + "\n");
-        }
         rDTO = db.getRecipeById(recipeid);
         recipeTitle = rDTO.getTitle();
         steps = db.getAllStepsForRecipe(recipeid);
@@ -132,16 +138,15 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
         int minutes = duration % 60;
 
         if (hours > 0 && minutes > 0) {
-            time = String.format(Locale.GERMANY, "%d Std %d Min", hours, minutes);
+            time = String.format(Locale.GERMANY, getString(R.string.hoursAndMinutes), hours, minutes);
         } else if (hours > 0) {
-            time = String.format(Locale.GERMANY, "%d Std", hours);
+            time = String.format(Locale.GERMANY, getString(R.string.hours), hours);
         } else {
-            time = String.format(Locale.GERMANY, "%d Min", minutes);
+            time = String.format(Locale.GERMANY, getString(R.string.min), minutes);
         }
         portions = rDTO.getPortions();
         isFavorite = rDTO.getIsFavorite();
         imagePath = rDTO.getImagePath();
-        Log.d("CookIt", "DTO erhalten.");
 
         ingredientsLayout = findViewById(R.id.ingredientsLayout);
         durationLayout = findViewById(R.id.durationLayout);
@@ -180,12 +185,12 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
         /**
          * Creating TextViews for Ingredients
          */
-        TextView ingredientsHeader = new TextView(this);
-        ingredientsHeader.setText("Zutaten");
-        ingredientsHeader.setLayoutParams(textViewParamsIngredientHeader);
-        ingredientsLayout.addView(ingredientsHeader);
-
-
+        if(!iADTO.isEmpty()) {
+            TextView ingredientsHeader = new TextView(this);
+            ingredientsHeader.setText(getText(R.string.ingredients));
+            ingredientsHeader.setLayoutParams(textViewParamsIngredientHeader);
+            ingredientsLayout.addView(ingredientsHeader);
+        }
 
         LinearLayout ingredientsLinearLayout = new LinearLayout(this);
         ingredientsLinearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -201,10 +206,10 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
         TextView portionsView = new TextView(this);
         portionsView.setLayoutParams(textViewParamsName);
         if (portions > 1) {
-            String portionen = portions + " Portionen";
+            String portionen = portions + " " + getString(R.string.portions);
             portionsView.setText(portionen);
-        } else {
-            String portion = "Eine Portion";
+        } else if (portions == 1) {
+            String portion = getString(R.string.onePortion);
             portionsView.setText(portion);
         }
         portionsView.setTextColor(Color.WHITE);
@@ -271,11 +276,13 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
 
         stepsLayout = findViewById(R.id.stepsLayout);
 
-        TextView StepsHeader= new TextView(this);
-        StepsHeader.setText("Zubereitungsschritte");
-        StepsHeader.setLayoutParams(textViewParamsIngredientHeader);
-        StepsHeader.setTextColor(Color.WHITE);
-        stepsLayout.addView(StepsHeader);
+        if (!steps.isEmpty()){
+            TextView StepsHeader = new TextView(this);
+            StepsHeader.setText(getText(R.string.steps));
+            StepsHeader.setLayoutParams(textViewParamsIngredientHeader);
+            StepsHeader.setTextColor(Color.WHITE);
+            stepsLayout.addView(StepsHeader);
+        }
 
         for(StepDTO s : steps){
             LinearLayout singleStepLayout = new LinearLayout(this);
@@ -357,16 +364,15 @@ public void showMenu(View v) {
 
     popupMenu.setOnMenuItemClickListener(item -> {
         if (item.getItemId() == menu_edit) {
-            Toast.makeText(this, "Bearbeiten", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.edit), Toast.LENGTH_SHORT).show(); // kommt weg
             return true;
         } else if (item.getItemId() == R.id.menu_delete) {
             db.open();
             db.deleteRecipe(recipeid);
-            Log.d("CookIt", "Rezept gelöscht");
             db.close();
             Intent back = new Intent(this, RecipeActivity.class);
             Toast toast = new Toast(this);
-            toast.setText("Rezept gelöscht");
+            toast.setText(getText(R.string.recipeDeleted));
             toast.show();
             startActivity(back);
         }

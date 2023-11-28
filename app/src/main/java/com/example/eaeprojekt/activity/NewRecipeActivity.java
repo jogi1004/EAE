@@ -1,30 +1,24 @@
 package com.example.eaeprojekt.activity;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -45,7 +39,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 
 import com.example.eaeprojekt.DTO.IngredientAmountDTO;
 import com.example.eaeprojekt.DTO.IngredientDTO;
@@ -58,10 +51,7 @@ import com.example.eaeprojekt.database.DatabaseManager;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 
 public class NewRecipeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -138,7 +128,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
         button_add_image = findViewById(R.id.picture_layout);
         button_add_image.setOnClickListener(this);
-        pictureView = findViewById(R.id.recipeImageView);
+        pictureView = findViewById(R.id.picture);
 
         //Layout zum dimmen
         FrameLayout layout_MainMenu = findViewById( R.id.mainmenu);
@@ -161,10 +151,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                 Intent data = result.getData();
                 if (data != null && data.getData() != null) {
                     Uri selectedImageUri = data.getData();
-                    button_add_image.setVisibility(View.INVISIBLE);
-                    Bitmap imageToStore;
-                    try {
-                        imageToStore = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
                         grantUriPermission(
                                 getPackageName(), selectedImageUri,
                                 Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION |
@@ -172,7 +158,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                         getContentResolver().takePersistableUriPermission(
                                 selectedImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION |
                                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                        pictureView.setImageBitmap(imageToStore);
+
                         String wholeID = DocumentsContract.getDocumentId(data.getData());
                         String id = wholeID.split(":")[1];
                         String[] column = {MediaStore.Images.Media.DATA};
@@ -188,8 +174,32 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                             }
                             cursor.close();
                         }
-                    }catch(IOException e){
-                            throw new RuntimeException(e);
+
+                    if (imagePath != null) {
+                        File imgFile = new File(imagePath);
+                        if(imgFile.exists()){
+                            try {
+                                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                                int rotate = 0;
+                                ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
+                                int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                                switch (orientation) {
+                                    case ExifInterface.ORIENTATION_ROTATE_270:
+                                        rotate = 270;
+                                        break;
+                                    case ExifInterface.ORIENTATION_ROTATE_180:
+                                        rotate = 180;
+                                        break;
+                                    case ExifInterface.ORIENTATION_ROTATE_90:
+                                        rotate = 90;
+                                        break;
+                                }
+                                pictureView.setImageBitmap(myBitmap);
+                                pictureView.setRotation(rotate);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                     }
                 }
             }
@@ -273,7 +283,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
                 Log.d("HSKL", "Permission not granted");
                 if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_MEDIA_IMAGES)) {
-                    Log.d("HSKL", "Soll Permission abfragen");
                     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
                     alertBuilder.setCancelable(true);
                     alertBuilder.setTitle("Berechtigung notwendig");
@@ -283,7 +292,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                     alert.show();
 
                 } else {
-                    Log.d("HSKL", "Frage an ohne Abfrage");
                     ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES);
                 }
                 return false;
@@ -297,18 +305,12 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.d("HSKL", "RequestPermissionResult");
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    openImagePicker();
-                } else {
-                    // Permission denied
-                    Toast.makeText(this, "Permission denied. Cannot pick image.", Toast.LENGTH_SHORT).show();
-                }
-                break;
+        if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openImagePicker();
+            }
 
             /*case MY_PERMISSIONS_REQUEST_CAMERA:
                 Log.d("HSKL", "case Camera");

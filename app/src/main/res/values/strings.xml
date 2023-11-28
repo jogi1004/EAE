@@ -27,9 +27,33 @@
     <string name="add">Hinzufügen</string>
     <string name="stepDescription">Schrittbeschreibung</string>
     <string name="step">Zubereitungsschritt</string>
-    <string name="NavBarAddText">Rezept erstellen</string> <!--TODO-->
+    <string name="NavBarAddText">Rezept erstellen</string>
     <string name="shoppingBagHelperText">Deine Einkaufsliste ist leer!</string>
-    <string name="zubereitungsschritte">Zubereitungsschritte</string>
+    <string name="steps">Zubereitungsschritte</string>
+    <string name="addRecipe">Rezept hinzufügen</string>
+    <string name="addStep">Schritt hinzufügen</string>
+    <string name="addIngredient">Zutat hinzufügen</string>
+    <string name="people">Personen</string>
+    <string name="portionsColon">Portionen: </string>
+    <string name="minutes">min.</string>
+    <string name="durationColon">Dauer:</string>
+    <string name="fieldForTitle">Feld für den Titel</string>
+    <string name="createNewRecipe">Neues Rezept erstellen</string>
+    <string name="backButtonDescription">Zurück-Knopf</string>
+    <string name="recipeImageDescription">Hier steht das Rezept-Bild</string>
+    <string name="titleColon">Titel:</string>
+    <string name="titleHint">Titel</string>
+    <string name="permissionDenied">Zugriff verweigert. Bild nicht auswählbar.</string>
+    <string name="durationHint">Dauer</string>
+    <string name="ingredients">Zutaten</string>
+    <string name="recipeDeleted">Rezept gelöscht</string>
+    <string name="hoursAndMinutes">%d Std %d Min</string>
+    <string name="hours">%d Std</string>
+    <string name="min">%d Min</string>
+    <string name="onePortion">Eine Portion</string>
+    <string name="portions">Portionen</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="duration">%s %nDauer: %s</string>
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge"> <!-- TODO: Das sollte schöner werden -->
         <item>1</item>
