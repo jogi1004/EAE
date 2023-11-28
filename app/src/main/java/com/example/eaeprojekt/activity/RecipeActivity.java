@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -24,6 +25,7 @@ import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -62,7 +64,6 @@ public class RecipeActivity extends AppCompatActivity {
 
 
         for (RecipeDTO recipe : recipes) {
-            Log.d("HSKL", "Rezept " + recipe.getTitle() + " hat ImagePath " + recipe.getImagePath());
             long recipeid = recipe.getId();
             RelativeLayout recipeItem = new RelativeLayout(this);
             recipeItem.setLayoutParams(new RelativeLayout.LayoutParams(
@@ -80,18 +81,39 @@ public class RecipeActivity extends AppCompatActivity {
             /**
              * Picture of the Recipe
              */
-            ImageView picture = new ImageView(this);
+            de.hdodenhof.circleimageview.CircleImageView picture = new de.hdodenhof.circleimageview.CircleImageView(this);
 
             if (recipe.getImagePath()!= null) {
                 File imgFile = new File(recipe.getImagePath());
                 if(imgFile.exists()){
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    picture.setImageBitmap(myBitmap);
+                    try {
+                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                        int rotate = 0;
+                        ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
+                        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                        switch (orientation) {
+                            case ExifInterface.ORIENTATION_ROTATE_270:
+                                rotate = 270;
+                                break;
+                            case ExifInterface.ORIENTATION_ROTATE_180:
+                                rotate = 180;
+                                break;
+                            case ExifInterface.ORIENTATION_ROTATE_90:
+                                rotate = 90;
+                                break;
+                        }
+                        picture.setImageBitmap(myBitmap);
+                        picture.setRotation(rotate);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
             else {
                 picture.setImageResource(R.drawable.camera);
             }
+
+            picture.setPadding(15, 15, 15, 15);
 
             LinearLayout llayout = new LinearLayout(this);
             llayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -100,7 +122,8 @@ public class RecipeActivity extends AppCompatActivity {
             pictureParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);  // Align the picture to the left
             pictureParams.addRule(RelativeLayout.CENTER_VERTICAL);  // Center the picture vertically
             picture.setLayoutParams(pictureParams);
-            picture.setPadding(30, 20, 0, 20); //TODO das war weg
+            picture.setBorderWidth(10);
+            picture.setBorderColor(getColor(R.color.backgroundGreen));
 
             LinearLayout dataLayout = new LinearLayout(this);
             dataLayout.setOrientation(LinearLayout.VERTICAL);
@@ -120,6 +143,7 @@ public class RecipeActivity extends AppCompatActivity {
             recipeName.setTextSize(25);
             recipeName.setTypeface(null, Typeface.BOLD);
             TextView recipeDetails = new TextView(this);
+
             int duration = recipe.getDuration();
             int hours = duration / 60;
             int minutes = duration % 60;
@@ -127,22 +151,22 @@ public class RecipeActivity extends AppCompatActivity {
             String durationText;
 
             if (hours > 0 && minutes > 0) {
-                durationText = String.format(Locale.GERMANY, "%d Std %d Min", hours, minutes);
+                durationText = String.format(Locale.GERMANY, getString(R.string.hoursAndMinutes), hours, minutes);
             } else if (hours > 0) {
-                durationText = String.format(Locale.GERMANY, "%d Std", hours);
+                durationText = String.format(Locale.GERMANY, getString(R.string.hours), hours);
             } else {
-                durationText = String.format(Locale.GERMANY, "%d Min", minutes);
+                durationText = String.format(Locale.GERMANY, getString(R.string.min), minutes);
             }
 
             int portionen = recipe.getPortions();
             String portion;
             if (portionen > 1) {
-                portion = portionen + " Portionen";
+                portion = portionen + " " + getString(R.string.portions);
             } else {
-                portion = "Eine Portion";
+                portion = getString(R.string.onePortion);
             }
 
-            recipeDetails.setText(String.format(Locale.GERMANY, "%s %nDauer: %s", portion, durationText));
+            recipeDetails.setText(String.format(Locale.GERMANY, getString(R.string.duration), portion, durationText));
             recipeDetails.setTextSize(16);
 
             ImageView favIcon = new ImageView(this);
