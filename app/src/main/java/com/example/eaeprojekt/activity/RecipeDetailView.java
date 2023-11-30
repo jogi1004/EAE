@@ -8,6 +8,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import androidx.exifinterface.media.ExifInterface;
+
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -277,13 +279,15 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
         stepsLayout = findViewById(R.id.stepsLayout);
 
         if (!steps.isEmpty()){
-            TextView StepsHeader = new TextView(this);
-            StepsHeader.setText(getText(R.string.steps));
-            StepsHeader.setLayoutParams(textViewParamsIngredientHeader);
-            StepsHeader.setTextColor(Color.WHITE);
-            stepsLayout.addView(StepsHeader);
+            TextView stepsHeader = new TextView(this);
+            stepsHeader.setText(getText(R.string.steps));
+            stepsHeader.setLayoutParams(textViewParamsIngredientHeader);
+            stepsHeader.setTextColor(Color.WHITE);
+            stepsHeader.setPaintFlags(stepsHeader.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            stepsLayout.addView(stepsHeader);
         }
 
+        int counter = 0;
         for(StepDTO s : steps){
             LinearLayout singleStepLayout = new LinearLayout(this);
 
@@ -295,7 +299,7 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
 
             singleStepLayout.setLayoutParams(layoutStepsParams);
             TextView t = new TextView(this);
-            t.setText(s.getText());
+            t.setText(String.format(Locale.GERMANY, "%d. %s", ++counter, s.getText()));
             t.setTextColor(Color.WHITE);
             t.setPadding(40,10,0,10);
             singleStepLayout.addView(t);
