@@ -20,20 +20,20 @@ import com.example.eaeprojekt.activity.NewRecipeActivity;
 import com.example.eaeprojekt.activity.RecipeEditActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
 
-public class PopupSteps implements View.OnClickListener {
+public class PopupStepsEdit implements View.OnClickListener {
 
     DatabaseManager db;
 
     ConstraintLayout buttonAdd;
     ConstraintLayout buttonBack;
-    NewRecipeActivity mainActivity;
+    RecipeEditActivity mainActivity;
     View view;
     PopupWindow popupWindow;
     FrameLayout frame;
 
-    public void showPopupWindow(final View view, NewRecipeActivity newRecipeActivity) {
+    public void showPopupWindow(final View view, RecipeEditActivity recipeEditActivity) {
 
-        mainActivity = newRecipeActivity;
+        mainActivity = recipeEditActivity;
 
             LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
             View popupView = inflater.inflate(R.layout.add_steps_popup, null);
@@ -80,7 +80,7 @@ public class PopupSteps implements View.OnClickListener {
 
             EditText stepDescription = (EditText) view.findViewById(R.id.step_description);
 
-            long stepId = db.insertStep(NewRecipeActivity.newRecipeId, stepDescription.getText().toString());
+            long stepId = db.insertStep(RecipeEditActivity.recipeIDEdit, stepDescription.getText().toString());
 
             frame.getForeground().setAlpha(0);
             frame.setElevation(0);

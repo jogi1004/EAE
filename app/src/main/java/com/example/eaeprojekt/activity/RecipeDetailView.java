@@ -56,9 +56,8 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
     List<IngredientDTO> iDTO;
     long idUsed = 0;
     List<IngredientDTO> ingredientsForRecipe = new ArrayList<>();
-
     List<StepDTO> steps;
-
+    ImageButton favoriteStar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +67,7 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
          * Setting up BottomNavigationBar Buttons
          */
         b = findViewById(R.id.bottomNavView);
-        b.setSelectedItemId(R.id.AddButtonNavBar);
+        b.setSelectedItemId(R.id.recipeListButtonNavBar);
         b.setOnItemSelectedListener(this::onNavigationItemSelected);
         /**
          * Receive Intent from RecipeActivity and extracting ID
@@ -86,6 +85,7 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
         iDTO = db.getAllIngredients();
         //Alle Zutaten, die für das Rezept benötigt werden (Name und Unit)
         iADTO = db.getIngredientsForRecipe(recipeid);
+
 
 
 
@@ -117,6 +117,26 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
 
         ingredientsLayout = findViewById(R.id.ingredientsLayout);
         durationLayout = findViewById(R.id.durationLayout);
+
+        //Favoriten Stern anpassen
+        favoriteStar = findViewById(R.id.favoriteStar);
+        if(isFavorite == 1){
+            favoriteStar.setImageResource(R.drawable.favorite_on);
+        }else{
+            favoriteStar.setImageResource(R.drawable.favorite_off);
+        }
+        //Erstellen eines OnClickListener für den Favoritenstern
+        favoriteStar.setOnClickListener(v -> {
+                if(isFavorite == 1){
+                    isFavorite = 0;
+                    favoriteStar.setImageResource(R.drawable.favorite_off);
+                    db.updateRecipe(recipeid,recipeTitle,portions,time,isFavorite,"-1");
+                } else {
+                    isFavorite = 1;
+                    favoriteStar.setImageResource(R.drawable.favorite_on);
+                    db.updateRecipe(recipeid,recipeTitle,portions,time,isFavorite,"-1");
+                }
+                });
 
         /**
          * LayoutParams for TextViews in IngredientsLayout
@@ -242,7 +262,7 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
         stepsLayout = findViewById(R.id.stepsLayout);
 
         TextView StepsHeader= new TextView(this);
-        StepsHeader.setText("Zubereitungsschritte");
+        StepsHeader.setText(R.string.stepsTitle);
         StepsHeader.setLayoutParams(textViewParamsIngredientHeader);
         StepsHeader.setTextColor(Color.WHITE);
         stepsLayout.addView(StepsHeader);
@@ -292,32 +312,7 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
         }
         return false;
     }
-/**
-    @Override
-    public void onClick(View v) {
-        if(delete == v){
-            db.open();
-            db.deleteRecipe(recipeid);
-            Log.d("CookIt", "Rezept gelöscht");
-            db.close();
-            Intent back = new Intent(this, RecipeActivity.class);
-            Toast toast = new Toast(this);
-            toast.setText("Rezept gelöscht");
-            toast.show();
-            startActivity(back);
-        } else if (favorite == v) {
-            if(isFavorite == 1){
-                isFavorite = 0;
-                favorite.setImageResource(R.drawable.favorite_off);
-            } else{
-                isFavorite = 1;
-                favorite.setImageResource(R.drawable.favorite_on);
-            }
-            db.updateRecipe(recipeid,recipeTitle,portions,time,isFavorite,imagePath);
 
-        }
-    }
-**/
 @RequiresApi(api = Build.VERSION_CODES.Q)
 @SuppressLint({"RestrictedApi", "NonConstantResourceId"})
 public void showMenu(View v) {
@@ -327,10 +322,20 @@ public void showMenu(View v) {
 
     popupMenu.setOnMenuItemClickListener(item -> {
         if (item.getItemId() == menu_edit) {
-            Toast.makeText(this, "Bearbeiten", Toast.LENGTH_SHORT).show();
-            return true;
+            Intent i = new Intent(this, RecipeEditActivity.class);
+            i.putExtra("ID", recipeid);
+            startActivity(i);
+            Log.d("CookIt", "Intent zum Bearbeiten gestartet");
         } else if (item.getItemId() == R.id.menu_delete) {
-            Toast.makeText(this, "Löschen", Toast.LENGTH_SHORT).show();
+            db.open();
+            db.deleteRecipe(recipeid);
+            Log.d("CookIt", "Rezept gelöscht");
+            db.close();
+            Intent back = new Intent(this, RecipeActivity.class);
+            Toast toast = new Toast(this);
+            toast.setText("Rezept gelöscht");
+            toast.show();
+            startActivity(back);
         }
         return false;
     });

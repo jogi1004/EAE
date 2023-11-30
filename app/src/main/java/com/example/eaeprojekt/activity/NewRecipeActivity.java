@@ -38,7 +38,6 @@ import java.util.List;
 
 public class NewRecipeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    Toolbar toolbar;
     ImageView backButton;
     ConstraintLayout button_add_ingredients;
     ConstraintLayout button_add_steps;
