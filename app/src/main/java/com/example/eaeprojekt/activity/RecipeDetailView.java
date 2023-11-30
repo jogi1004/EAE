@@ -140,11 +140,11 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
         int minutes = duration % 60;
 
         if (hours > 0 && minutes > 0) {
-            time = String.format(Locale.GERMANY, getString(R.string.hoursAndMinutes), hours, minutes);
+            time = String.format(Locale.GERMAN, getString(R.string.hoursAndMinutes), hours, minutes);
         } else if (hours > 0) {
-            time = String.format(Locale.GERMANY, getString(R.string.hours), hours);
+            time = String.format(Locale.GERMAN, getString(R.string.hours), hours);
         } else {
-            time = String.format(Locale.GERMANY, getString(R.string.min), minutes);
+            time = String.format(Locale.GERMAN, getString(R.string.min), minutes);
         }
         portions = rDTO.getPortions();
         isFavorite = rDTO.getIsFavorite();
@@ -208,11 +208,9 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
         TextView portionsView = new TextView(this);
         portionsView.setLayoutParams(textViewParamsName);
         if (portions > 1) {
-            String portionen = portions + " " + getString(R.string.portions);
-            portionsView.setText(portionen);
+            portionsView.setText(String.format(Locale.GERMAN, "%d %s", portions, getString(R.string.portions)));
         } else if (portions == 1) {
-            String portion = getString(R.string.onePortion);
-            portionsView.setText(portion);
+            portionsView.setText(getString(R.string.onePortion));
         }
         portionsView.setTextColor(Color.WHITE);
 
@@ -298,10 +296,17 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
             layoutStepsParams.setMargins(10,10,10,10);
 
             singleStepLayout.setLayoutParams(layoutStepsParams);
+            singleStepLayout.setOrientation(LinearLayout.VERTICAL);
+            TextView h = new TextView(this);
+            h.setText(String.format(Locale.GERMAN, "%d. Schritt:", ++counter));
+            h.setTextColor(Color.WHITE);
+            h.setPadding(40,10,0,10);
+            h.setPaintFlags(h.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            singleStepLayout.addView(h);
             TextView t = new TextView(this);
-            t.setText(String.format(Locale.GERMANY, "%d. %s", ++counter, s.getText()));
+            t.setText(s.getText());
             t.setTextColor(Color.WHITE);
-            t.setPadding(40,10,0,10);
+            t.setPadding(40,0,0,10);
             singleStepLayout.addView(t);
             stepsLayout.addView(singleStepLayout);
         }

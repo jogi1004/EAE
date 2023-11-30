@@ -29,7 +29,7 @@
     <string name="step">Zubereitungsschritt</string>
     <string name="NavBarAddText">Rezept erstellen</string>
     <string name="shoppingBagHelperText">Deine Einkaufsliste ist leer!</string>
-    <string name="steps">Zubereitungsschritte</string>
+    <string name="steps">Zubereitung</string>
     <string name="addRecipe">Rezept hinzufügen</string>
     <string name="addStep">Schritt hinzufügen</string>
     <string name="addIngredient">Zutat hinzufügen</string>
