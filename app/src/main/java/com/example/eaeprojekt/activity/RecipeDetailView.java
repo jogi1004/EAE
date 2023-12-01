@@ -4,15 +4,18 @@ import static com.example.eaeprojekt.R.id.menu_edit;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuPopupHelper;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+
+import android.graphics.Paint;
+import android.media.ExifInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
@@ -34,10 +37,11 @@ import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.io.LineNumberInputStream;
-import java.lang.reflect.Field;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * RecipeDetail View provides all functional Methods for showing
@@ -48,10 +52,11 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
     private DatabaseManager db;
     RecipeDTO rDTO;
     BottomNavigationView b;
-    String recipeTitle, imagePath;
-    int portions, time, isFavorite, recipeid;
+    String recipeTitle, imagePath, time;
+    int portions, isFavorite, recipeid;
     LinearLayout ingredientsLayout, stepsLayout;
     GridLayout durationLayout;
+    ImageView circleViewImage;
     List<IngredientAmountDTO> iADTO;
     List<IngredientDTO> iDTO;
     long idUsed = 0;
@@ -74,18 +79,47 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
          */
         Intent receive = getIntent();
         recipeid = receive.getIntExtra("ID", 0);
-        Log.d("CookIt", "Id aus Intent geholt: " + recipeid);
+        circleViewImage = findViewById(R.id.circleViewRecipe);
         /**
          * Open and close DB for getting Ingredients
          */
         db = new DatabaseManager(this);
         db.open();
-        Log.d("CookIt", "DB geöffnet und DBManager erstellt.");
         //Alle Zutaten aus DB lesen
         iDTO = db.getAllIngredients();
         //Alle Zutaten, die für das Rezept benötigt werden (Name und Unit)
         iADTO = db.getIngredientsForRecipe(recipeid);
-
+        //Bild aus DB holen
+        RecipeDTO recipe = db.getRecipeById(recipeid);
+        if (recipe.getImagePath()!= null) {
+            File imgFile = new File(recipe.getImagePath());
+            if(imgFile.exists()) {
+                try {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    int rotate = 0;
+                    ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
+                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                    switch (orientation) {
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            rotate = 270;
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            rotate = 180;
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            rotate = 90;
+                            break;
+                    }
+                    circleViewImage.setImageBitmap(myBitmap);
+                    circleViewImage.setRotation(rotate);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        else {
+            circleViewImage.setImageResource(R.drawable.camera);
+        }
 
 
 
@@ -103,17 +137,24 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
             }
         }
 
-        for (IngredientDTO ingredient : ingredientsForRecipe) {
-            Log.d("CookIt", "ingredientsForRecipe: " + ingredient.getName() + "\n");
-        }
         rDTO = db.getRecipeById(recipeid);
         recipeTitle = rDTO.getTitle();
         steps = db.getAllStepsForRecipe(recipeid);
-        time = rDTO.getDuration();
+
+        int duration = recipe.getDuration();
+        int hours = duration / 60;
+        int minutes = duration % 60;
+
+        if (hours > 0 && minutes > 0) {
+            time = String.format(Locale.GERMAN, getString(R.string.hoursAndMinutes), hours, minutes);
+        } else if (hours > 0) {
+            time = String.format(Locale.GERMAN, getString(R.string.hours), hours);
+        } else {
+            time = String.format(Locale.GERMAN, getString(R.string.min), minutes);
+        }
         portions = rDTO.getPortions();
         isFavorite = rDTO.getIsFavorite();
         imagePath = rDTO.getImagePath();
-        Log.d("CookIt", "DTO erhalten.");
 
         ingredientsLayout = findViewById(R.id.ingredientsLayout);
         durationLayout = findViewById(R.id.durationLayout);
@@ -130,11 +171,11 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
                 if(isFavorite == 1){
                     isFavorite = 0;
                     favoriteStar.setImageResource(R.drawable.favorite_off);
-                    db.updateRecipe(recipeid,recipeTitle,portions,time,isFavorite,"-1");
+                    db.updateRecipe(recipeid,recipeTitle,portions, Integer.parseInt(time),isFavorite,"-1");
                 } else {
                     isFavorite = 1;
                     favoriteStar.setImageResource(R.drawable.favorite_on);
-                    db.updateRecipe(recipeid,recipeTitle,portions,time,isFavorite,"-1");
+                    db.updateRecipe(recipeid,recipeTitle,portions, Integer.parseInt(time),isFavorite,"-1");
                 }
                 });
 
@@ -172,12 +213,12 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
         /**
          * Creating TextViews for Ingredients
          */
-        TextView ingredientsHeader = new TextView(this);
-        ingredientsHeader.setText("Zutaten");
-        ingredientsHeader.setLayoutParams(textViewParamsIngredientHeader);
-        ingredientsLayout.addView(ingredientsHeader);
-
-
+        if(!iADTO.isEmpty()) {
+            TextView ingredientsHeader = new TextView(this);
+            ingredientsHeader.setText(getText(R.string.ingredients));
+            ingredientsHeader.setLayoutParams(textViewParamsIngredientHeader);
+            ingredientsLayout.addView(ingredientsHeader);
+        }
 
         LinearLayout ingredientsLinearLayout = new LinearLayout(this);
         ingredientsLinearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -188,14 +229,14 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
          */
         TextView durationView = new TextView(this);
         durationView.setLayoutParams(textViewParamsName);
-        durationView.setText(time + "min");
+        durationView.setText(time);
         durationView.setTextColor(Color.WHITE);
         TextView portionsView = new TextView(this);
         portionsView.setLayoutParams(textViewParamsName);
         if (portions > 1) {
-            portionsView.setText(portions + " Portionen");
-        } else {
-            portionsView.setText(portions + " Portion");
+            portionsView.setText(String.format(Locale.GERMAN, "%d %s", portions, getString(R.string.portions)));
+        } else if (portions == 1) {
+            portionsView.setText(getString(R.string.onePortion));
         }
         portionsView.setTextColor(Color.WHITE);
 
@@ -261,12 +302,16 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
 
         stepsLayout = findViewById(R.id.stepsLayout);
 
-        TextView StepsHeader= new TextView(this);
-        StepsHeader.setText(R.string.stepsTitle);
-        StepsHeader.setLayoutParams(textViewParamsIngredientHeader);
-        StepsHeader.setTextColor(Color.WHITE);
-        stepsLayout.addView(StepsHeader);
+        if (!steps.isEmpty()){
+            TextView stepsHeader = new TextView(this);
+            stepsHeader.setText(getText(R.string.steps));
+            stepsHeader.setLayoutParams(textViewParamsIngredientHeader);
+            stepsHeader.setTextColor(Color.WHITE);
+            stepsHeader.setPaintFlags(stepsHeader.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            stepsLayout.addView(stepsHeader);
+        }
 
+        int counter = 0;
         for(StepDTO s : steps){
             LinearLayout singleStepLayout = new LinearLayout(this);
 
@@ -277,10 +322,17 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
             layoutStepsParams.setMargins(10,10,10,10);
 
             singleStepLayout.setLayoutParams(layoutStepsParams);
+            singleStepLayout.setOrientation(LinearLayout.VERTICAL);
+            TextView h = new TextView(this);
+            h.setText(String.format(Locale.GERMAN, "%d. Schritt:", ++counter));
+            h.setTextColor(Color.WHITE);
+            h.setPadding(40,10,0,10);
+            h.setPaintFlags(h.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            singleStepLayout.addView(h);
             TextView t = new TextView(this);
             t.setText(s.getText());
             t.setTextColor(Color.WHITE);
-            t.setPadding(40,10,0,10);
+            t.setPadding(40,0,0,10);
             singleStepLayout.addView(t);
             stepsLayout.addView(singleStepLayout);
         }

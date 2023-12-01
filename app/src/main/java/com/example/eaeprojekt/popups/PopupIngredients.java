@@ -1,4 +1,4 @@
-package com.example.eaeprojekt;
+package com.example.eaeprojekt.popups;
 
 import android.graphics.Color;
 import android.util.Log;
@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.activity.NewRecipeActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.example.eaeprojekt.DTO.IngredientDTO;
@@ -222,7 +223,7 @@ public class PopupIngredients implements View.OnClickListener {
             EditText amount = popupView.findViewById(R.id.amount);
 
             // Zutat zum Rezept hinzufügen
-            long ingredientId = db.insertIngredientQuantity(NewRecipeActivity.newRecipeId, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()),0);
+            long ingredientId = db.insertIngredientQuantity(NewRecipeActivity.newRecipeId, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()),0, 0);
             /*
             schrittbeschreibung in der view hinzufügen
              */

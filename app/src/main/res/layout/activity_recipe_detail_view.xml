@@ -46,7 +46,6 @@
         android:id="@+id/circleViewRecipe"
         android:layout_width="225sp"
         android:layout_height="225sp"
-        android:src="@drawable/testbild1"
         app:civ_border_width="4dp"
         app:civ_border_color="@color/darkerYellow"
         android:layout_below="@id/RecipeName"

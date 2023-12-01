@@ -45,6 +45,7 @@ public class DatabaseManager {
     public static final String COLUMN_INGREDIENT_QUANTITY_RECIPE_ID = "RezeptID";
     public static final String COLUMN_INGREDIENT_QUANTITY_INGREDIENT_ID = "ZutatID";
     public static final String COLUMN_IS_ON_SHOPPING_LIST = "aufEinkaufsliste";
+    public static final String COLUMN_INGREDIENT_QUANTITY_IS_CHECKED = "istMarkiert";
 
     // Tabelle für Schritte in Rezepten
     public static final String TABLE_STEPS = "Schritte";
@@ -69,7 +70,7 @@ public class DatabaseManager {
 
     // CRUD-Operationen für Rezepte
 
-    public long insertRecipe(String title, int portionsmenge, String dauer, int istFavorit, String bildpfad) {
+    public long insertRecipe(String title, int portionsmenge, int dauer, int istFavorit, String bildpfad) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_RECIPE_TITLE, title);
         values.put(COLUMN_RECIPE_PORTIONSMENGE, portionsmenge);
@@ -111,7 +112,7 @@ public class DatabaseManager {
         return recipes;
     }
 
-    public RecipeDTO getRecipeById(int id) {
+    public RecipeDTO getRecipeById(long id) {
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_RECIPES + " WHERE " + COLUMN_RECIPE_ID + " = ?", new String[]{String.valueOf(id)});
         RecipeDTO recipeDTO = null;
 
@@ -237,34 +238,34 @@ public class DatabaseManager {
                 return ingredient.getId();
             }
         }
-                ContentValues values = new ContentValues();
-                values.put(COLUMN_INGREDIENT_NAME, name);
-                values.put(COLUMN_INGREDIENT_UNIT, unit);
-                return database.insert(TABLE_INGREDIENTS, null, values);
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_INGREDIENT_NAME, name);
+        values.put(COLUMN_INGREDIENT_UNIT, unit);
+        return database.insert(TABLE_INGREDIENTS, null, values);
     }
 
     public List<IngredientDTO> getAllIngredients() {
         List<IngredientDTO> ingredients = new ArrayList<>();
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENTS, null);
 
-            if (cursor.moveToFirst()) {
-                do {
-                    int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_ID);
-                    int nameIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_NAME);
-                    int unitIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_UNIT);
+        if (cursor.moveToFirst()) {
+            do {
+                int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_ID);
+                int nameIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_NAME);
+                int unitIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_UNIT);
 
-                    if (idIndex >= 0 && nameIndex >= 0 && unitIndex >= 0) {
-                        int id = cursor.getInt(idIndex);
-                        String name = cursor.getString(nameIndex);
-                        String unit = cursor.getString(unitIndex);
+                if (idIndex >= 0 && nameIndex >= 0 && unitIndex >= 0) {
+                    int id = cursor.getInt(idIndex);
+                    String name = cursor.getString(nameIndex);
+                    String unit = cursor.getString(unitIndex);
 
-                        IngredientDTO ingredientDTO = new IngredientDTO(id, name, unit);
-                        ingredients.add(ingredientDTO);
-                    }
-                } while (cursor.moveToNext());
-            }
+                    IngredientDTO ingredientDTO = new IngredientDTO(id, name, unit);
+                    ingredients.add(ingredientDTO);
+                }
+            } while (cursor.moveToNext());
+        }
 
-            cursor.close();
+        cursor.close();
 
         return ingredients;
     }
@@ -282,12 +283,12 @@ public class DatabaseManager {
                 String unit = cursor.getString(unitIndex);
 
                 cursor.close();
-                ingredientDTO = new IngredientDTO(id, name, unit);
+                return(new IngredientDTO(id, name, unit));
             }
         }
 
         cursor.close();
-        return ingredientDTO;
+        return null;
     }
 
 
@@ -374,14 +375,16 @@ public class DatabaseManager {
             int amountIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_AMOUNT);
             int recipeIdIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_RECIPE_ID);
             int isOnShoppingListIndex = cursor.getColumnIndex(COLUMN_IS_ON_SHOPPING_LIST);
+            int isCheckedIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_IS_CHECKED);
 
             if (idIndex >= 0 && amountIndex >= 0 && recipeIdIndex >= 0 && isOnShoppingListIndex >= 0) {
                 long id = cursor.getLong(idIndex);
                 double amount = cursor.getDouble(amountIndex);
                 long recipeId = cursor.getLong(recipeIdIndex);
                 int isOnShoppingList = cursor.getInt(isOnShoppingListIndex);
+                int isChecked = cursor.getInt(isCheckedIndex);
 
-                ingredientAmountDTO = new IngredientAmountDTO(id, amount, recipeId, ingredientId, isOnShoppingList);
+                ingredientAmountDTO = new IngredientAmountDTO(id, amount, recipeId, ingredientId, isOnShoppingList, isChecked);
             }
         }
 
@@ -390,20 +393,22 @@ public class DatabaseManager {
     }
 
 
-    public long insertIngredientQuantity(long recipeId, long ingredientId, double amount, int isOnShoppingList) {
+    public long insertIngredientQuantity(long recipeId, long ingredientId, double amount, int isOnShoppingList, int isChecked) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_INGREDIENT_QUANTITY_AMOUNT, amount);
         values.put(COLUMN_INGREDIENT_QUANTITY_RECIPE_ID, recipeId);
         values.put(COLUMN_INGREDIENT_QUANTITY_INGREDIENT_ID, ingredientId);
         values.put(COLUMN_IS_ON_SHOPPING_LIST, isOnShoppingList);
+        values.put(COLUMN_INGREDIENT_QUANTITY_IS_CHECKED, isChecked);
         return database.insert(TABLE_INGREDIENT_QUANTITY, null, values);
     }
 
-    public int updateIngredientQuantity(long ingredientQuantityId, long newIngredientId, double newAmount, int newIsOnShoppingList) {
+    public int updateIngredientQuantity(long ingredientQuantityId, long newIngredientId, double newAmount, int newIsOnShoppingList, int newIsChecked) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_INGREDIENT_QUANTITY_INGREDIENT_ID, newIngredientId);
         values.put(COLUMN_INGREDIENT_QUANTITY_AMOUNT, newAmount);
         values.put(COLUMN_IS_ON_SHOPPING_LIST, newIsOnShoppingList);
+        values.put(COLUMN_INGREDIENT_QUANTITY_IS_CHECKED, newIsChecked);
         return database.update(
                 TABLE_INGREDIENT_QUANTITY,
                 values,
@@ -429,6 +434,7 @@ public class DatabaseManager {
             int amountIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_AMOUNT);
             int ingredientIdIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_INGREDIENT_ID);
             int isOnShoppingListIndex = cursor.getColumnIndex(COLUMN_IS_ON_SHOPPING_LIST);
+            int isCheckedIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_IS_CHECKED);
 
             while (!cursor.isAfterLast()) {
                 if (idIndex >= 0 && amountIndex >= 0 && ingredientIdIndex >= 0 && isOnShoppingListIndex >= 0) {
@@ -436,8 +442,9 @@ public class DatabaseManager {
                     int amount = cursor.getInt(amountIndex);
                     int ingredientId = cursor.getInt(ingredientIdIndex);
                     int isOnShoppingList = cursor.getInt(isOnShoppingListIndex);
+                    int isChecked = cursor.getInt(isCheckedIndex);
 
-                    IngredientAmountDTO ingredientAmountDTO = new IngredientAmountDTO(id, amount, recipeId, ingredientId, isOnShoppingList);
+                    IngredientAmountDTO ingredientAmountDTO = new IngredientAmountDTO(id, amount, recipeId, ingredientId, isOnShoppingList, isChecked);
                     ingredientAmounts.add(ingredientAmountDTO);
                 }
 
@@ -460,6 +467,7 @@ public class DatabaseManager {
             int recipeIdIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_RECIPE_ID);
             int ingredientIdIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_INGREDIENT_ID);
             int isOnShoppingListIndex = cursor.getColumnIndex(COLUMN_IS_ON_SHOPPING_LIST);
+            int isCheckedIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_IS_CHECKED);
 
             while (!cursor.isAfterLast()) {
                 if (idIndex >= 0 && amountIndex >= 0 && recipeIdIndex >= 0 && ingredientIdIndex >= 0 && isOnShoppingListIndex >= 0) {
@@ -468,8 +476,9 @@ public class DatabaseManager {
                     int ingredientId = cursor.getInt(ingredientIdIndex);
                     int amount = cursor.getInt(amountIndex);
                     int isOnShoppingList = cursor.getInt(isOnShoppingListIndex);
+                    int isChecked = cursor.getInt(isCheckedIndex);
 
-                    IngredientAmountDTO ingredientAmountDTO = new IngredientAmountDTO(id, amount, recipeId, ingredientId, isOnShoppingList);
+                    IngredientAmountDTO ingredientAmountDTO = new IngredientAmountDTO(id, amount, recipeId, ingredientId, isOnShoppingList, isChecked);
                     ingredientsOnShoppingList.add(ingredientAmountDTO);
                 }
 
@@ -486,6 +495,11 @@ public class DatabaseManager {
         values.put(COLUMN_IS_ON_SHOPPING_LIST, 0);
 
         database.update(TABLE_INGREDIENT_QUANTITY, values, null, null);
+    }
+
+    public int deleteCheckedRecipes() {
+        String whereClause = COLUMN_INGREDIENT_QUANTITY_IS_CHECKED + " = 1";
+        return database.delete(TABLE_INGREDIENT_QUANTITY, whereClause, null);
     }
 
 
@@ -599,6 +613,7 @@ public class DatabaseManager {
                     COLUMN_INGREDIENT_QUANTITY_RECIPE_ID + " INTEGER, " +
                     COLUMN_INGREDIENT_QUANTITY_INGREDIENT_ID + " INTEGER, " +
                     COLUMN_IS_ON_SHOPPING_LIST + " INTEGER, " +
+                    COLUMN_INGREDIENT_QUANTITY_IS_CHECKED + " INTEGER, " +
                     "FOREIGN KEY (" + COLUMN_INGREDIENT_QUANTITY_RECIPE_ID + ") REFERENCES " + TABLE_RECIPES + "(" + COLUMN_RECIPE_ID + "), " +
                     "FOREIGN KEY (" + COLUMN_INGREDIENT_QUANTITY_INGREDIENT_ID + ") REFERENCES " + TABLE_INGREDIENTS + "(" + COLUMN_INGREDIENT_ID + ")" +
                     ")";

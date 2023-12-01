@@ -4,9 +4,9 @@ public class StepDTO {
 
     private int id;
     private String text;
-    private int recipeId;
+    private long recipeId;
 
-    public StepDTO(int id, String text, int recipeId) {
+    public StepDTO(int id, String text, long recipeId) {
         this.id = id;
         this.text = text;
         this.recipeId = recipeId;
@@ -20,7 +20,7 @@ public class StepDTO {
         return text;
     }
 
-    public int getRecipeId() {
+    public long getRecipeId() {
         return recipeId;
     }
 
@@ -32,7 +32,7 @@ public class StepDTO {
         this.text = text;
     }
 
-    public void setRecipeId(int recipeId) {
+    public void setRecipeId(long recipeId) {
         this.recipeId = recipeId;
     }
 }
