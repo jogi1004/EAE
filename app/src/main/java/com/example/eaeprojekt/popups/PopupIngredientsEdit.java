@@ -211,7 +211,7 @@ public class PopupIngredientsEdit implements View.OnClickListener {
             EditText amount = popupView.findViewById(R.id.amount);
 
             // Zutat zum Rezept hinzufügen
-            long ingredientId = db.insertIngredientQuantity(RecipeEditActivity.recipeIDEdit, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()),0);
+            long ingredientId = db.insertIngredientQuantity(RecipeEditActivity.recipeIDEdit, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()),0, 0);
             /*
             schrittbeschreibung in der view hinzufügen
              */

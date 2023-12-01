@@ -25,7 +25,7 @@ import com.example.eaeprojekt.DTO.IngredientAmountDTO;
 import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.DTO.StepDTO;
-import com.example.eaeprojekt.PopupIngredients;
+import com.example.eaeprojekt.popups.PopupIngredients;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.example.eaeprojekt.popups.PopupIngredientsEdit;
@@ -46,7 +46,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
     Spinner spinner_portionsmenge;
     String recipeTitle, image;
     private int isFavorite, duration, portions, portionsmenge;
-    public static int recipeIDEdit;
+    public static long recipeIDEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

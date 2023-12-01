@@ -29,12 +29,10 @@
     <string name="step">Zubereitungsschritt</string>
     <string name="NavBarAddText">Rezept erstellen</string>
     <string name="shoppingBagHelperText">Deine Einkaufsliste ist leer!</string>
-<<<<<<< HEAD
     <string name="zubereitungsschritte">Zubereitungsschritte</string>
     <string name="stepsTitle">Zubereitungsschritte</string>
     <string name="recipeEditTitle">Rezept bearbeiten</string>
     <string name="recipeEditSave">Rezept speichern</string>
-=======
     <string name="steps">Zubereitung</string>
     <string name="addRecipe">Rezept hinzufügen</string>
     <string name="addStep">Schritt hinzufügen</string>
@@ -60,7 +58,6 @@
     <string name="portions">Portionen</string>
     <string name="edit">Bearbeiten</string>
     <string name="duration">%s %nDauer: %s</string>
->>>>>>> main
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge"> <!-- TODO: Das sollte schöner werden -->
         <item>1</item>
