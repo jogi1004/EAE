@@ -39,7 +39,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="5dp"
-        android:src="@drawable/light_arrow_left"
+        android:src="@drawable/arrow_left_dark"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/toolbar"
@@ -111,7 +111,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         android:layout_centerHorizontal="true"
-                        android:src="@drawable/camera" />
+                        android:src="@drawable/camera_small" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout

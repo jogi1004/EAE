@@ -38,7 +38,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="5dp"
-        android:src="@drawable/light_arrow_left"
+        android:src="@drawable/arrow_left_dark"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/toolbar"
@@ -52,8 +52,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:text="@string/createNewRecipe"
-        android:textColor="?attr/colorPrimary"
-        android:textSize="30sp"
+        android:textColor="@color/fontColor"
+        android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintEnd_toEndOf="@+id/toolbar"
@@ -110,7 +110,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         android:layout_centerHorizontal="true"
-                        android:src="@drawable/camera" />
+                        android:src="@drawable/camera_small" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -150,6 +150,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@id/title"
                         android:hint="@string/titleHint"
+                        android:textColor="@color/fontColor"
                         android:inputType="text"
                         android:importantForAutofill="no" />
 
@@ -177,6 +178,7 @@
                         app:layout_constraintStart_toStartOf="@+id/title_text"
                         app:layout_constraintTop_toTopOf="@id/time"
                         android:importantForAutofill="no"
+                        android:textColor="@color/fontColor"
                         android:hint="@string/durationHint"/>
 
                     <TextView

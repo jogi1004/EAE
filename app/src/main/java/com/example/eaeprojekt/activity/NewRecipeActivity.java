@@ -445,7 +445,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             Mülleimer
              */
             ImageView trash = new ImageView(this);
-            trash.setImageResource(R.drawable.light_trash_can);
+            trash.setImageResource(R.drawable.trashcan_light);
             trash.setId(View.generateViewId());
 
             ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
@@ -525,7 +525,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
             //Mülleimer
             ImageView trash = new ImageView(this);
-            trash.setImageResource(R.drawable.light_trash_can);
+            trash.setImageResource(R.drawable.trashcan_light);
             trash.setId(View.generateViewId());
 
             ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(

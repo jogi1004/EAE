@@ -142,7 +142,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
             }
         }
         else {
-            pictureView.setImageResource(R.drawable.camera);
+            pictureView.setImageResource(R.drawable.camera_small);
         }
 
         pictureView.setPadding(15, 15, 15, 15);
@@ -291,7 +291,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
             Mülleimer
              */
                 ImageView trash = new ImageView(this);
-                trash.setImageResource(R.drawable.light_trash_can);
+                trash.setImageResource(R.drawable.trashcan_light);
                 trash.setId(View.generateViewId());
 
                 ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
@@ -374,7 +374,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
 
                 //Mülleimer
                 ImageView trash = new ImageView(this);
-                trash.setImageResource(R.drawable.light_trash_can);
+                trash.setImageResource(R.drawable.trashcan_light);
                 trash.setId(View.generateViewId());
 
                 ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(

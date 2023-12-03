@@ -131,7 +131,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             ingUnitTextView.setId(View.generateViewId());
 
             trashCanIconImageView = new ImageView(this);
-            trashCanIconImageView.setImageResource(R.drawable.trash_can);
+            trashCanIconImageView.setImageResource(R.drawable.trashcan_dark);
             trashCanIconImageView.setId(View.generateViewId());
 
             // Set an OnClickListener for the trash can icons

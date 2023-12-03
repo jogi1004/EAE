@@ -114,7 +114,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
             }
         }
         else {
-            circleViewImage.setImageResource(R.drawable.camera);
+            circleViewImage.setImageResource(R.drawable.camera_small);
         }
 
         rDTO = db.getRecipeById(recipeid);
@@ -142,20 +142,20 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
         //Favoriten Stern anpassen
         favoriteStar = findViewById(R.id.favoriteStar);
         if(isFavorite == 1){
-            favoriteStar.setImageResource(R.drawable.favorite_on);
+            favoriteStar.setImageResource(R.drawable.favoritestar_filled_dark);
         }else{
-            favoriteStar.setImageResource(R.drawable.favorite_off);
+            favoriteStar.setImageResource(R.drawable.favoritestar_hollow_dark);
         }
 
         //Erstellen eines OnClickListener für den Favoritenstern
         favoriteStar.setOnClickListener(v -> {
                 if(isFavorite == 1){
                     isFavorite = 0;
-                    favoriteStar.setImageResource(R.drawable.favorite_off);
+                    favoriteStar.setImageResource(R.drawable.favoritestar_hollow_dark);
                     db.updateRecipe(recipeid,recipeTitle,portions, duration, isFavorite,imagePath);
                 } else {
                     isFavorite = 1;
-                    favoriteStar.setImageResource(R.drawable.favorite_on);
+                    favoriteStar.setImageResource(R.drawable.favoritestar_filled_dark);
                     db.updateRecipe(recipeid,recipeTitle,portions, duration, isFavorite,imagePath);
                 }
                 });

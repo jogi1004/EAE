@@ -7,6 +7,6 @@
         android:title="Bearbeiten"/>
     <item
         android:id="@+id/menu_delete"
-        android:icon="@drawable/trash_can"
+        android:icon="@drawable/trashcan_dark"
         android:title="Löschen"/>
 </menu>

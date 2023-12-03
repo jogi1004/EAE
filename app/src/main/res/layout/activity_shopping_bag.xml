@@ -70,7 +70,7 @@
             android:layout_marginEnd="20sp"
             android:contentDescription="@string/AddSymbolDescription"
             android:scaleType="fitCenter"
-            android:src="@drawable/add_symbol"
+            android:src="@drawable/plus_dark"
             android:background="@color/background"/>
 
         <ImageButton
@@ -82,7 +82,7 @@
             android:layout_marginEnd="20sp"
             android:contentDescription="@string/AddSymbolDescription"
             android:scaleType="fitCenter"
-            android:src="@drawable/trash_can"
+            android:src="@drawable/trashcan_dark"
             android:background="@color/background"/>
 
     </RelativeLayout>
@@ -133,7 +133,8 @@
         android:background="@color/backgroundGreen"
         app:menu="@menu/bottom_nav_bar"
         android:layout_gravity="bottom"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        app:itemIconSize="30dp">
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 </RelativeLayout>
