@@ -20,48 +20,36 @@ import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.activity.NewRecipeActivity;
+import com.example.eaeprojekt.activity.RecipeEditActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
-import com.example.eaeprojekt.DTO.IngredientDTO;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PopupIngredients implements View.OnClickListener {
+public class PopupIngredientsEdit implements View.OnClickListener {
 
     DatabaseManager db;
-
-    NewRecipeActivity mainActivity;
+    RecipeEditActivity mainActivity;
     View popupView;
     PopupWindow popupWindow;
     //Adapter für Zutaten
     Spinner ingredients;
     TextView unitTV;
     ArrayAdapter<String> adapterIngredients;
-
     FrameLayout frame;
-
     ArrayList<String> ingredientList;
-    
-    
-    ConstraintLayout cancelButtonIngredient;
-    ConstraintLayout addButtonIngredient;
-
-    EditText nameText;
-    EditText unitText;
-    ConstraintLayout createIngredient;
-
-
+    ConstraintLayout cancelButtonIngredient, addButtonIngredient, createIngredient;
+    EditText nameText, unitText;
     ImageView addIngredientCross;
+    String choosedIngredient, choosedUnit;
 
-    String choosedIngredient;
-    String choosedUnit;
-
-    public void showPopupWindow(final View view, NewRecipeActivity newRecipeActivity) {
+    public void showPopupWindow(final View view, RecipeEditActivity recipeEditActivity) {
 
 
-        mainActivity = newRecipeActivity;
+        mainActivity = recipeEditActivity;
 
         db = new DatabaseManager(mainActivity);
         db.open();
@@ -223,7 +211,7 @@ public class PopupIngredients implements View.OnClickListener {
             EditText amount = popupView.findViewById(R.id.amount);
 
             // Zutat zum Rezept hinzufügen
-            long ingredientId = db.insertIngredientQuantity(NewRecipeActivity.newRecipeId, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()),0, 0);
+            long ingredientId = db.insertIngredientQuantity(RecipeEditActivity.recipeIDEdit, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()),0, 0);
             /*
             schrittbeschreibung in der view hinzufügen
              */

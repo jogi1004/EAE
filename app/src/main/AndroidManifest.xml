@@ -17,7 +17,11 @@
         android:theme="@style/Theme.EAEProjekt"
         tools:targetApi="31">
         <activity
-            android:name=".activity.RecipeDetailView"
+            android:name=".activity.RecipeEditActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.RecipeDetailViewActivity"
             android:exported="false" />
         <activity
             android:name=".activity.NewRecipeActivity"

@@ -56,7 +56,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
         dimmableLayoutShoppingBag.getForeground().setAlpha(0);
         helperTextView = findViewById(R.id.helperTextBox);
         b = findViewById(R.id.bottomNavView);
-        b.setSelectedItemId(R.id.AddButtonNavBar);
+        b.setSelectedItemId(R.id.shoppingBagButtonNavBar);
         b.setOnItemSelectedListener(this::onNavigationItemSelected);
         updateShoppingBag();
     }
