@@ -59,9 +59,6 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
     GridLayout durationLayout;
     ImageView circleViewImage;
     List<IngredientAmountDTO> iADTO;
-    List<IngredientDTO> iDTO;
-    //long idUsed = 0;
-    //List<IngredientDTO> ingredientsForRecipe = new ArrayList<>();
     List<StepDTO> steps;
     ImageButton favoriteStar;
 
@@ -86,10 +83,8 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
          */
         db = new DatabaseManager(this);
         db.open();
-        //Alle Zutaten aus DB lesen
-        //iDTO = db.getAllIngredients();
-        //Alle Zutaten, die für das Rezept benötigt werden (Name und Unit)
         iADTO = db.getIngredientsForRecipe(recipeid);
+
         //Bild aus DB holen
         RecipeDTO recipe = db.getRecipeById(recipeid);
         if (recipe.getImagePath()!= null) {
@@ -122,23 +117,6 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
             circleViewImage.setImageResource(R.drawable.camera);
         }
 
-
-
-        /**
-         * Getting all Ingredients for RecipeID
-         */
-        /*for (IngredientDTO ingredient : iDTO) {
-            long id = ingredient.getId();
-            for (IngredientAmountDTO i : iADTO) {
-                idUsed = i.getIngredientId();
-
-                if (id == idUsed) {
-                    ingredientsForRecipe.add(ingredient);
-                }
-            }
-        }*/
-
-
         rDTO = db.getRecipeById(recipeid);
         recipeTitle = rDTO.getTitle();
         steps = db.getAllStepsForRecipe(recipeid);
@@ -168,6 +146,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
         }else{
             favoriteStar.setImageResource(R.drawable.favorite_off);
         }
+
         //Erstellen eines OnClickListener für den Favoritenstern
         favoriteStar.setOnClickListener(v -> {
                 if(isFavorite == 1){
@@ -280,21 +259,6 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
             ingredientUnit.setPadding(20, 0, 0, 0);
             ingredientUnit.setLayoutParams(ingredientUnitLayoutParams);
 
-            //ingredientLayout.addView(ingredientName);
-
-            // Iterate above iADTO to get ID of Ingredient
-            /*for (IngredientAmountDTO i : iADTO) {
-                if (i.getIngredientId() == ingredient.getId()) {
-                    // TextView für die Menge
-                    TextView ingredientAmount = new TextView(this);
-                    ingredientAmount.setText(String.valueOf((int)i.getAmount()));
-                    ingredientAmount.setPadding(20, 0, 0, 0); // Ändern Sie die Padding-Werte nach Bedarf
-
-                    // Fügen Sie den TextView für die Menge zum horizontalen Layout hinzu
-                    ingredientLayout.addView(ingredientAmount);
-                    break;
-                }
-            }*/
 
             TextView ingredientAmount = new TextView(this);
             ingredientAmount.setText(String.valueOf((int) ingredient.getAmount()));

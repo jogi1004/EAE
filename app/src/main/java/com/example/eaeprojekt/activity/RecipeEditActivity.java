@@ -50,9 +50,8 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
     EditText time, title;
     Spinner spinner_portionsmenge;
     String recipeTitle, image;
-    private int isFavorite, duration, portions, portionsmenge;
-
-    private RecipeDTO recipe;
+    private int isFavorite;
+    private int portionsmenge;
     public static long recipeIDEdit;
 
     @Override
@@ -68,19 +67,13 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
         db.open();
 
             //Neues Rezept erstellen mit keinen Inhalten (wird gelöscht, falls vorgang abgebrochen wird)
-            List<RecipeDTO> alleRezepte = db.getAllRecipes();
-            //Alle Ingredients holen
-            List<IngredientAmountDTO> zutaten = db.getIngredientsForRecipe(recipeIDEdit);
 
-
-                    recipe = db.getRecipeById(recipeIDEdit);
+        RecipeDTO recipe = db.getRecipeById(recipeIDEdit);
                     recipeTitle = recipe.getTitle();
-                    duration = recipe.getDuration();
-                    portions = recipe.getPortions();
+        int duration = recipe.getDuration();
                     image = recipe.getImagePath();
                     isFavorite = recipe.getIsFavorite();
 
-            //Log.d("CookIt", "Titel: " + recipeTitle + ", Zeit: " + duration + ", Portionen: " + portions);
 
             //ZurückButton behandeln
             backButton = (ImageView) findViewById(R.id.backButton);
@@ -88,36 +81,35 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
 
 
             //Buttons zum Rezept behandeln
-            button_add_ingredients = (ConstraintLayout) findViewById(R.id.button_add_ingredients);
+            button_add_ingredients = findViewById(R.id.button_add_ingredients);
             button_add_ingredients.setOnClickListener(this);
 
-            button_add_steps = (ConstraintLayout) findViewById(R.id.button_add_steps);
+            button_add_steps = findViewById(R.id.button_add_steps);
             button_add_steps.setOnClickListener(this);
 
 
-            button_add_recipe = (ConstraintLayout) findViewById(R.id.button_add_recipe);
+            button_add_recipe = findViewById(R.id.button_add_recipe);
             button_add_recipe.setOnClickListener(this);
 
-            button_cancel = (ConstraintLayout) findViewById(R.id.button_cancel);
+            button_cancel = findViewById(R.id.button_cancel);
             button_cancel.setOnClickListener(this);
 
             //Layout zum dimmen
-            FrameLayout layout_MainMenu = (FrameLayout) findViewById(R.id.mainmenu);
+            FrameLayout layout_MainMenu = findViewById(R.id.mainmenu);
             layout_MainMenu.getForeground().setAlpha(0);
 
 
             //für db eintrag
-            title = (EditText) findViewById(R.id.title_text);
+            title = findViewById(R.id.title_text);
             title.setText(recipeTitle);
-            time = (EditText) findViewById(R.id.time_text);
+            time = findViewById(R.id.time_text);
             time.setText(String.valueOf(duration));
 
             //spinner füllen
-            spinner_portionsmenge = (Spinner) findViewById(R.id.spinner);
+            spinner_portionsmenge = findViewById(R.id.spinner);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.portionsmenge, android.R.layout.simple_spinner_dropdown_item);
             spinner_portionsmenge.setAdapter(adapter);
             // Spinner auf die in der DB gespeicherte Portionsanzahl setzen
-            //spinner_portionsmenge.setSelection(portions - 1);
             spinner_portionsmenge.setSelection(portionsmenge -1); // wieso -1
             spinner_portionsmenge.setOnItemSelectedListener(this);
 
@@ -195,11 +187,9 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
 
                 if (title.getText().length() > 0 && time.getText().length() > 0) {
                     //datenbankzugriff
-                    db = new DatabaseManager(this);
                     db.open();
                     //Rezepteinträge aktuallisieren
                     db.updateRecipe(recipeIDEdit, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), isFavorite, image);
-                    //Log.d("CookIt", "DB Update mit: "+ recipeIDEdit + title.getText().toString() + portionsmenge + time + isFavorite + " Speichern!");
                     db.close();
                     Intent intent = new Intent(this, RecipeActivity.class);
                     startActivity(intent);
@@ -207,18 +197,11 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
                     finish();
                 } else {
                     Toast toast = new Toast(this);
-                    toast.setText("Fülle bitte zuerst alle Felder aus 😊");
+                    toast.setText(getString(R.string.pleaseFillAllFields));
                     toast.show();
                 }
 
             } else if (view == backButton || view == button_cancel) {
-                //Intent intent = new Intent(this, RecipeDetailViewActivity.class);
-                //intent.putExtra("ID", recipeIDEdit);
-                //db.open(); Wieso sollte ich das tun?
-                //db.updateRecipe(recipeIDEdit, title.getText().toString(), currentRecportionsmenge, Integer.parseInt(time.getText().toString()), isFavorite, "-1");
-                //Log.d("CookIt", "DB Update mit: "+ recipeIDEdit + title.getText().toString() + portionsmenge + time + isFavorite + " BackButton!");
-                //db.close();
-                //startActivity(intent);
                 finish();
             }
 
@@ -238,7 +221,6 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
 
         public void addIngredients () {
             List<IngredientAmountDTO> ingredientDTOs = db.getIngredientsForRecipe(recipeIDEdit);
-            //Log.d("Fehler: ", "RezeptId " + recipeIDEdit);
 
 
             for (IngredientAmountDTO ingredient : ingredientDTOs) {

@@ -58,6 +58,7 @@
     <string name="portions">Portionen</string>
     <string name="edit">Bearbeiten</string>
     <string name="duration">%s %nDauer: %s</string>
+    <string name="pleaseFillAllFields">Fülle bitte zuerst alle Felder aus 😊</string>
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge"> <!-- TODO: Das sollte schöner werden -->
         <item>1</item>
