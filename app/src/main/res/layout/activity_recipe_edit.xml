@@ -42,7 +42,8 @@
         android:src="@drawable/light_arrow_left"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/toolbar" />
+        app:layout_constraintTop_toTopOf="@+id/toolbar"
+        android:contentDescription="@string/backButtonDescription" />
 
     <TextView
         android:id="@+id/recipeTitleEdit"
@@ -99,15 +100,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/picture"
-                        android:layout_width="74dp"
-                        android:layout_height="61dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:civ_border_width="4dp"
+                        app:civ_border_color="@color/darkerYellow"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/camera" />
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/camera" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -128,7 +132,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="20dp"
-                        android:text="Titel:"
+                        android:text="@string/titleColon"
                         android:textColor="#884D29"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -141,12 +145,14 @@
                         android:layout_height="25dp"
                         android:layout_marginStart="60dp"
                         android:background="@drawable/background_edit_text"
-                        android:contentDescription="Feld für den Titel"
                         android:textAlignment="center"
                         app:layout_constraintBottom_toBottomOf="@+id/title"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/title" />
+                        app:layout_constraintTop_toTopOf="@+id/title"
+                        android:hint="@string/titleHint"
+                        android:importantForAutofill="no"
+                        android:inputType="text" />
 
                     <TextView
                         android:id="@+id/time"
@@ -154,7 +160,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="10dp"
-                        android:text="Dauer:"
+                        android:text="@string/durationColon"
                         android:textColor="#884D29"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -166,19 +172,20 @@
                         android:layout_width="100dp"
                         android:layout_height="25dp"
                         android:background="@drawable/background_edit_text"
-                        android:contentDescription="Feld für den Dauer"
                         android:inputType="number"
                         android:textAlignment="center"
                         app:layout_constraintBottom_toBottomOf="@+id/time"
                         app:layout_constraintStart_toStartOf="@+id/title_text"
-                        app:layout_constraintTop_toTopOf="@+id/time" />
+                        app:layout_constraintTop_toTopOf="@+id/time"
+                        android:hint="@string/durationHint"
+                        android:importantForAutofill="no" />
 
                     <TextView
                         android:id="@+id/minutes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="min."
+                        android:text="@string/minutes"
                         android:textColor="#884D29"
                         android:textSize="15sp"
                         android:textStyle="bold"
@@ -191,7 +198,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="10dp"
-                        android:text="Portionen:"
+                        android:text="@string/portionsColon"
                         android:textColor="#884D29"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -213,7 +220,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="Personen"
+                        android:text="@string/people"
                         android:textColor="#884D29"
                         android:textSize="15sp"
                         android:textStyle="bold"
@@ -236,7 +243,7 @@
                             android:background="@drawable/background_edit_text"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:text="Zutaten hinzufügen"
+                            android:text="@string/addIngredient"
                             android:textColor="#884D29"
                             android:textSize="15sp"
                             android:textStyle="bold"
@@ -267,7 +274,7 @@
                             android:background="@drawable/background_edit_text"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:text="Zubereitungsschritt hinzufügen"
+                            android:text="@string/addStep"
                             android:textColor="#884D29"
                             android:textSize="15sp"
                             android:textStyle="bold"
@@ -359,7 +366,7 @@
             android:layout_height="55dp"
             android:gravity="center"
             android:padding="5dp"
-            android:text="Abbrechen"
+            android:text="@string/cancel"
             android:textColor="#FFFFFF"
             android:textSize="15sp"
             android:textStyle="bold"

@@ -1,7 +1,10 @@
 package com.example.eaeprojekt.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -13,6 +16,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,18 +29,19 @@ import com.example.eaeprojekt.DTO.IngredientAmountDTO;
 import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.DTO.StepDTO;
-import com.example.eaeprojekt.popups.PopupIngredients;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.example.eaeprojekt.popups.PopupIngredientsEdit;
-import com.example.eaeprojekt.popups.PopupSteps;
 import com.example.eaeprojekt.popups.PopupStepsEdit;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class RecipeEditActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     ImageView backButton;
+    ImageView pictureView;
     ConstraintLayout button_add_ingredients;
     ConstraintLayout button_add_steps;
     ConstraintLayout button_add_recipe;
@@ -46,6 +51,8 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
     Spinner spinner_portionsmenge;
     String recipeTitle, image;
     private int isFavorite, duration, portions, portionsmenge;
+
+    private RecipeDTO recipe;
     public static long recipeIDEdit;
 
     @Override
@@ -65,16 +72,15 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
             //Alle Ingredients holen
             List<IngredientAmountDTO> zutaten = db.getIngredientsForRecipe(recipeIDEdit);
 
-            for (RecipeDTO recipe : alleRezepte) {
-                if (recipe.getId() == recipeIDEdit) {
+
+                    recipe = db.getRecipeById(recipeIDEdit);
                     recipeTitle = recipe.getTitle();
                     duration = recipe.getDuration();
                     portions = recipe.getPortions();
                     image = recipe.getImagePath();
                     isFavorite = recipe.getIsFavorite();
-                }
-            }
-            Log.d("CookIt", "Titel: " + recipeTitle + ", Zeit: " + duration + ", Portionen: " + portions);
+
+            //Log.d("CookIt", "Titel: " + recipeTitle + ", Zeit: " + duration + ", Portionen: " + portions);
 
             //ZurückButton behandeln
             backButton = (ImageView) findViewById(R.id.backButton);
@@ -102,7 +108,6 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
 
             //für db eintrag
             title = (EditText) findViewById(R.id.title_text);
-            Log.d("CookIt", "Versuch den Titel und die Zeit zu setzen folgt...");
             title.setText(recipeTitle);
             time = (EditText) findViewById(R.id.time_text);
             time.setText(String.valueOf(duration));
@@ -112,8 +117,51 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.portionsmenge, android.R.layout.simple_spinner_dropdown_item);
             spinner_portionsmenge.setAdapter(adapter);
             // Spinner auf die in der DB gespeicherte Portionsanzahl setzen
-            spinner_portionsmenge.setSelection(portions - 1);
+            //spinner_portionsmenge.setSelection(portions - 1);
+            spinner_portionsmenge.setSelection(portionsmenge -1); // wieso -1
             spinner_portionsmenge.setOnItemSelectedListener(this);
+
+        pictureView = findViewById(R.id.picture);
+
+        if (image != null) {
+            File imgFile = new File(image);
+            if(imgFile.exists()){
+                try {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    int rotate = 0;
+                    ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
+                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                    switch (orientation) {
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            rotate = 270;
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            rotate = 180;
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            rotate = 90;
+                            break;
+                    }
+                    pictureView.setImageBitmap(myBitmap);
+                    pictureView.setRotation(rotate);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        else {
+            pictureView.setImageResource(R.drawable.camera);
+        }
+
+        pictureView.setPadding(15, 15, 15, 15);
+
+        LinearLayout llayout = new LinearLayout(this);
+        llayout.setOrientation(LinearLayout.HORIZONTAL);
+
+        RelativeLayout.LayoutParams pictureParams = new RelativeLayout.LayoutParams(300, 300);
+        pictureParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);  // Align the picture to the left
+        pictureParams.addRule(RelativeLayout.CENTER_VERTICAL);  // Center the picture vertically
+        pictureView.setLayoutParams(pictureParams);
 
             addIngredients();
 
@@ -150,8 +198,8 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
                     db = new DatabaseManager(this);
                     db.open();
                     //Rezepteinträge aktuallisieren
-                    db.updateRecipe(recipeIDEdit, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), isFavorite, "-1");
-                    Log.d("CookIt", "DB Update mit: "+ recipeIDEdit + title.getText().toString() + portionsmenge + time + isFavorite + " Speichern!");
+                    db.updateRecipe(recipeIDEdit, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), isFavorite, image);
+                    //Log.d("CookIt", "DB Update mit: "+ recipeIDEdit + title.getText().toString() + portionsmenge + time + isFavorite + " Speichern!");
                     db.close();
                     Intent intent = new Intent(this, RecipeActivity.class);
                     startActivity(intent);
@@ -164,13 +212,13 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
                 }
 
             } else if (view == backButton || view == button_cancel) {
-                Intent intent = new Intent(this, RecipeDetailView.class);
-                intent.putExtra("ID", recipeIDEdit);
-                db.open();
-                db.updateRecipe(recipeIDEdit, title.getText().toString(),portionsmenge, Integer.parseInt(time.getText().toString()), isFavorite, "-1");
-                Log.d("CookIt", "DB Update mit: "+ recipeIDEdit + title.getText().toString() + portionsmenge + time + isFavorite + " BackButton!");
-                db.close();
-                startActivity(intent);
+                //Intent intent = new Intent(this, RecipeDetailViewActivity.class);
+                //intent.putExtra("ID", recipeIDEdit);
+                //db.open(); Wieso sollte ich das tun?
+                //db.updateRecipe(recipeIDEdit, title.getText().toString(), currentRecportionsmenge, Integer.parseInt(time.getText().toString()), isFavorite, "-1");
+                //Log.d("CookIt", "DB Update mit: "+ recipeIDEdit + title.getText().toString() + portionsmenge + time + isFavorite + " BackButton!");
+                //db.close();
+                //startActivity(intent);
                 finish();
             }
 
@@ -190,7 +238,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
 
         public void addIngredients () {
             List<IngredientAmountDTO> ingredientDTOs = db.getIngredientsForRecipe(recipeIDEdit);
-            Log.d("Fehler: ", "RezeptId " + recipeIDEdit);
+            //Log.d("Fehler: ", "RezeptId " + recipeIDEdit);
 
 
             for (IngredientAmountDTO ingredient : ingredientDTOs) {
@@ -228,7 +276,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
              */
                 TextView amountText = new TextView(this);
                 amountText.setId(View.generateViewId());
-                amountText.setText("" + ingredient.getAmount());
+                amountText.setText(String.valueOf((int) ingredient.getAmount()));
                 amountText.setGravity(Gravity.CENTER);
                 amountText.setTextColor(Color.parseColor("#FFFFFF"));
 

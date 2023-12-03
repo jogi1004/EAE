@@ -43,13 +43,13 @@ public class RecipeActivity extends AppCompatActivity {
         recipeLayout = findViewById(R.id.recipeLayoutinScrollView);
         db = new DatabaseManager(this);
         db.open();
+        updateRecipeList(db.getAllRecipes());
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView);
         bottomNavigationView.setSelectedItemId(R.id.recipeListButtonNavBar);
         bottomNavigationView.setOnItemSelectedListener(this::onNavigationItemSelected);
 
         favSwitch = findViewById(R.id.switch1);
-        updateRecipeList(db.getAllRecipes());
         favSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 updateRecipeList(db.getFavoritenRezepte());
@@ -189,6 +189,7 @@ public class RecipeActivity extends AppCompatActivity {
                     recipe.setIsFavorite(1);
                     favIcon.setImageResource(R.drawable.favorite_on);
                 }
+                db.open();
                 db.updateRecipe(recipe.getId(), recipe.getTitle(), recipe.getPortions(), recipe.getDuration(), recipe.getIsFavorite(), recipe.getImagePath());
                 if (favSwitch.isChecked()) {
                     updateRecipeList(db.getFavoritenRezepte());
@@ -224,7 +225,7 @@ public class RecipeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
-                    Intent i = new Intent(context, RecipeDetailView.class);
+                    Intent i = new Intent(context, RecipeDetailViewActivity.class);
                     i.putExtra("ID", recipeItem.getId());
                     Log.d("CookIt", "Id in Intent gemacht: "+recipeItem.getId());
                     startActivity(i);
@@ -246,6 +247,13 @@ public class RecipeActivity extends AppCompatActivity {
             startActivity(i);
         }
         return false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        db.open();
+        updateRecipeList(db.getAllRecipes());
     }
 }
 
