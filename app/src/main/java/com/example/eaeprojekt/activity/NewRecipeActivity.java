@@ -83,8 +83,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_recipe);
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         button_add_ingredients = findViewById(R.id.button_add_ingredients);
 
         //datenbankzugriff
