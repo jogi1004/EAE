@@ -1,12 +1,21 @@
 package com.example.eaeprojekt.activity;
 
+import static com.google.android.material.internal.ViewUtils.dpToPx;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.text.Layout;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -16,12 +25,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.eaeprojekt.DTO.IngredientAmountDTO;
 import com.example.eaeprojekt.DTO.IngredientDTO;
+import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.example.eaeprojekt.popups.PopupDeleteShoppingBag;
+import com.example.eaeprojekt.popups.PopupIngredients;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -32,7 +45,7 @@ import java.util.List;
  */
 public class ShoppingBagActivity extends AppCompatActivity implements View.OnClickListener,ShoppingBagUpdateListener {
 
-    FloatingActionButton newShoppingBagItem;
+    ImageButton addIngredient;
     ImageButton deleteAllIcon;
     PopupDeleteShoppingBag deleteShoppingBagPopup;
     LinearLayout shoppingLayout;
@@ -58,9 +71,14 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
         b = findViewById(R.id.bottomNavView);
         b.setSelectedItemId(R.id.AddButtonNavBar);
         b.setOnItemSelectedListener(this::onNavigationItemSelected);
+
+        addIngredient = findViewById(R.id.addButtonShoppingBag);
+        addIngredient.setOnClickListener(this);
+
         updateShoppingBag();
     }
 
+    @SuppressLint("ResourceType")
     public void updateShoppingBag() {
         shoppingLayout.removeAllViews();
         db = new DatabaseManager(this);
@@ -74,142 +92,250 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
         /**
          * Using DTO to get all Ingredients from the DB
          */
+
+        long i = 0;
         for (IngredientAmountDTO ingredientAmount : ingredientsOnShoppingList) {
-
-            /**
-             * Creating Rectangle Shape with rounded Corners as background
-             */
-            GradientDrawable shape = new GradientDrawable();
-            shape.setShape(GradientDrawable.RECTANGLE);
-            shape.setCornerRadius(30); // Radius for rounded corners in pixels
-            shape.setColor(getColor(R.color.darkerYellow));
-
-            /**
-             * Layout for single Ingredient
-             */
-            RelativeLayout ingredientAmountItem = new RelativeLayout(this);
-            ingredientAmountItem.setLayoutParams(new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            ));
-            ingredientAmountItem.setBackground(shape);
-            ingredientAmountItem.setPadding(0, 20, 0, 30);
-            RelativeLayout.LayoutParams MarginBetween = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            );
-            MarginBetween.setMargins(0, 20, 0, 0);
-            ingredientAmountItem.setLayoutParams(MarginBetween);
 
             IngredientDTO ingredient = db.getIngredientById(ingredientAmount.getIngredientId());
 
-            // Saving name, unit, and amount of the ingredient
-            String ingredientName = ingredient.getName();
-            String ingredientUnit = ingredient.getUnit();
-            double ingredientAmountAmount = ingredientAmount.getAmount();
+            LinearLayout parentLayout1 = this.findViewById(R.id.ingredientWithoutRecipe);
 
-            /**
-             * Creating Layout and Views for Ingredients from DB
+            LinearLayout parentLayout2 = new LinearLayout(this);
+            ViewGroup.LayoutParams pp = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            parentLayout2.setOrientation(LinearLayout.VERTICAL);
+            parentLayout2.setLayoutParams(pp);
+
+
+            if((int) ingredientAmount.getRecipeId() == -9){
+
+
+                if(i != ingredientAmount.getRecipeId()) {
+                    TextView titleOther = new TextView(this);
+                    titleOther.setText("Andere Zutaten");
+
+                    parentLayout1.addView(titleOther);
+
+                    View view = new View(this);
+                    view.setBackgroundColor(Color.parseColor("#844D29"));
+                    ViewGroup.LayoutParams viewParams = new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            1
+                    );
+                    view.setLayoutParams(viewParams);
+                    parentLayout1.addView(view);
+
+                    i = ingredientAmount.getRecipeId();
+                }
+            }else{
+
+                if(i != ingredientAmount.getRecipeId()) {
+                    TextView titleRecipes = new TextView(this);
+                    long id = ingredientAmount.getRecipeId();
+                    RecipeDTO recipe = db.getRecipeById(id);
+                    String titleRecipe = recipe.getTitle();
+
+                    titleRecipes.setText(titleRecipe);
+                    if(!db.getIngredientsForRecipe(-9).isEmpty()) {
+                        titleRecipes.setPadding(0, 60, 0, 0);
+                    }else if(parentLayout2.getChildCount() > 1){
+                        titleRecipes.setPadding(0, 60, 0, 0);
+                    }
+                    parentLayout2.addView(titleRecipes);
+
+                    View line = new View(this);
+                    line.setBackgroundColor(Color.parseColor("#844D29"));
+                    ViewGroup.LayoutParams lineParams = new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            dpToPx(1)
+                    );
+                    line.setLayoutParams(lineParams);
+                    parentLayout2.addView(line);
+
+                    i = ingredientAmount.getRecipeId();
+                }
+            }
+
+            /*
+            Zutaten in der view hinzufügen
              */
-            TextView ingNameTextView = new TextView(this);
-            ingNameTextView.setText(ingredientName);
-            ingNameTextView.setTextSize(20);
-            ingNameTextView.setTextColor(getColor(R.color.fontColor));
-            ingNameTextView.setId(View.generateViewId());
+            ConstraintLayout layout = new ConstraintLayout(this);
 
-            TextView ingAmountTextView = new TextView(this);
-            String amountTXT = String.valueOf(ingredientAmountAmount);
-            ingAmountTextView.setText(amountTXT);
-            ingAmountTextView.setTextSize(20);
-            ingAmountTextView.setTextColor(getColor(R.color.fontColor));
-            ingAmountTextView.setId(View.generateViewId());
+            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
+                    ConstraintLayout.LayoutParams.MATCH_PARENT,
+                    ConstraintLayout.LayoutParams.WRAP_CONTENT
+            );
+            layout.setPadding(20,20,20,20);
+            layout.setLayoutParams(layoutParams);
+            layoutParams.setMargins(40, 0, 40, 0);
 
-            TextView ingUnitTextView = new TextView(this);
-            ingUnitTextView.setText(ingredientUnit);
-            ingUnitTextView.setTextSize(20);
-            ingUnitTextView.setTextColor(getColor(R.color.fontColor));
-            ingUnitTextView.setId(View.generateViewId());
+            /*
+            Zutat
+             */
+            TextView ingredientText = new TextView(this);
+            ingredientText.setId(View.generateViewId());
+            ingredientText.setText(ingredient.getName());
+            ingredientText.setGravity(Gravity.CENTER);
+            ingredientText.setTextColor(Color.parseColor("#844D29"));
 
-            trashCanIconImageView = new ImageView(this);
-            trashCanIconImageView.setImageResource(R.drawable.trash_can);
-            trashCanIconImageView.setId(View.generateViewId());
+            ViewGroup.LayoutParams ingredientParams = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            ingredientText.setLayoutParams(ingredientParams);
 
-            // Set an OnClickListener for the trash can icons
-            trashCanIconImageView.setOnClickListener(view -> handleItemDeletion(ingredientAmount.getId(), ingredientAmount.getIngredientId(), ingredientName, ingredientAmountAmount, ingredientUnit));
+            layout.addView(ingredientText);
+
+            /*
+            Menge
+             */
+            TextView amountText = new TextView(this);
+            amountText.setId(View.generateViewId());
+            amountText.setText(String.valueOf((int) ingredientAmount.getAmount()));
+            amountText.setGravity(Gravity.CENTER);
+            amountText.setTextColor(Color.parseColor("#844D29"));
+
+            ViewGroup.LayoutParams amountParams = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            amountText.setLayoutParams(amountParams);
+
+            layout.addView(amountText);
+
+            /*
+            Einheit
+             */
+            TextView unitText = new TextView(this);
+            unitText.setId(View.generateViewId());
+            unitText.setText(ingredient.getUnit());
+            unitText.setGravity(Gravity.CENTER);
+            unitText.setTextColor(Color.parseColor("#844D29"));
+
+            ViewGroup.LayoutParams unitParams = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            unitText.setLayoutParams(unitParams);
+
+            layout.addView(unitText);
+
+            /*
+            Checkbox
+            */
             CheckBox checkBox = new CheckBox(this);
-            if (ingredientAmount.getIsChecked() == 1) {
+            checkBox.setId(View.generateViewId());
+
+            ViewGroup.LayoutParams checkBoxParams = new ViewGroup.LayoutParams(
+                    50,
+                    50
+            );
+            checkBox.setLayoutParams(checkBoxParams);
+            if(ingredientAmount.getIsChecked() == 1){
                 checkBox.setChecked(true);
             }
-            checkBox.setOnClickListener(view -> handleCheckboxClick(ingredientAmount));
+            layout.addView(checkBox);
 
-
-            /**
-             * Changing Layout with params
+            /*
+            Mülleimer
              */
-            RelativeLayout.LayoutParams textViewParamsName = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
+            ImageView trash = new ImageView(this);
+            trash.setImageResource(R.drawable.trash_can);
+            trash.setId(View.generateViewId());
+
+            ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
+                    50,
+                    50
             );
-            textViewParamsName.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            textViewParamsName.setMargins(25, 20, 0, 10);
+            trash.setLayoutParams(trashParams);
+            layout.addView(trash);
 
-            RelativeLayout.LayoutParams textViewParamsAmount = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            );
-            textViewParamsAmount.addRule(RelativeLayout.RIGHT_OF, ingNameTextView.getId());
-            textViewParamsAmount.setMargins(50, 20, 0, 10);
-
-            RelativeLayout.LayoutParams textViewParamsUnit = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            );
-            textViewParamsUnit.addRule(RelativeLayout.RIGHT_OF, ingAmountTextView.getId());
-            textViewParamsUnit.setMargins(30, 20, 0, 10);
-
-            RelativeLayout.LayoutParams trashCanParams = new RelativeLayout.LayoutParams(
-                    75,
-                    75
-            );
-
-            /**
-             * Adding some rules for the Layout of trashcan
+            /*
+            Constraints
              */
-            trashCanParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            trashCanParams.setMargins(0, 0, 20, 0);
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.clone(layout);
 
-            RelativeLayout.LayoutParams checkBoxparams = new RelativeLayout.LayoutParams(
-                    85,
-                    85
-            );
-            checkBoxparams.addRule(RelativeLayout.LEFT_OF, trashCanIconImageView.getId());
-            checkBoxparams.setMargins(0,0,15,0);
+            //Zutat
+            constraintSet.connect(ingredientText.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+            constraintSet.connect(ingredientText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(ingredientText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+            //Menge
+            constraintSet.connect(amountText.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 250);
+            constraintSet.connect(amountText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(amountText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+            //Einheit
+            constraintSet.connect(unitText.getId(), ConstraintSet.START, amountText.getId(), ConstraintSet.END, 20);
+            constraintSet.connect(unitText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(unitText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+            //Checkbox
+            constraintSet.connect(checkBox.getId(), ConstraintSet.END, trash.getId(), ConstraintSet.START, 20);
+            constraintSet.connect(unitText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(unitText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+            //Mülleimer
+            constraintSet.connect(trash.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+            constraintSet.connect(trash.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(trash.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
 
-            /**
-             * Adding Rules for the Checkbox
-             */
-            checkBox.setLayoutParams(checkBoxparams);
-            /**
-             * Adding LayoutParams to TextViews
-             */
-            ingNameTextView.setLayoutParams(textViewParamsName);
-            ingAmountTextView.setLayoutParams(textViewParamsAmount);
-            ingUnitTextView.setLayoutParams(textViewParamsUnit);
-            trashCanIconImageView.setLayoutParams(trashCanParams);
-            /**
-             * Adding TextViews to Layout
-             */
-            ingredientAmountItem.addView(ingNameTextView);
-            ingredientAmountItem.addView(ingAmountTextView);
-            ingredientAmountItem.addView(ingUnitTextView);
-            ingredientAmountItem.addView(trashCanIconImageView);
-            ingredientAmountItem.addView(checkBox);
-            /**
-             * Adding Layout to ScrollView
-             */
-            shoppingLayout.addView(ingredientAmountItem);
+            constraintSet.applyTo(layout);
+
+            LinearLayout parentparent2 = this.findViewById(R.id.shoppingLayoutinScrollView);
+
+            if(ingredientAmount.getRecipeId() == -9){
+                parentLayout1.addView(layout);
+            }else {
+                parentLayout2.addView(layout);
+                parentparent2.addView(parentLayout2);
+            }
+
+
+        /*
+        noch bearbeiten
+         */
+            trash.setOnClickListener(v ->{
+                if(ingredientAmount.getRecipeId() == -9) {
+
+                    db.deleteIngredientQuantity(ingredientAmount.getId());
+                    List<IngredientAmountDTO> li = db.getIngredientsForRecipe(-9);
+                    parentLayout1.removeView(layout);
+                    if(li.isEmpty()){
+                        parentLayout1.removeAllViews();
+                        helperTextView.setVisibility(View.VISIBLE);
+                    }
+                }else{
+
+                    db.updateIngredientQuantity(ingredientAmount.getId(),ingredientAmount.getIngredientId(),ingredientAmount.getAmount(),0,0);
+                    List<IngredientAmountDTO> li = db.getIngredientsForRecipe(ingredientAmount.getRecipeId());
+                    boolean empty = true;
+                    for(IngredientAmountDTO a: li){
+                        if(a.getOnShoppingList() == 1){
+                            empty = false;
+                            break;
+                        }
+                    }
+
+                    if(empty == true){
+                        Log.d("true", "ja");
+                        Log.d("true", "ja2: " + parentLayout2.getChildCount());
+                        parentLayout2.removeAllViews();
+                        Log.d("true", "ja3: " + parentLayout2.getChildCount());
+                    }else{
+                        Log.d("true", "nein");
+                        Log.d("true", "nein2: " + parentLayout2.getChildCount());
+                        parentLayout2.removeView(layout);
+                    }
+
+                    helperTextView.setVisibility(ingredientsOnShoppingList.isEmpty()? View.VISIBLE : View.INVISIBLE);
+                }
+            });
         }
-        db.close();
+    }
+
+    private int dpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return Math.round(dp * density);
     }
 
     private boolean onNavigationItemSelected(MenuItem item) {
@@ -234,8 +360,18 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View view) {
+
+        FrameLayout layout_MainMenu = findViewById( R.id.FrameLayoutShoppingBag);
+
         if (view == deleteAllIcon) {
             deleteShoppingBagPopup.showPopupWindow(view, this);
+        } else if (view == addIngredient) {
+            PopupIngredients popup = new PopupIngredients();
+            popup.showPopupWindow(view, this);
+
+            //background-dimming
+            layout_MainMenu.getForeground().setAlpha(220);
+            layout_MainMenu.setElevation(1);
         }
     }
 

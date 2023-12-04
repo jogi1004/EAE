@@ -1,5 +1,6 @@
 package com.example.eaeprojekt.activity;
 
+import static com.example.eaeprojekt.R.id.amount;
 import static com.example.eaeprojekt.R.id.menu_edit;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,12 +8,15 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.exifinterface.media.ExifInterface;
 import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -262,12 +266,52 @@ public class RecipeDetailView extends AppCompatActivity implements View.OnClickL
                 }
             }
 
+
             // Fügen Sie die TextViews für Name und Einheit zum horizontalen Layout hinzu
 
             ingredientLayout.addView(ingredientUnit);
 
+            for (IngredientAmountDTO i : iADTO) {
+                if (i.getIngredientId() == ingredient.getId()) {
+                    //Einkaufsliste-Button hinzufügen
+                    ImageView shoppingBag = new ImageView(this);
+                    if(i.getOnShoppingList() == 0) {
+                        shoppingBag.setImageResource(R.drawable.shopping_icon);
+                    }else{
+                        shoppingBag.setImageResource(android.R.drawable.ic_lock_lock);
+                    }
+                    shoppingBag.setPadding(20, 0, 0, 10);
+                    ViewGroup.LayoutParams bagParams = new ViewGroup.LayoutParams(
+                            60,
+                            60
+                    );
+                    shoppingBag.setLayoutParams(bagParams);
+                    ingredientLayout.addView(shoppingBag);
+
+                    // TextView für die Menge
+                    shoppingBag.setOnClickListener(v ->{
+                        if(i.getOnShoppingList() == 0) {
+                            db.updateIngredientQuantity(i.getId(), i.getIngredientId(), i.getAmount(), 1, 0);
+                            Toast toast = new Toast(this);
+                            toast.setText("Zutat zur Einkaufsliste hinzugefügt");
+                            toast.show();
+                            shoppingBag.setImageResource(android.R.drawable.ic_lock_lock);
+                        }else{
+                            db.updateIngredientQuantity(i.getId(), i.getIngredientId(), i.getAmount(), 0, 0);
+                            Toast toast = new Toast(this);
+                            toast.setText("Zutat aus der Einkaufsliste entfernt");
+                            toast.show();
+                            shoppingBag.setImageResource(R.drawable.shopping_icon);
+                        }
+                    });
+                    break;
+                }
+            }
+
             // Fügen Sie das horizontale Layout zum vertikalen Layout hinzu
             ingredientsLinearLayout.addView(ingredientLayout);
+
+            // Iterate above iADTO to get ID of Ingredient
         }
 
         /**
