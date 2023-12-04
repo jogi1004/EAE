@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -226,11 +225,125 @@ public class PopupIngredients implements View.OnClickListener {
             popupWindow.dismiss();
             frame.performClick();
 
-            if(mainActivity.getClass() == NewRecipeActivity.class) {
-                addIngredientToNewRecipe();
-            }else {
-                addIngredientToShoppingBag();
-            }
+            IngredientDTO ingredientToAdd = db.getIngredientByNameAndUnit(choosedIngredient, choosedUnit);
+
+            EditText amount = popupView.findViewById(R.id.amount);
+
+            // Zutat zum Rezept hinzufügen
+            long ingredientId = db.insertIngredientQuantity(NewRecipeActivity.newRecipeId, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()),0, 0);
+            /*
+            schrittbeschreibung in der view hinzufügen
+             */
+            ConstraintLayout layout = new ConstraintLayout(mainActivity);
+
+            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
+                    ConstraintLayout.LayoutParams.MATCH_PARENT,
+                    ConstraintLayout.LayoutParams.WRAP_CONTENT
+            );
+            layout.setPadding(20,20,20,20);
+            layout.setLayoutParams(layoutParams);
+            layoutParams.setMargins(40, 0, 40, 0);
+
+            /*
+            Zutat
+             */
+            TextView ingredientText = new TextView(mainActivity);
+            ingredientText.setId(View.generateViewId());
+            ingredientText.setText(ingredientToAdd.getName());
+            ingredientText.setGravity(Gravity.CENTER);
+            ingredientText.setTextColor(Color.parseColor("#FFFFFF"));
+
+            ViewGroup.LayoutParams ingredientParams = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            ingredientText.setLayoutParams(ingredientParams);
+
+            layout.addView(ingredientText);
+
+            /*
+            Menge
+             */
+            TextView amountText = new TextView(mainActivity);
+            amountText.setId(View.generateViewId());
+            amountText.setText(amount.getText().toString());
+            amountText.setGravity(Gravity.CENTER);
+            amountText.setTextColor(Color.parseColor("#FFFFFF"));
+
+            ViewGroup.LayoutParams amountParams = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            amountText.setLayoutParams(amountParams);
+
+            layout.addView(amountText);
+
+            /*
+            Einheit
+             */
+            TextView unitText = new TextView(mainActivity);
+            unitText.setId(View.generateViewId());
+            unitText.setText(ingredientToAdd.getUnit());
+            unitText.setGravity(Gravity.CENTER);
+            unitText.setTextColor(Color.parseColor("#FFFFFF"));
+
+            ViewGroup.LayoutParams unitParams = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            unitText.setLayoutParams(unitParams);
+
+            layout.addView(unitText);
+
+            /*
+            Mülleimer
+             */
+            ImageView trash = new ImageView(mainActivity);
+            trash.setImageResource(R.drawable.trashcan_light);
+            trash.setId(View.generateViewId());
+
+            ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
+                    50,
+                    50
+            );
+            trash.setLayoutParams(trashParams);
+            layout.addView(trash);
+
+            Log.d("inhalt", "" + ingredientToAdd.getName() + " " + amount + " " + ingredientToAdd.getUnit());
+
+            /*
+            Constraints
+             */
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.clone(layout);
+
+            //Zutat
+            constraintSet.connect(ingredientText.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+            constraintSet.connect(ingredientText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(ingredientText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+            //Menge
+            constraintSet.connect(amountText.getId(), ConstraintSet.START, ingredientText.getId(), ConstraintSet.START, 200);
+            constraintSet.connect(amountText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(amountText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+            //Einheit
+            constraintSet.connect(unitText.getId(), ConstraintSet.START, amountText.getId(), ConstraintSet.END, 20);
+            constraintSet.connect(unitText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(unitText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+            //Mülleimer
+            constraintSet.connect(trash.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+            constraintSet.connect(trash.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+            constraintSet.connect(trash.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+
+            constraintSet.applyTo(layout);
+
+
+            LinearLayout parentLayout = mainActivity.findViewById(R.id.ingredientsLayout);
+            parentLayout.addView(layout);
+
+            trash.setOnClickListener(v ->{
+                db.deleteIngredientQuantity(ingredientId);
+                parentLayout.removeView(layout);
+            });
 
         }else if (view == frame) {
             frame.getForeground().setAlpha(0);
@@ -314,7 +427,7 @@ public class PopupIngredients implements View.OnClickListener {
             Mülleimer
              */
         ImageView trash = new ImageView(mainActivity);
-        trash.setImageResource(R.drawable.light_trash_can);
+        trash.setImageResource(R.drawable.trashcan_light);
         trash.setId(View.generateViewId());
 
         ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
@@ -486,7 +599,7 @@ public class PopupIngredients implements View.OnClickListener {
             Mülleimer
              */
         ImageView trash = new ImageView(mainActivity);
-        trash.setImageResource(R.drawable.trash_can);
+        trash.setImageResource(R.drawable.trashcan_dark);
         trash.setId(View.generateViewId());
 
         ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(

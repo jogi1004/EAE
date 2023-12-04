@@ -43,13 +43,13 @@ public class RecipeActivity extends AppCompatActivity {
         recipeLayout = findViewById(R.id.recipeLayoutinScrollView);
         db = new DatabaseManager(this);
         db.open();
+        updateRecipeList(db.getAllRecipes());
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView);
         bottomNavigationView.setSelectedItemId(R.id.recipeListButtonNavBar);
         bottomNavigationView.setOnItemSelectedListener(this::onNavigationItemSelected);
 
         favSwitch = findViewById(R.id.switch1);
-        updateRecipeList(db.getAllRecipes());
         favSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 updateRecipeList(db.getFavoritenRezepte());
@@ -110,7 +110,7 @@ public class RecipeActivity extends AppCompatActivity {
                 }
             }
             else {
-                picture.setImageResource(R.drawable.camera);
+                picture.setImageResource(R.drawable.camera_small);
             }
 
             picture.setPadding(15, 15, 15, 15);
@@ -170,7 +170,7 @@ public class RecipeActivity extends AppCompatActivity {
             recipeDetails.setTextSize(16);
 
             ImageView favIcon = new ImageView(this);
-            favIcon.setImageResource(recipe.getIsFavorite() == 1 ? R.drawable.favorite_on : R.drawable.favorite_off);
+            favIcon.setImageResource(recipe.getIsFavorite() == 1 ? R.drawable.favoritestar_filled_dark : R.drawable.favoritestar_hollow_dark);
             favIcon.setLayoutParams(new RelativeLayout.LayoutParams(140, 140));
             RelativeLayout.LayoutParams favIconParams = new RelativeLayout.LayoutParams(
                     100,
@@ -184,11 +184,12 @@ public class RecipeActivity extends AppCompatActivity {
             favIcon.setOnClickListener(v -> {
                 if (recipe.getIsFavorite() == 1) {
                     recipe.setIsFavorite(0);
-                    favIcon.setImageResource(R.drawable.favorite_off);
+                    favIcon.setImageResource(R.drawable.favoritestar_hollow_dark);
                 } else {
                     recipe.setIsFavorite(1);
-                    favIcon.setImageResource(R.drawable.favorite_on);
+                    favIcon.setImageResource(R.drawable.favoritestar_filled_dark);
                 }
+                db.open();
                 db.updateRecipe(recipe.getId(), recipe.getTitle(), recipe.getPortions(), recipe.getDuration(), recipe.getIsFavorite(), recipe.getImagePath());
                 if (favSwitch.isChecked()) {
                     updateRecipeList(db.getFavoritenRezepte());
@@ -224,7 +225,7 @@ public class RecipeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
-                    Intent i = new Intent(context, RecipeDetailView.class);
+                    Intent i = new Intent(context, RecipeDetailViewActivity.class);
                     i.putExtra("ID", recipeItem.getId());
                     Log.d("CookIt", "Id in Intent gemacht: "+recipeItem.getId());
                     startActivity(i);
@@ -246,6 +247,13 @@ public class RecipeActivity extends AppCompatActivity {
             startActivity(i);
         }
         return false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        db.open();
+        updateRecipeList(db.getAllRecipes());
     }
 }
 

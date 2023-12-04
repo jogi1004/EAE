@@ -20,17 +20,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorSecondary"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:titleTextColor="?attr/colorPrimary" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSecondary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextColor="?attr/colorPrimary" />
 
 
     <ImageView
@@ -45,15 +46,15 @@
         android:contentDescription="@string/backButtonDescription" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/recipeTitleEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:text="@string/createNewRecipe"
+        android:text="@string/recipeEditTitle"
         android:textColor="@color/fontColor"
-        android:textSize="25sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintEnd_toEndOf="@+id/toolbar"
@@ -148,11 +149,10 @@
                         app:layout_constraintBottom_toBottomOf="@+id/title"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/title"
+                        app:layout_constraintTop_toTopOf="@+id/title"
                         android:hint="@string/titleHint"
-                        android:textColor="@color/fontColor"
-                        android:inputType="text"
-                        android:importantForAutofill="no" />
+                        android:importantForAutofill="no"
+                        android:inputType="text" />
 
                     <TextView
                         android:id="@+id/time"
@@ -176,10 +176,9 @@
                         android:textAlignment="center"
                         app:layout_constraintBottom_toBottomOf="@+id/time"
                         app:layout_constraintStart_toStartOf="@+id/title_text"
-                        app:layout_constraintTop_toTopOf="@id/time"
-                        android:importantForAutofill="no"
-                        android:textColor="@color/fontColor"
-                        android:hint="@string/durationHint"/>
+                        app:layout_constraintTop_toTopOf="@+id/time"
+                        android:hint="@string/durationHint"
+                        android:importantForAutofill="no" />
 
                     <TextView
                         android:id="@+id/minutes"
@@ -212,9 +211,9 @@
                         android:layout_height="25dp"
                         android:layout_marginStart="3dp"
                         android:background="@drawable/background_edit_text"
-                        app:layout_constraintBottom_toBottomOf="@id/portions"
-                        app:layout_constraintStart_toEndOf="@id/portions"
-                        app:layout_constraintTop_toTopOf="@id/portions" />
+                        app:layout_constraintBottom_toBottomOf="@+id/portions"
+                        app:layout_constraintStart_toEndOf="@+id/portions"
+                        app:layout_constraintTop_toTopOf="@+id/portions" />
 
                     <TextView
                         android:id="@+id/persons"
@@ -225,8 +224,8 @@
                         android:textColor="#884D29"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@id/spinner"
-                        app:layout_constraintStart_toEndOf="@id/spinner" />
+                        app:layout_constraintBottom_toBottomOf="@+id/spinner"
+                        app:layout_constraintStart_toEndOf="@+id/spinner" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/button_add_ingredients"
@@ -235,7 +234,7 @@
                         android:layout_marginStart="15dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/portions">
+                        app:layout_constraintTop_toBottomOf="@+id/portions">
 
                         <TextView
                             android:id="@+id/text_add_ingredients"
@@ -265,8 +264,8 @@
                         android:layout_marginEnd="15dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/button_add_ingredients"
-                        app:layout_constraintTop_toBottomOf="@id/portions">
+                        app:layout_constraintStart_toEndOf="@+id/button_add_ingredients"
+                        app:layout_constraintTop_toBottomOf="@+id/portions">
 
                         <TextView
                             android:id="@+id/text_add_steps"
@@ -288,7 +287,6 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
                 <!--Layout für die Zutaten -->
                 <LinearLayout
                     android:id="@+id/ingredientsLayout"
@@ -301,7 +299,7 @@
                     android:background="@drawable/background_with_rounded_corners"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/newRecipeInformationLayout"/>
+                    app:layout_constraintTop_toBottomOf="@+id/newRecipeInformationLayout"/>
 
 
                 <!--Layout für die Schritte -->
@@ -313,7 +311,7 @@
                     android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ingredientsLayout"/>
+                    app:layout_constraintTop_toBottomOf="@+id/ingredientsLayout"/>
 
 
 
@@ -323,61 +321,61 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/button_add_recipe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/background_popup_steps"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/button_add_recipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/background_popup_steps"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/text_add_recipe"
+            android:layout_width="145dp"
+            android:layout_height="55dp"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/recipeEditSave"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:id="@+id/text_add_recipe"
-                android:layout_width="145dp"
-                android:layout_height="55dp"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="@string/addRecipe"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/button_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/background_popup_steps"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <TextView
-                android:id="@+id/text_cancel"
-                android:layout_width="145dp"
-                android:layout_height="55dp"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="@string/cancel"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/button_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/background_popup_steps"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/text_cancel"
+            android:layout_width="145dp"
+            android:layout_height="55dp"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/cancel"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

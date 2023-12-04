@@ -69,7 +69,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
         dimmableLayoutShoppingBag.getForeground().setAlpha(0);
         helperTextView = findViewById(R.id.helperTextBox);
         b = findViewById(R.id.bottomNavView);
-        b.setSelectedItemId(R.id.AddButtonNavBar);
+        b.setSelectedItemId(R.id.shoppingBagButtonNavBar);
         b.setOnItemSelectedListener(this::onNavigationItemSelected);
 
         addIngredient = findViewById(R.id.addButtonShoppingBag);
@@ -185,6 +185,9 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                     ViewGroup.LayoutParams.WRAP_CONTENT
             );
             ingredientText.setLayoutParams(ingredientParams);
+            trashCanIconImageView = new ImageView(this);
+            trashCanIconImageView.setImageResource(R.drawable.trashcan_dark);
+            trashCanIconImageView.setId(View.generateViewId());
 
             layout.addView(ingredientText);
 
@@ -242,7 +245,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             Mülleimer
              */
             ImageView trash = new ImageView(this);
-            trash.setImageResource(R.drawable.trash_can);
+            trash.setImageResource(R.drawable.trashcan_dark);
             trash.setId(View.generateViewId());
 
             ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
