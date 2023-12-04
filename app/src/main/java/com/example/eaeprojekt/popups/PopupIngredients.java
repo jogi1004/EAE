@@ -292,7 +292,7 @@ public class PopupIngredients implements View.OnClickListener {
             Mülleimer
              */
             ImageView trash = new ImageView(mainActivity);
-            trash.setImageResource(R.drawable.light_trash_can);
+            trash.setImageResource(R.drawable.trashcan_light);
             trash.setId(View.generateViewId());
 
             ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(

@@ -57,7 +57,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/spinnerIngredient"
         app:layout_constraintStart_toEndOf="@+id/spinnerIngredient"
         app:layout_constraintTop_toTopOf="@+id/spinnerIngredient"
-        app:srcCompat="@drawable/add_symbol" />
+        app:srcCompat="@drawable/plus_dark" />
 
     <TextView
         android:id="@+id/chooseAmount"

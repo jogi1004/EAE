@@ -33,7 +33,7 @@
         android:id="@+id/favoriteStar"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/favorite_on"
+        android:src="@drawable/favoritestar_hollow_dark"
         android:scaleType="fitCenter"
         android:background="@color/background"
         android:layout_toEndOf="@id/circleViewRecipe"
@@ -116,6 +116,7 @@ android:layout_height="wrap_content"
 android:background="@color/backgroundGreen"
 app:menu="@menu/bottom_nav_bar"
 android:layout_gravity="bottom"
-android:layout_alignParentBottom="true">
+android:layout_alignParentBottom="true"
+    app:itemIconSize="30dp">
 </com.google.android.material.bottomnavigation.BottomNavigationView>
     </RelativeLayout>

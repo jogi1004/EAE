@@ -110,7 +110,7 @@ public class RecipeActivity extends AppCompatActivity {
                 }
             }
             else {
-                picture.setImageResource(R.drawable.camera);
+                picture.setImageResource(R.drawable.camera_small);
             }
 
             picture.setPadding(15, 15, 15, 15);
@@ -170,7 +170,7 @@ public class RecipeActivity extends AppCompatActivity {
             recipeDetails.setTextSize(16);
 
             ImageView favIcon = new ImageView(this);
-            favIcon.setImageResource(recipe.getIsFavorite() == 1 ? R.drawable.favorite_on : R.drawable.favorite_off);
+            favIcon.setImageResource(recipe.getIsFavorite() == 1 ? R.drawable.favoritestar_filled_dark : R.drawable.favoritestar_hollow_dark);
             favIcon.setLayoutParams(new RelativeLayout.LayoutParams(140, 140));
             RelativeLayout.LayoutParams favIconParams = new RelativeLayout.LayoutParams(
                     100,
@@ -184,10 +184,10 @@ public class RecipeActivity extends AppCompatActivity {
             favIcon.setOnClickListener(v -> {
                 if (recipe.getIsFavorite() == 1) {
                     recipe.setIsFavorite(0);
-                    favIcon.setImageResource(R.drawable.favorite_off);
+                    favIcon.setImageResource(R.drawable.favoritestar_hollow_dark);
                 } else {
                     recipe.setIsFavorite(1);
-                    favIcon.setImageResource(R.drawable.favorite_on);
+                    favIcon.setImageResource(R.drawable.favoritestar_filled_dark);
                 }
                 db.open();
                 db.updateRecipe(recipe.getId(), recipe.getTitle(), recipe.getPortions(), recipe.getDuration(), recipe.getIsFavorite(), recipe.getImagePath());
