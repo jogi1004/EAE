@@ -34,7 +34,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
@@ -56,7 +55,6 @@ import java.util.List;
 
 public class NewRecipeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    Toolbar toolbar;
     ImageView backButton;
     ConstraintLayout button_add_ingredients;
     ConstraintLayout button_add_steps;
@@ -83,8 +81,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_recipe);
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         button_add_ingredients = findViewById(R.id.button_add_ingredients);
 
         //datenbankzugriff
@@ -240,7 +236,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                 db = new DatabaseManager(this);
                 db.open();
                 // Rezepteinträge aktualisieren
-                db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), 0, imagePath); // TODO
+                db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), 0, imagePath);
 
                 Intent intent = new Intent(this, RecipeActivity.class);
                 startActivity(intent);

@@ -59,6 +59,8 @@
     <string name="edit">Bearbeiten</string>
     <string name="duration">%s %nDauer: %s</string>
     <string name="pleaseFillAllFields">Fülle bitte zuerst alle Felder aus 😊</string>
+    <string name="burgerMenuDescription">Hier klicken, um ins Burger-Menü zu gelangen</string>
+    <string name="favoritesSwitchDescription">Hier klicken, um Favorit umzuschalten</string>
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge"> <!-- TODO: Das sollte schöner werden -->
         <item>1</item>
