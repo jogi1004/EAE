@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.ExifInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,8 +49,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
     EditText time, title;
     Spinner spinner_portionsmenge;
     String recipeTitle, image;
-    private int isFavorite;
-    private int portionsmenge;
+    private int isFavorite, portions;
     public static long recipeIDEdit;
 
     @Override
@@ -66,11 +64,10 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
         db = new DatabaseManager(this);
         db.open();
 
-            //Neues Rezept erstellen mit keinen Inhalten (wird gelöscht, falls vorgang abgebrochen wird)
-
         RecipeDTO recipe = db.getRecipeById(recipeIDEdit);
                     recipeTitle = recipe.getTitle();
         int duration = recipe.getDuration();
+        portions = recipe.getPortions();
                     image = recipe.getImagePath();
                     isFavorite = recipe.getIsFavorite();
 
@@ -110,7 +107,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.portionsmenge, android.R.layout.simple_spinner_dropdown_item);
             spinner_portionsmenge.setAdapter(adapter);
             // Spinner auf die in der DB gespeicherte Portionsanzahl setzen
-            spinner_portionsmenge.setSelection(portionsmenge -1); // wieso -1
+            spinner_portionsmenge.setSelection(portions -1); // wieso -1
             spinner_portionsmenge.setOnItemSelectedListener(this);
 
         pictureView = findViewById(R.id.picture);
@@ -186,11 +183,8 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
             } else if (view == button_add_recipe) {
 
                 if (title.getText().length() > 0 && time.getText().length() > 0) {
-                    //datenbankzugriff
-                    db.open();
-                    //Rezepteinträge aktuallisieren
-                    db.updateRecipe(recipeIDEdit, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), isFavorite, image);
-                    db.close();
+                    //Rezepteinträge aktualisieren
+                    db.updateRecipe(recipeIDEdit, title.getText().toString(), portions, Integer.parseInt(time.getText().toString()), isFavorite, image);
                     Intent intent = new Intent(this, RecipeActivity.class);
                     startActivity(intent);
 
@@ -210,12 +204,12 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
         //welche portionsmenge ausgewählt wurde
         @Override
         public void onItemSelected (AdapterView < ? > adapterView, View view,int position, long l){
-            portionsmenge = position + 1;
+            portions = position + 1;
         }
 
         @Override
         public void onNothingSelected (AdapterView < ? > adapterView){
-            portionsmenge = 1;
+            portions = 1;
         }
 
 
