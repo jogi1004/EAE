@@ -230,23 +230,22 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         } else if (view == button_add_image) {
             openImagePicker();
         } else if (view == button_add_recipe) {
-
+            Toast toast = new Toast(this);
             if(title.getText().length() > 0 && time.getText().length() > 0) {
                 // datenbankzugriff
                 db = new DatabaseManager(this);
                 db.open();
                 // Rezepteinträge aktualisieren
                 db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), 0, imagePath);
-
+                toast.setText(getText(R.string.recipeCreated));
                 Intent intent = new Intent(this, RecipeActivity.class);
                 startActivity(intent);
 
                 finish();
             }else{
-                Toast toast = new Toast(this);
-                toast.setText("Fülle bitte zuerst alle Felder aus 😊");
-                toast.show();
+                toast.setText(getText(R.string.pleaseFillAllFields));
             }
+            toast.show();
 
         } else if (view == backButton || view == button_cancel) {
             Intent intent = new Intent(this, RecipeActivity.class);
