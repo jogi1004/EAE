@@ -274,7 +274,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
             if (portions > 1) {
                 TextView portionsView = new TextView(this);
                 portionsView.setTextColor(Color.WHITE);
-                portionsView.setText(portions);
+                portionsView.setText(String.valueOf(portions));
                 portionsView.setPadding(10, 0, 0, 0);
                 durationLayout.addView(portionsView);
             }
@@ -474,5 +474,15 @@ public void showMenu(View v) {
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (db != null) {
+            try {
+                db.close();
+            } catch (Exception ignore) {
+            }
+        }
     }
 }

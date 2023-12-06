@@ -411,6 +411,16 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
         public void onPointerCaptureChanged ( boolean hasCapture){
             super.onPointerCaptureChanged(hasCapture);
         }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (db != null) {
+            try {
+                db.close();
+            } catch (Exception ignore) {
+            }
+        }
+    }
     }
 
 
