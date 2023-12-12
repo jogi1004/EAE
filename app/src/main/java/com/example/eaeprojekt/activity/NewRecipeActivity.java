@@ -273,10 +273,9 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     public static boolean checkPermission(final Context context)
     {
         int currentAPIVersion = Build.VERSION.SDK_INT;
-        if(currentAPIVersion>=android.os.Build.VERSION_CODES.M)
+        if(currentAPIVersion>= Build.VERSION_CODES.TIRAMISU)
         {
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
-                Log.d("HSKL", "Permission not granted");
                 if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_MEDIA_IMAGES)) {
                     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
                     alertBuilder.setCancelable(true);
@@ -285,16 +284,30 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                     alertBuilder.setPositiveButton(android.R.string.ok, (dialog, which) -> ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES));
                     AlertDialog alert = alertBuilder.create();
                     alert.show();
-
                 } else {
-                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES);
+                        ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES);
                 }
                 return false;
             } else {
                 return true;
             }
         } else {
-            return true;
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+                    alertBuilder.setCancelable(true);
+                    alertBuilder.setTitle("Berechtigung notwendig");
+                    alertBuilder.setMessage("Bitte erlaube den Zugriff auf den Speicher in den Einstellungen");
+                    alertBuilder.setPositiveButton(android.R.string.ok, (dialog, which) -> ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE));
+                    AlertDialog alert = alertBuilder.create();
+                    alert.show();
+                } else {
+                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                }
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 
@@ -302,7 +315,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE || requestCode == MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openImagePicker();
             }

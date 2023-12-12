@@ -45,7 +45,7 @@ import java.util.logging.LogRecord;
 
 public class PopupIngredients implements View.OnClickListener {
 
-    static DatabaseManager db;
+    DatabaseManager db;
 
     Activity mainActivity;
     View popupView;
@@ -57,7 +57,7 @@ public class PopupIngredients implements View.OnClickListener {
 
     FrameLayout frame;
 
-    static ArrayList<String> ingredientList;
+    ArrayList<String> ingredientList;
     
     
     ConstraintLayout cancelButtonIngredient;
@@ -105,8 +105,12 @@ public class PopupIngredients implements View.OnClickListener {
         ingredients = popupView.findViewById(R.id.spinnerIngredient);
 
         //Spinner mit daten aus db füllen
-        fillSpinner();
+        ingredientList = new ArrayList<>();
 
+        List<IngredientDTO> allIngredients = db.getAllIngredients();
+        for(IngredientDTO newIngredient : allIngredients){
+            ingredientList.add(newIngredient.getName() + ", " + newIngredient.getUnit());
+        }
 
         adapter = new CustomAdapter(mainActivity, ingredientList);
         ingredients.setAdapter(adapter);
@@ -139,15 +143,6 @@ public class PopupIngredients implements View.OnClickListener {
             frame = mainActivity.findViewById(R.id.mainmenu);
         }else{
             frame = mainActivity.findViewById(R.id.FrameLayoutShoppingBag);
-        }
-    }
-
-    public static void fillSpinner() {
-        ingredientList = new ArrayList<>();
-
-        List<IngredientDTO> allIngredients = db.getAllIngredients();
-        for(IngredientDTO newIngredient : allIngredients){
-            ingredientList.add(newIngredient.getName() + ", " + newIngredient.getUnit());
         }
     }
 
