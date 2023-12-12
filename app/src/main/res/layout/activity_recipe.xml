@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".activity.RecipeActivity">
+
+    <LinearLayout
+        android:id="@+id/WelcomeLinearLayoutRecipes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="35sp"
+            android:layout_marginTop="10sp"
+            android:background="@color/backgroundGreen"
+            android:gravity="center"
+            android:text="@string/BannerTextRecipeList"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="107dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="-400sp"
+            android:layout_marginTop="60sp"
+            android:contentDescription="@string/ImageViewDescription"
+            app:srcCompat="@drawable/burger_andre" />
+        <!-- Beginn hier -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25sp"
+                android:layout_marginTop="55sp"
+                android:text="@string/RecipeTxt"
+                android:textColor="@color/fontColor"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:thumb="@drawable/thumb_layer_list"
+                app:thumbTint="@null"
+                app:trackTint="@null"
+                app:showText="false"
+                android:checked="true"
+                app:track="@drawable/switch_bg"
+                />
+
+        </LinearLayout>
+
+        <!-- Ende hier -->
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0sp"
+        android:layout_above="@id/bottomNavView"
+        android:layout_below="@id/WelcomeLinearLayoutRecipes">
+
+        <ScrollView
+            android:id="@+id/ScrollViewRecipes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp">
+
+            <LinearLayout
+                android:id="@+id/recipeLayoutinScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+            </LinearLayout>
+
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/backgroundGreen"
+        app:menu="@menu/bottom_nav_bar"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom" />
+
+</RelativeLayout>

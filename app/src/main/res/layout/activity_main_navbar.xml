@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background = "@color/background">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="350sp"
+        android:layout_height="500sp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="50sp"
+        android:contentDescription="@string/ImageViewDescription"
+        android:src="@drawable/logo_und_text"
+        tools:ignore="ImageContrastCheck" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/titleBelowLogo"
+        android:text="@string/titleBelowLogo"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_anchor="@+id/imageView2"
+        app:layout_anchorGravity="bottom|center" />
+
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundGreen"
+            app:menu="@menu/bottom_nav_bar"
+            android:layout_gravity="bottom"
+            app:itemIconSize="30dp">
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

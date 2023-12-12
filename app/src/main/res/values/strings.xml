@@ -1,0 +1,85 @@
+<resources>
+    <string name="app_name">Cook It</string>
+    <string name="recipeButton">Rezeptliste</string>
+    <string name="shoppingBag">Einkaufsliste</string>
+    <string name="ImageViewDescription">Logo der App, ein Burger mit Augen</string>
+    <string name="titleBelowLogo">Save all of your recipes in one space</string>
+    <string name="header">Cook It</string>
+    <string name="welcomeBackTxt">Willkommen zurück!</string>
+    <string name="addButtonDescription">Kleines Plus Icon zum hinzufügen von Rezepten.</string>
+    <string name="AddSymbolDescription">Plus Zeichen in der unteren Mitte des Bildschirms zum Hinzufügen von neuen Rezepten.</string>
+    <string name="shoppinglist">Einkaufsliste</string>
+    <string name="recipelist">Rezepteliste</string>
+    <string name="BannerTextRecipeList">Deine Rezepteliste</string>
+    <string name="TestRecipeName">TestRezept</string>
+    <string name="recipeDescription">Button um ein Rezept zu öffnen</string>
+    <string name="BannerTxtShopping">Deine Einkaufsliste</string>
+    <string name="NeedToBuy">Das musst du dir noch kaufen!</string>
+    <string name="RecipeTxt">Hier deine Rezepte im Überblick!</string>
+    <string name="favoritesSwitch">nur Favoriten anzeigen&#32;</string>
+    <string name="recipeDetails">%1$s Portionen | Dauer: %2$s</string> <!--TODO-->
+    <string name="DeleteSymbolDescription">Mülleimer-Icon am oberen Bildschirmrand zum Leeren der gesamten Einkaufsliste.</string>
+    <string name="deleteShoppingList">Einkaufsliste leeren</string>
+    <string name="deleteShoppingListYouSure">Möchtest du deine Einkaufliste wirklich leeren?</string>
+    <string name="deleteConfirmation">Alle Zutaten löschen</string>
+    <string name="deleteCheckedConfirmation">Markierte Zutaten löschen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="add">Hinzufügen</string>
+    <string name="stepDescription">Schrittbeschreibung</string>
+    <string name="step">Zubereitungsschritt</string>
+    <string name="NavBarAddText">Rezept erstellen</string>
+    <string name="shoppingBagHelperText">Deine Einkaufsliste ist leer!</string>
+    <string name="zubereitungsschritte">Zubereitungsschritte</string>
+    <string name="stepsTitle">Zubereitungsschritte</string>
+    <string name="recipeEditTitle">Rezept bearbeiten</string>
+    <string name="recipeEditSave">Rezept speichern</string>
+    <string name="steps">Zubereitung</string>
+    <string name="addRecipe">Rezept hinzufügen</string>
+    <string name="addStep">Schritt hinzufügen</string>
+    <string name="addIngredient">Zutat hinzufügen</string>
+    <string name="people">Personen</string>
+    <string name="portionsColon">Portionen: </string>
+    <string name="minutes">min.</string>
+    <string name="durationColon">Dauer:</string>
+    <string name="fieldForTitle">Feld für den Titel</string>
+    <string name="createNewRecipe">Neues Rezept erstellen</string>
+    <string name="backButtonDescription">Zurück-Knopf</string>
+    <string name="recipeImageDescription">Hier steht das Rezept-Bild</string>
+    <string name="titleColon">Titel:</string>
+    <string name="titleHint">Titel</string>
+    <string name="permissionDenied">Zugriff verweigert. Bild nicht auswählbar.</string>
+    <string name="durationHint">Dauer</string>
+    <string name="ingredients">Zutaten</string>
+    <string name="recipeDeleted">Rezept gelöscht</string>
+    <string name="hoursAndMinutes">%d Std %d Min</string>
+    <string name="hours">%d Std</string>
+    <string name="min">%d Min</string>
+    <string name="onePortion">Eine Portion</string>
+    <string name="portions">Portionen</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="duration">%s %nDauer: %s</string>
+    <string name="pleaseFillAllFields">Fülle bitte zuerst alle Felder aus 😊</string>
+    <string name="burgerMenuDescription">Hier klicken, um ins Burger-Menü zu gelangen</string>
+    <string name="favoritesSwitchDescription">Hier klicken, um Favorit umzuschalten</string>
+    <string name="recipeCreated">Rezept wurde erfolgreich erstellt!</string>
+    <string name="bearbeiten">Bearbeiten</string>
+    <string name="zutat_loeschen">Zutat Löschen</string>
+    <!--Spinner Portionsmenge-->
+    <string-array name="portionsmenge"> <!-- TODO: Das sollte schöner werden -->
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+    <!--Spinner Zutat-->
+    <string-array name="zutat">
+    </string-array>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/shoppingBagButtonNavBar"
+        android:title="@string/shoppinglist"
+        android:icon="@drawable/shoppingbag_dark_filled"
+        />
+    <item
+        android:id="@+id/AddButtonNavBar"
+        android:icon="@drawable/plus_dark"
+        android:title="@string/NavBarAddText"
+        />
+    <item
+        android:id="@+id/recipeListButtonNavBar"
+        android:title="@string/recipelist"
+        android:icon="@drawable/chiefhat_dark"
+        />
+</menu>
