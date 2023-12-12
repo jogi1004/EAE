@@ -1,10 +1,14 @@
 package com.example.eaeprojekt.popups;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,18 +23,25 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.eaeprojekt.DTO.IngredientAmountDTO;
 import com.example.eaeprojekt.R;
+import com.example.eaeprojekt.activity.MainActivity;
 import com.example.eaeprojekt.activity.NewRecipeActivity;
 import com.example.eaeprojekt.activity.ShoppingBagActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.example.eaeprojekt.DTO.IngredientDTO;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
+
 
 public class PopupIngredients implements View.OnClickListener {
 
@@ -40,9 +51,9 @@ public class PopupIngredients implements View.OnClickListener {
     View popupView;
     PopupWindow popupWindow;
     //Adapter für Zutaten
+    private CustomAdapter adapter;
     Spinner ingredients;
     TextView unitTV;
-    ArrayAdapter<String> adapterIngredients;
 
     FrameLayout frame;
 
@@ -62,6 +73,8 @@ public class PopupIngredients implements View.OnClickListener {
     String choosedIngredient;
     String choosedUnit;
 
+    View parentView;
+
     public void showPopupWindow(final View view, Activity activity) {
 
 
@@ -70,13 +83,15 @@ public class PopupIngredients implements View.OnClickListener {
         db = new DatabaseManager(mainActivity);
         db.open();
 
+        parentView = view;
+
 
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.add_ingredients_popup, null);
         this.popupView = popupView;
 
         //length and width from the Window
-        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int width = LinearLayout.LayoutParams.MATCH_PARENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = true;
 
@@ -94,36 +109,22 @@ public class PopupIngredients implements View.OnClickListener {
 
         List<IngredientDTO> allIngredients = db.getAllIngredients();
         for(IngredientDTO newIngredient : allIngredients){
-            Log.d("spinner"," "+ newIngredient.getName() + " " + newIngredient.getUnit());
             ingredientList.add(newIngredient.getName() + ", " + newIngredient.getUnit());
-            Log.d("spinner"," "+ newIngredient.getName() + " " + newIngredient.getUnit() + " wurde hinzugefügt");
         }
 
-        adapterIngredients = new ArrayAdapter<>(mainActivity, android.R.layout.simple_spinner_dropdown_item, ingredientList);
-        ingredients.setAdapter(adapterIngredients);
+        adapter = new CustomAdapter(mainActivity, ingredientList);
+        ingredients.setAdapter(adapter);
 
-        ingredients.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+        String selectedItem = adapter.getItem(0);
+        String[] separated = selectedItem.split(", ");
+        choosedIngredient = separated[0];
+        choosedUnit = separated[1];
 
-                String selectedItem = ingredientList.get(position);
-                String[] separated = selectedItem.split(", ");
-                choosedIngredient = separated[0];
-                choosedUnit = separated[1];
+        unitTV = popupView.findViewById(R.id.textViewUnit);
+        unitTV.setText(choosedUnit.toString());
 
-                unitTV = popupView.findViewById(R.id.textViewUnit);
-                unitTV.setText(choosedUnit.toString());
 
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                String selectedItem = ingredientList.get(0);
-                String[] separated = selectedItem.split(", ");
-                choosedIngredient = separated[0];
-                choosedUnit = separated[1];
-            }
-        });
 
         addIngredientCross = popupView.findViewById(R.id.addIngredientCross);
         addIngredientCross.setOnClickListener(this);
@@ -157,35 +158,38 @@ public class PopupIngredients implements View.OnClickListener {
         unitText = popupView.findViewById(R.id.unitText);
         String unitTextString = unitText.getText().toString();
 
-        ConstraintLayout ja = popupView.findViewById(R.id.ja);
+        ConstraintLayout bbelow = popupView.findViewById(R.id.bbelow);
 
         if (view == addIngredientCross){
 
 
             if(layoutAddIngredient.getVisibility() == View.VISIBLE){
                 layoutAddIngredient.setVisibility(View.INVISIBLE);
+                addIngredientCross.setImageResource(R.drawable.plus_dark);
+
 
 
                 ConstraintSet constraintSet = new ConstraintSet();
-                constraintSet.clone(ja);
+                constraintSet.clone(bbelow);
 
-                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.START, R.id.ja, ConstraintSet.START, 30);
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.START, R.id.bbelow, ConstraintSet.START, 30);
                 constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.TOP, R.id.chooseAmount, ConstraintSet.BOTTOM, 40); // Hier wird die obere View referenziert
-                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.BOTTOM, R.id.ja, ConstraintSet.BOTTOM, 30);
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.BOTTOM, R.id.bbelow, ConstraintSet.BOTTOM, 30);
 
-                constraintSet.applyTo(ja);
+                constraintSet.applyTo(bbelow);
 
             }else {
                 layoutAddIngredient.setVisibility(View.VISIBLE);
+                addIngredientCross.setImageResource(R.drawable.minus_dark);
 
                 ConstraintSet constraintSet = new ConstraintSet();
-                constraintSet.clone(ja);
+                constraintSet.clone(bbelow);
 
-                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.START, R.id.ja, ConstraintSet.START, 30);
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.START, R.id.bbelow, ConstraintSet.START, 30);
                 constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.TOP, R.id.addIngredientLayout, ConstraintSet.BOTTOM, 40); // Hier wird die obere View referenziert
-                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.BOTTOM, R.id.ja, ConstraintSet.BOTTOM, 30);
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.BOTTOM, R.id.bbelow, ConstraintSet.BOTTOM, 30);
 
-                constraintSet.applyTo(ja);
+                constraintSet.applyTo(bbelow);
             }
         }else if(view == createIngredient){
 
@@ -193,19 +197,19 @@ public class PopupIngredients implements View.OnClickListener {
                 db.insertIngredient(nameTextString, unitTextString);
 
                 ingredientList.add(nameTextString + ", " + unitTextString);
-                adapterIngredients.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
                 ingredients.setSelection(ingredientList.size()-1);
 
                 layoutAddIngredient.setVisibility(View.INVISIBLE);
 
                 ConstraintSet constraintSet = new ConstraintSet();
-                constraintSet.clone(ja);
+                constraintSet.clone(bbelow);
 
-                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.START, R.id.ja, ConstraintSet.START, 30);
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.START, R.id.bbelow, ConstraintSet.START, 30);
                 constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.TOP, R.id.chooseAmount, ConstraintSet.BOTTOM, 40); // Hier wird die obere View referenziert
-                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.BOTTOM, R.id.ja, ConstraintSet.BOTTOM, 30);
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.BOTTOM, R.id.bbelow, ConstraintSet.BOTTOM, 30);
 
-                constraintSet.applyTo(ja);
+                constraintSet.applyTo(bbelow);
                 
             }else{
                 Toast toast = new Toast(mainActivity);
@@ -551,5 +555,91 @@ public class PopupIngredients implements View.OnClickListener {
         });
 
     }
+
+
+
+    class CustomAdapter extends ArrayAdapter<String> {
+
+        public CustomAdapter(Context context, List<String> items) {
+            super(context, android.R.layout.simple_spinner_item, items);
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        }
+
+        @Override
+        public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            View view = super.getDropDownView(position, convertView, parent);
+
+            // Füge den OnLongClickListener zu jedem Element in der Dropdown-Liste hinzu
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    try {
+                        Method method = Spinner.class.getDeclaredMethod("onDetachedFromWindow");
+                        method.setAccessible(true);
+                        method.invoke(ingredients);
+                        Log.d("eehm", "Hat geklappt");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    ConstraintLayout editView = popupView.findViewById(R.id.above);
+                    editView.setVisibility(View.VISIBLE);
+
+                    ConstraintLayout belowView = popupView.findViewById(R.id.bbelow);
+                    belowView.setVisibility(View.GONE);
+
+
+                    String selectedItem = getItem(position);
+                    String[] separated = selectedItem.split(", ");
+                    choosedIngredient = separated[0];
+                    choosedUnit = separated[1];
+
+                    EditText editName = popupView.findViewById(R.id.nameText2);
+                    editName.setText(choosedIngredient);
+
+                    EditText editUnit = popupView.findViewById(R.id.unitText2);
+                    editUnit.setText(choosedUnit);
+
+                    IngredientDTO ingredient = db.getIngredientByNameAndUnit(choosedIngredient, choosedUnit);
+                    Log.d("eehm", "Ingredient" + ingredient);
+
+                    PopupEditIngredient popup = new PopupEditIngredient();
+                    popup.insideEdit(popupView, mainActivity, ingredient.getId());
+
+                    return true;
+                }
+            });
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String selectedItem = getItem(position);
+                    String[] separated = selectedItem.split(", ");
+                    choosedIngredient = separated[0];
+                    choosedUnit = separated[1];
+
+                    unitTV = popupView.findViewById(R.id.textViewUnit);
+                    unitTV.setText(choosedUnit.toString());
+
+                    ingredients.setSelection(position);
+
+                    try {
+                        Method method = Spinner.class.getDeclaredMethod("onDetachedFromWindow");
+                        method.setAccessible(true);
+                        method.invoke(ingredients);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+            return view;
+        }
+    }
+
+    public CustomAdapter getAdapter() {
+        return adapter;
+    }
+
 
 }

@@ -54,13 +54,16 @@
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch1"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
-                android:layout_marginTop="5dp"
-                android:textSize="17sp"
-                android:textColor="@color/fontColor"
-                android:text="@string/favoritesSwitch"
+                android:thumb="@drawable/thumb_layer_list"
+                app:thumbTint="@null"
+                app:trackTint="@null"
+                app:showText="false"
+                android:checked="true"
+                app:track="@drawable/switch_bg"
                 />
+
         </LinearLayout>
 
         <!-- Ende hier -->

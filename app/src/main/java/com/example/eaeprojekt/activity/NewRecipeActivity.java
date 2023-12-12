@@ -386,6 +386,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
 
         for(IngredientAmountDTO ingredient : ingredientDTOs){
+
             IngredientDTO ingredientBare = db.getIngredientById(ingredient.getIngredientId());
 
             ConstraintLayout layout = new ConstraintLayout(this);
@@ -420,9 +421,10 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
              */
             TextView amountText = new TextView(this);
             amountText.setId(View.generateViewId());
-            amountText.setText((int)ingredient.getAmount());
+            amountText.setText(String.valueOf((int) ingredient.getAmount()));
             amountText.setGravity(Gravity.CENTER);
             amountText.setTextColor(Color.parseColor("#FFFFFF"));
+            Log.d("Hannah", " " + (int) ingredient.getAmount());
 
             ViewGroup.LayoutParams amountParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
