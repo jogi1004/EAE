@@ -185,8 +185,6 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
                 if (title.getText().length() > 0 && time.getText().length() > 0) {
                     //Rezepteinträge aktualisieren
                     db.updateRecipe(recipeIDEdit, title.getText().toString(), portions, Integer.parseInt(time.getText().toString()), isFavorite, image);
-                    Intent intent = new Intent(this, RecipeActivity.class);
-                    startActivity(intent);
 
                     finish();
                 } else {

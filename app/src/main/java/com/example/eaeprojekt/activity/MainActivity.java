@@ -3,13 +3,18 @@ package com.example.eaeprojekt.activity;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
-
+import android.view.View;
+import android.widget.Toast;
 import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
@@ -31,29 +36,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_navbar);
-
-        // Beispieldaten hinzufügen
-        //DatabaseManager dbMan = new DatabaseManager(this);
-        //dbMan.open();
-        // Datenbank löschen
-        //deleteDatabase(DatabaseManager.DATABASE_NAME);
-        // Datenbank löschen
-        //deleteDatabase(DatabaseManager.DATABASE_NAME);
-
-        // Optional: Schließe die Datenbankverbindung
-        //dbMan.close();
-        //dbMan.open();
+        //Abfrage ob auf dem Gerät der Darkmode aktiviert ist
+        int darkmode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        if(darkmode == Configuration.UI_MODE_NIGHT_YES){
+            getWindow().setStatusBarColor(Color.rgb(52,73,42));
+        } else{
+            //Ändert immer die Farbe der StatusBarColor auf die BackgroundFarbe
+            getWindow().setStatusBarColor(Color.rgb(255,236,175));
+        }
 
         b = findViewById(R.id.bottomNavView);
         b.setSelectedItemId(R.id.AddButtonNavBar);
         b.setOnItemSelectedListener(this::onNavigationItemSelected);
-        /*DatabaseManager db = new DatabaseManager(this);
-        db.open();
-        long x = db.insertIngredient("Spargel", "Stangen");
-        db.insertIngredientQuantity(-1, x, 300, 1, 0);
-        db.insertIngredientQuantity(-1, x, 200, 1, 1);
-        db.close();*/
 
+        //Abfragen der Displaygröße um die Positionierung der Item u.ä. prozentual anzuordnen
+        DisplayMetrics dM = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dM);
+        int height = dM.heightPixels;
+        int width = dM.widthPixels;
+        Toast.makeText(this, "Höhe des Bildschirms: " + height + " Breite des Bildschirms: " + width, Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Abfrage ob auf dem Gerät der Darkmode aktiviert ist
+        int darkmode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        if(darkmode == Configuration.UI_MODE_NIGHT_YES){
+            getWindow().setStatusBarColor(Color.rgb(52,73,42));
+        } else{
+            //Ändert immer die Farbe der StatusBarColor auf die BackgroundFarbe
+            getWindow().setStatusBarColor(Color.rgb(255,236,175));
+        }
     }
 
     public void logAllIngredients(DatabaseManager dbMan) {

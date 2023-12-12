@@ -16,7 +16,7 @@
     <string name="BannerTxtShopping">Deine Einkaufsliste</string>
     <string name="NeedToBuy">Das musst du dir noch kaufen!</string>
     <string name="RecipeTxt">Hier deine Rezepte im Überblick!</string>
-    <string name="favoritesSwitch">nur Favoriten anzeigen&#32;</string>
+    <string name="favoritesSwitch">Favoriten anzeigen&#32;</string>
     <string name="recipeDetails">%1$s Portionen | Dauer: %2$s</string> <!--TODO-->
     <string name="DeleteSymbolDescription">Mülleimer-Icon am oberen Bildschirmrand zum Leeren der gesamten Einkaufsliste.</string>
     <string name="deleteShoppingList">Einkaufsliste leeren</string>
