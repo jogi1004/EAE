@@ -1,5 +1,7 @@
 package com.example.eaeprojekt.popups;
 
+import static com.example.eaeprojekt.popups.PopupIngredients.fillSpinner;
+
 import android.app.Activity;
 import android.util.Log;
 import android.view.Gravity;
@@ -29,7 +31,6 @@ public class PopupEditIngredient implements View.OnClickListener {
     Activity mainActivity;
 
     long id;
-
 
 
     public void insideEdit(final View view, Activity activity, long ingredientId) {
@@ -74,6 +75,7 @@ public class PopupEditIngredient implements View.OnClickListener {
             parentView.findViewById(R.id.bbelow).setVisibility(View.VISIBLE);
 
 
+
         } else if (viewClick == buttonDelete) {
             db = new DatabaseManager(mainActivity);
             db.open();
@@ -83,7 +85,8 @@ public class PopupEditIngredient implements View.OnClickListener {
             parentView.findViewById(R.id.above).setVisibility(View.GONE);
             parentView.findViewById(R.id.bbelow).setVisibility(View.VISIBLE);
 
-        }
+            fillSpinner();
 
+        }
     }
 }

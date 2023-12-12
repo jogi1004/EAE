@@ -334,6 +334,7 @@
             android:maxLength="20"
             android:maxLines="1"
             android:textColor="#884D29"
+            android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/name2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/name2"
@@ -361,6 +362,7 @@
             android:maxLength="15"
             android:maxLines="1"
             android:textColor="#884D29"
+            android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/unit2"
             app:layout_constraintStart_toStartOf="@+id/nameText2"
             app:layout_constraintTop_toTopOf="@+id/unit2" />
