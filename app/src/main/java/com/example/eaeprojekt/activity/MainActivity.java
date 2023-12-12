@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.AddButtonNavBar) {
             Intent i = new Intent(this, NewRecipeActivity.class);
             startActivity(i);
+            Log.d("CooktIt", "Öffnen der NewRecipeActivity");
             //Öffne ADDActivity
         }
         if (id == R.id.recipeListButtonNavBar) {

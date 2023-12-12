@@ -201,7 +201,7 @@
 
                         <TextView
                             android:id="@+id/text_add_ingredients"
-                            style="@style/EditTextStyle"
+                            android:gravity="center"
                             android:layout_width="145dp"
                             android:layout_height="55dp"
                             android:background="@drawable/background_edit_text"
@@ -231,7 +231,7 @@
 
                         <TextView
                             android:id="@+id/text_add_steps"
-                            style="@style/EditTextStyle"
+                            android:background="@drawable/background_edit_text"
                             android:layout_width="145dp"
                             android:layout_height="55dp"
                             android:gravity="center"
@@ -266,7 +266,9 @@
                     style="@style/StepsLayoutStyle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ingredientsLayout"/>
+                    app:layout_constraintTop_toBottomOf="@id/ingredientsLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
