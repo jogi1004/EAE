@@ -62,6 +62,9 @@
     <string name="burgerMenuDescription">Hier klicken, um ins Burger-Menü zu gelangen</string>
     <string name="favoritesSwitchDescription">Hier klicken, um Favorit umzuschalten</string>
     <string name="recipeCreated">Rezept wurde erfolgreich erstellt!</string>
+    <string name="permissionNecessary">Berechtigung notwendig</string>
+    <string name="pleaseAllowGalleryAccess">Bitte erlaube den Zugriff auf die Galerie in den Einstellungen, um Bilder zu verwenden</string>
+    <string name="pleaseAllowStorageAccess">Bitte erlaube den Zugriff auf den Speicher in den Einstellungen, um Bilder zu verwenden</string>
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge"> <!-- TODO: Das sollte schöner werden -->
         <item>1</item>

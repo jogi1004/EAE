@@ -1,12 +1,20 @@
 package com.example.eaeprojekt.activity;
 
+import static com.example.eaeprojekt.activity.NewRecipeActivity.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE;
+import static com.example.eaeprojekt.activity.NewRecipeActivity.MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES;
+
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.media.ExifInterface;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -16,8 +24,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.DTO.RecipeDTO;
@@ -34,6 +46,7 @@ public class RecipeActivity extends AppCompatActivity {
     private LinearLayout recipeLayout;
     private DatabaseManager db;
     private SwitchCompat favSwitch;
+    private static AlertDialog alert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +74,6 @@ public class RecipeActivity extends AppCompatActivity {
 
     private void updateRecipeList(List<RecipeDTO> recipes) {
         recipeLayout.removeAllViews();
-
-
         for (RecipeDTO recipe : recipes) {
             long recipeid = recipe.getId();
             RelativeLayout recipeItem = new RelativeLayout(this);
@@ -83,32 +94,41 @@ public class RecipeActivity extends AppCompatActivity {
              */
             de.hdodenhof.circleimageview.CircleImageView picture = new de.hdodenhof.circleimageview.CircleImageView(this);
 
-            if (recipe.getImagePath()!= null) {
-                File imgFile = new File(recipe.getImagePath());
-                if(imgFile.exists()){
-                    try {
-                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                        int rotate = 0;
-                        ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
-                        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-                        switch (orientation) {
-                            case ExifInterface.ORIENTATION_ROTATE_270:
-                                rotate = 270;
-                                break;
-                            case ExifInterface.ORIENTATION_ROTATE_180:
-                                rotate = 180;
-                                break;
-                            case ExifInterface.ORIENTATION_ROTATE_90:
-                                rotate = 90;
-                                break;
+            if (recipe.getImagePath()!= null && checkPermission(this)) {
+                    /*Uri selectedImageUri = Uri.parse(recipe.getImagePath());
+                    grantUriPermission(
+                            getPackageName(), selectedImageUri,
+                            Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION |
+                                    Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    getContentResolver().takePersistableUriPermission(
+                            selectedImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION |
+                                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);*/
+
+                    File imgFile = new File(recipe.getImagePath());
+                    if (imgFile.exists()) {
+                        try {
+                            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                            int rotate = 0;
+                            ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
+                            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                            switch (orientation) {
+                                case ExifInterface.ORIENTATION_ROTATE_270:
+                                    rotate = 270;
+                                    break;
+                                case ExifInterface.ORIENTATION_ROTATE_180:
+                                    rotate = 180;
+                                    break;
+                                case ExifInterface.ORIENTATION_ROTATE_90:
+                                    rotate = 90;
+                                    break;
+                            }
+                            picture.setImageBitmap(myBitmap);
+                            picture.setRotation(rotate);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
                         }
-                        picture.setImageBitmap(myBitmap);
-                        picture.setRotation(rotate);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
                     }
                 }
-            }
             else {
                 picture.setImageResource(R.drawable.camera_small);
             }
@@ -262,6 +282,47 @@ public class RecipeActivity extends AppCompatActivity {
             try {
                 db.close();
             } catch (Exception ignore) {
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.d("HSKL", "Öffne PermissionResult");
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE || requestCode == MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            }
+        }
+    }
+
+    public static boolean checkPermission(final Context context)
+    {
+        int currentAPIVersion = Build.VERSION.SDK_INT;
+        if(currentAPIVersion>= Build.VERSION_CODES.TIRAMISU)
+        {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_MEDIA_IMAGES)) {
+                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES);
+                } else {
+                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES);
+                }
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                } else {
+                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                }
+                return false;
+            } else {
+                return true;
             }
         }
     }

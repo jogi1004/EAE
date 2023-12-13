@@ -72,9 +72,9 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     public static long newRecipeId;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
 
-    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 10;
+    public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 10;
     //private static final int MY_PERMISSIONS_REQUEST_CAMERA = 11;
-    private static final int MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES = 12;
+    public static final int MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES = 12;
 
 
     @Override
@@ -276,34 +276,14 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         if(currentAPIVersion>= Build.VERSION_CODES.TIRAMISU)
         {
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_MEDIA_IMAGES)) {
-                    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
-                    alertBuilder.setCancelable(true);
-                    alertBuilder.setTitle("Berechtigung notwendig");
-                    alertBuilder.setMessage("Bitte erlaube den Zugriff auf die Galerie in den Einstellungen");
-                    alertBuilder.setPositiveButton(android.R.string.ok, (dialog, which) -> ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES));
-                    AlertDialog alert = alertBuilder.create();
-                    alert.show();
-                } else {
-                        ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES);
-                }
+                ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES);
                 return false;
             } else {
                 return true;
             }
         } else {
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
-                    alertBuilder.setCancelable(true);
-                    alertBuilder.setTitle("Berechtigung notwendig");
-                    alertBuilder.setMessage("Bitte erlaube den Zugriff auf den Speicher in den Einstellungen");
-                    alertBuilder.setPositiveButton(android.R.string.ok, (dialog, which) -> ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE));
-                    AlertDialog alert = alertBuilder.create();
-                    alert.show();
-                } else {
                     ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                }
                 return false;
             } else {
                 return true;
