@@ -61,6 +61,9 @@
     <string name="pleaseFillAllFields">Fülle bitte zuerst alle Felder aus 😊</string>
     <string name="burgerMenuDescription">Hier klicken, um ins Burger-Menü zu gelangen</string>
     <string name="favoritesSwitchDescription">Hier klicken, um Favorit umzuschalten</string>
+    <string name="recipeCreated">Rezept wurde erfolgreich erstellt!</string>
+    <string name="bearbeiten">Bearbeiten</string>
+    <string name="zutat_loeschen">Zutat Löschen</string>
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge"> <!-- TODO: Das sollte schöner werden -->
         <item>1</item>

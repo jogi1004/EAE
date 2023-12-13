@@ -71,7 +71,7 @@ public class PopupDeleteShoppingBag implements View.OnClickListener {
     public void onClick(View viewClick) {
 
 
-        if(viewClick == buttonBack){
+        if (viewClick == buttonBack) {
 
             frame.getForeground().setAlpha(0);
             popupWindow.dismiss();
@@ -92,12 +92,11 @@ public class PopupDeleteShoppingBag implements View.OnClickListener {
             if (rowCount > 0) {
                 toast.setText(rowCount + " Einträge entfernt.");
                 toast.show();
-            }
-            else {
+            } else {
                 toast.setText("Keine Einträge entfernt.");
                 toast.show();
             }
-        }else if (viewClick == buttonDeleteAll) {
+        } else if (viewClick == buttonDeleteAll) {
 
             //datenbankzugriff
             db = new DatabaseManager(context);

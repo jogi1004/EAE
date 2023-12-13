@@ -258,5 +258,15 @@ public class RecipeActivity extends AppCompatActivity {
         db.open();
         updateRecipeList(db.getAllRecipes());
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (db != null) {
+            try {
+                db.close();
+            } catch (Exception ignore) {
+            }
+        }
+    }
 }
 

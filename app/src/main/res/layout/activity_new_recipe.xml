@@ -124,6 +124,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@id/title"
+                        android:maxLength="20"
+                        android:maxLines="1"
                         android:hint="@string/titleHint"
                         android:inputType="text"
                         android:importantForAutofill="no" />
@@ -145,6 +147,8 @@
                         android:layout_height="25dp"
                         android:inputType="number"
                         android:textAlignment="center"
+                        android:maxLength="10"
+                        android:maxLines="1"
                         app:layout_constraintBottom_toBottomOf="@+id/time"
                         app:layout_constraintStart_toStartOf="@+id/title_text"
                         app:layout_constraintTop_toTopOf="@id/time"
@@ -176,7 +180,7 @@
                         style="@style/EditTextStyle"
                         android:layout_width="75dp"
                         android:layout_height="25dp"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginStart="3dp"
                         app:layout_constraintBottom_toBottomOf="@id/portions"
                         app:layout_constraintStart_toEndOf="@id/portions"
                         app:layout_constraintTop_toTopOf="@id/portions" />
@@ -280,11 +284,11 @@
             android:id="@+id/button_add_recipe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginBottom="15dp"
             android:background="@drawable/background_popup_steps"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
                 android:id="@+id/text_add_recipe"
@@ -305,9 +309,13 @@
             android:id="@+id/button_cancel"
             style="@style/IngredientsAddButtons"
             android:layout_marginEnd="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_popup_steps"
+            android:layout_marginStart="15dp"
             android:layout_marginBottom="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintStart_toStartOf="parent">
 
             <TextView
                 android:id="@+id/text_cancel"

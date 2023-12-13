@@ -1,6 +1,5 @@
 package com.example.eaeprojekt.activity;
 
-
 import static com.example.eaeprojekt.R.id.menu_edit;
 
 import androidx.annotation.RequiresApi;
@@ -13,15 +12,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
+
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.media.ExifInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridLayout;
@@ -272,6 +274,38 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
                 ingredientLayout.addView(ingredientUnit);
                 ingredientLayout.addView(ingredientName);
 
+
+                        ImageView shoppingBag = new ImageView(this);
+                        if(ingredient.getOnShoppingList() == 0) {
+                            Log.d("abc", "Deail0");
+                            shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
+                        }else{
+                            Log.d("abc", "Deail1");
+                            shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
+                        }
+                        ViewGroup.LayoutParams bagParams = new ViewGroup.LayoutParams(
+                                40,
+                                40
+                        );
+                        shoppingBag.setLayoutParams(bagParams);
+                        ingredientLayout.addView(shoppingBag);
+
+                        shoppingBag.setOnClickListener(v ->{
+                            if(ingredient.getOnShoppingList() == 0) {
+                                db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), 1, 0);
+                                Toast toast = new Toast(this);
+                                toast.setText("Zutat zur Einkaufsliste hinzugefügt");
+                                toast.show();
+                                shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
+                            }else{
+                                db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), 0, 0);
+                                Toast toast = new Toast(this);
+                                toast.setText("Zutat aus der Einkaufsliste entfernt");
+                                toast.show();
+                                shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
+                            }
+                        });
+
                 // Fügen Sie das horizontale Layout zum vertikalen Layout hinzu
                 ingredientsLinearLayout.addView(ingredientLayout);
             }
@@ -300,6 +334,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
         durationLayout.addView(durationView);
         durationLayout.addView(portionsIcon);
 
+            // Iterate above iADTO to get ID of Ingredient
         TextView portionsDescription = new TextView(this);
         portionsDescription.setPadding(10, 10, 0, 0);
         portionsDescription.setTextColor(getColor(R.color.white));
@@ -313,7 +348,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
             if (portions > 1) {
                 TextView portionsView = new TextView(this);
                 portionsView.setTextColor(Color.WHITE);
-                portionsView.setText(portions);
+                portionsView.setText(String.valueOf(portions));
                 portionsView.setPadding(10, 0, 0, 0);
                 durationLayout.addView(portionsView);
             }
@@ -515,5 +550,15 @@ public void showMenu(View v) {
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (db != null) {
+            try {
+                db.close();
+            } catch (Exception ignore) {
+            }
+        }
     }
 }
