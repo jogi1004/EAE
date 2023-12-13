@@ -1,6 +1,5 @@
 package com.example.eaeprojekt.popups;
 
-import static com.example.eaeprojekt.popups.PopupIngredients.fillSpinner;
 
 import android.app.Activity;
 import android.util.Log;
@@ -84,8 +83,6 @@ public class PopupEditIngredient implements View.OnClickListener {
 
             parentView.findViewById(R.id.above).setVisibility(View.GONE);
             parentView.findViewById(R.id.bbelow).setVisibility(View.VISIBLE);
-
-            fillSpinner();
 
         }
     }
