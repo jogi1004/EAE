@@ -50,12 +50,12 @@ public class MainActivity extends AppCompatActivity {
         b.setOnItemSelectedListener(this::onNavigationItemSelected);
 
         //Abfragen der Displaygröße um die Positionierung der Item u.ä. prozentual anzuordnen
-        DisplayMetrics dM = new DisplayMetrics();
+        /** DisplayMetrics dM = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dM);
         int height = dM.heightPixels;
         int width = dM.widthPixels;
         Toast.makeText(this, "Höhe des Bildschirms: " + height + " Breite des Bildschirms: " + width, Toast.LENGTH_LONG).show();
-
+**/
     }
 
     @Override
@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.AddButtonNavBar) {
             Intent i = new Intent(this, NewRecipeActivity.class);
             startActivity(i);
-            Log.d("CooktIt", "Öffnen der NewRecipeActivity");
             //Öffne ADDActivity
         }
         if (id == R.id.recipeListButtonNavBar) {
