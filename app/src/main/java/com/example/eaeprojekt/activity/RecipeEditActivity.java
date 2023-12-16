@@ -73,7 +73,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
 
 
             //ZurückButton behandeln
-            backButton = (ImageView) findViewById(R.id.backButton);
+            backButton = findViewById(R.id.backButton);
             backButton.setOnClickListener(this);
 
 
@@ -112,7 +112,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
 
         pictureView = findViewById(R.id.picture);
 
-        if (image != null) {
+        if (image != null && Shared.checkPermission(this, true)) {
             File imgFile = new File(image);
             if(imgFile.exists()){
                 try {
