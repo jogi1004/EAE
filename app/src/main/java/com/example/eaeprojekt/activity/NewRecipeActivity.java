@@ -371,7 +371,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             amountText.setText(String.valueOf((int) ingredient.getAmount()));
             amountText.setGravity(Gravity.CENTER);
             amountText.setTextColor(Color.parseColor("#FFFFFF"));
-            Log.d("Hannah", " " + (int) ingredient.getAmount());
 
             ViewGroup.LayoutParams amountParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
