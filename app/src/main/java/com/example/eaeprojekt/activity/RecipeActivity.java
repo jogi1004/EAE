@@ -2,8 +2,10 @@ package com.example.eaeprojekt.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.media.ExifInterface;
@@ -50,7 +52,7 @@ public class RecipeActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.recipeListButtonNavBar);
         bottomNavigationView.setOnItemSelectedListener(this::onNavigationItemSelected);
 
-        favSwitch = findViewById(R.id.switch1);
+        favSwitch = findViewById(R.id.favSwitch);
         favSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 updateRecipeList(db.getFavoritenRezepte());
@@ -118,12 +120,12 @@ public class RecipeActivity extends AppCompatActivity {
             LinearLayout llayout = new LinearLayout(this);
             llayout.setOrientation(LinearLayout.HORIZONTAL);
 
-            RelativeLayout.LayoutParams pictureParams = new RelativeLayout.LayoutParams(300, 300);
+            RelativeLayout.LayoutParams pictureParams = new RelativeLayout.LayoutParams(250, 250);
             pictureParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);  // Align the picture to the left
             pictureParams.addRule(RelativeLayout.CENTER_VERTICAL);  // Center the picture vertically
             picture.setLayoutParams(pictureParams);
-            picture.setBorderWidth(10);
-            picture.setBorderColor(getColor(R.color.backgroundGreen));
+            picture.setBorderWidth(5);
+            picture.setBorderColor(getColor(R.color.fontColor));
 
             LinearLayout dataLayout = new LinearLayout(this);
             dataLayout.setOrientation(LinearLayout.VERTICAL);
@@ -136,7 +138,7 @@ public class RecipeActivity extends AppCompatActivity {
             dataLayout.setLayoutParams(dataParams);
 
             int marginInDp = (int) getResources().getDimension(R.dimen.margin_70dp);
-            dataLayout.setPadding(50, 0, marginInDp, 50);
+            dataLayout.setPadding(50, 0, marginInDp, 30);
 
             TextView recipeName = new TextView(this);
             recipeName.setText(recipe.getTitle());
@@ -179,7 +181,7 @@ public class RecipeActivity extends AppCompatActivity {
             favIconParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);  // Align the favIcon to the right
             favIconParams.addRule(RelativeLayout.CENTER_VERTICAL);  // Center the favIcon vertically
             favIcon.setLayoutParams(favIconParams);
-            favIcon.setPadding(0, 20, 0, 0);
+            favIcon.setPadding(0, 20, 20, 0);
 
             favIcon.setOnClickListener(v -> {
                 if (recipe.getIsFavorite() == 1) {
@@ -203,7 +205,8 @@ public class RecipeActivity extends AppCompatActivity {
                     RelativeLayout.LayoutParams.MATCH_PARENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT
             );
-            marginLayout.setMargins(0,0,0,15);
+
+            marginLayout.setMargins(0,0,0,30);
             recipeItem.setLayoutParams(marginLayout);
 
 

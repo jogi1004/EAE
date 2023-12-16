@@ -46,6 +46,7 @@ public class PopupSteps implements View.OnClickListener {
 
             //Create window
             popupWindow = new PopupWindow(popupView, width, height, focusable);
+            popupWindow.setOutsideTouchable(false);
 
             //Set the location of the window on the screen
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);

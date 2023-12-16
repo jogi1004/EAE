@@ -7,12 +7,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
 
 import android.graphics.Paint;
+import android.graphics.drawable.GradientDrawable;
 import android.media.ExifInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -140,26 +142,59 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
         isFavorite = rDTO.getIsFavorite();
         imagePath = rDTO.getImagePath();
 
+        // ingredientshape for rounded Corners
+        GradientDrawable ishape = new GradientDrawable();
+        ishape.setShape(GradientDrawable.RECTANGLE);
+        ishape.setCornerRadius(30); // Radius für abgerundete Ecken in Pixeln
+        ishape.setColor(getColor(R.color.darkerYellow));
+
+        GradientDrawable gshape = new GradientDrawable();
+        gshape.setShape(GradientDrawable.RECTANGLE);
+        gshape.setCornerRadius(30);
+        int darkmode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        if(darkmode == Configuration.UI_MODE_NIGHT_YES){
+            gshape.setColor(getColor(R.color.fontColor));
+        } else{
+            gshape.setColor(getColor(R.color.backgroundGreen));
+        }
+
+
         ingredientsLayout = findViewById(R.id.ingredientsLayout);
         durationLayout = findViewById(R.id.durationLayout);
 
         //Favoriten Stern anpassen
         favoriteStar = findViewById(R.id.favoriteStar);
-        if(isFavorite == 1){
-            favoriteStar.setImageResource(R.drawable.favoritestar_filled_dark);
-        }else{
-            favoriteStar.setImageResource(R.drawable.favoritestar_hollow_dark);
+        if(isFavorite == 1) {
+            if (darkmode == Configuration.UI_MODE_NIGHT_YES) {
+                favoriteStar.setImageResource(R.drawable.favoritestar_filled_light);
+            } else {
+                favoriteStar.setImageResource(R.drawable.favoritestar_filled_dark);
+            }
+        }else {
+            if (darkmode == Configuration.UI_MODE_NIGHT_YES) {
+                favoriteStar.setImageResource(R.drawable.favoritestar_hollow_light);
+            } else {
+                favoriteStar.setImageResource(R.drawable.favoritestar_hollow_dark);
+            }
         }
 
         //Erstellen eines OnClickListener für den Favoritenstern
         favoriteStar.setOnClickListener(v -> {
                 if(isFavorite == 1){
                     isFavorite = 0;
-                    favoriteStar.setImageResource(R.drawable.favoritestar_hollow_dark);
+                    if(darkmode == Configuration.UI_MODE_NIGHT_YES){
+                        favoriteStar.setImageResource(R.drawable.favoritestar_hollow_light);
+                    } else {
+                        favoriteStar.setImageResource(R.drawable.favoritestar_hollow_dark);
+                    }
                     db.updateRecipe(recipeid,recipeTitle,portions, duration, isFavorite,imagePath);
                 } else {
                     isFavorite = 1;
-                    favoriteStar.setImageResource(R.drawable.favoritestar_filled_dark);
+                    if(darkmode == Configuration.UI_MODE_NIGHT_YES){
+                        favoriteStar.setImageResource(R.drawable.favoritestar_filled_light);
+                    } else {
+                        favoriteStar.setImageResource(R.drawable.favoritestar_filled_dark);
+                    }
                     db.updateRecipe(recipeid,recipeTitle,portions, duration, isFavorite,imagePath);
                 }
                 });
@@ -173,7 +208,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         );
         textViewParamsName.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        textViewParamsName.setMargins(25, 10, 60, 10);
+        textViewParamsName.setMargins(25, 0, 60, 0);
 
 
         /**
@@ -196,6 +231,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
             ingredientsHeader.setText(getText(R.string.ingredients));
             ingredientsHeader.setLayoutParams(textViewParamsIngredientHeader);
             ingredientsHeader.setPaintFlags(ingredientsHeader.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
             ingredientsLayout.addView(ingredientsHeader);
             ingredientsLinearLayout = new LinearLayout(this);
             ingredientsLinearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -209,6 +245,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
                 // Erstellen Sie ein horizontales Layout für Name, Einheit und Menge
                 LinearLayout ingredientLayout = new LinearLayout(this);
                 ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
+                ingredientLayout.setDividerPadding(50);
 
                 // TextView für den Namen
                 TextView ingredientName = new TextView(this);
@@ -270,6 +307,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
                 ingredientsLinearLayout.addView(ingredientLayout);
             }
         }
+        ingredientsLayout.setBackground(ishape);
 
 
         /**
@@ -321,6 +359,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
             durationLayout.addView(convertSpinner);
         }
         durationLayout.addView(portionsDescription);
+        //durationLayout.setBackground(gshape);
 
 
         /**
@@ -364,6 +403,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
                 stepsLayout.addView(singleStepLayout);
             }
         }
+        stepsLayout.setBackground(gshape);
 
     }
         private boolean onNavigationItemSelected(MenuItem item) {

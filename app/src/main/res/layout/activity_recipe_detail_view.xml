@@ -4,42 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.RecipeDetailViewActivity"
-    android:background="@color/background">
+    tools:context=".activity.RecipeDetailViewActivity">
 
     <TextView
         android:id="@+id/RecipeName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/backgroundGreen"
-        android:layout_marginTop="15sp"
+        style="@style/TextViewHeader"
         android:text="@string/header"
-        android:textColor="@color/white"
-        android:textSize="25sp"
-        android:gravity="center"/>
+        android:textSize="25sp"/>
+
     <ImageButton
         android:id="@+id/menu_burger"
-        android:layout_width="50sp"
-        android:layout_height="50sp"
-        android:src="@drawable/burger_menu"
-        android:background="@color/background"
-        android:layout_toStartOf="@id/circleViewRecipe"
-        android:layout_below="@id/RecipeName"
-        android:layout_marginTop="20sp"
-        android:layout_marginEnd="20sp"
+        style="@style/ImageButtonBurgerMenu"
         android:onClick="showMenu"
         android:contentDescription="@string/burgerMenuDescription" />
     <ImageButton
         android:id="@+id/favoriteStar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/favoritestar_hollow_dark"
-        android:scaleType="fitCenter"
-        android:background="@color/background"
-        android:layout_toEndOf="@id/circleViewRecipe"
-        android:layout_below="@id/RecipeName"
-        android:layout_marginTop="20sp"
-        android:layout_marginStart="20sp"
+        style="@style/ImageButtonFavStarDetail"
         android:contentDescription="@string/favoritesSwitchDescription" />
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -55,16 +35,20 @@
     <GridLayout
         android:id="@+id/durationLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="5"
-        android:rowCount="1"
-        android:background="@color/backgroundGreen"
-        android:layout_marginTop="7sp"
+        android:layout_height="35dp"
+        android:layout_below="@id/circleViewRecipe"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="false"
         android:layout_marginStart="5sp"
+        android:layout_marginTop="7sp"
         android:layout_marginEnd="5sp"
+        android:background="@color/backgroundGreen"
+        android:columnCount="5"
         android:paddingTop="5sp"
         android:paddingBottom="5sp"
-        android:layout_below="@id/circleViewRecipe" />
+        android:rowCount="1"
+
+        />
 
     <ScrollView
         android:id="@+id/recipeScrollView"
@@ -92,14 +76,14 @@
 
             <LinearLayout
                 android:id="@+id/stepsLayout"
+                style="@style/StepsLayoutStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5sp"
                 android:layout_marginStart="5sp"
-                android:background="@color/backgroundGreen"
                 android:orientation="vertical"
                 android:layout_below="@id/ingredientsLayout"
-                android:layout_marginTop="7sp"/>
+                android:layout_marginTop="17sp"/>
         </RelativeLayout>
 </ScrollView>
 
@@ -110,13 +94,9 @@ android:layout_above="@+id/bottomNavView"
 android:layout_below="@id/recipeScrollView" />
 
 <com.google.android.material.bottomnavigation.BottomNavigationView
-android:id="@+id/bottomNavView"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:background="@color/backgroundGreen"
-app:menu="@menu/bottom_nav_bar"
-android:layout_gravity="bottom"
-android:layout_alignParentBottom="true"
-    app:itemIconSize="30dp">
+    android:id="@+id/bottomNavView"
+    style="@style/BottomNavigationBarStyle"
+    app:menu="@menu/bottom_nav_bar"
+    android:layout_alignParentBottom="true">
 </com.google.android.material.bottomnavigation.BottomNavigationView>
     </RelativeLayout>

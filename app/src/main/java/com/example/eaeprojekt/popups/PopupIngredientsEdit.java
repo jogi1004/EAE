@@ -137,7 +137,7 @@ public class PopupIngredientsEdit implements View.OnClickListener {
         unitText = popupView.findViewById(R.id.unitText);
         String unitTextString = unitText.getText().toString();
 
-        ConstraintLayout ja = popupView.findViewById(R.id.ja);
+        ConstraintLayout ja = popupView.findViewById(R.id.below);
 
         if (view == addIngredientCross){
 
@@ -149,9 +149,9 @@ public class PopupIngredientsEdit implements View.OnClickListener {
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(ja);
 
-                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.START, R.id.ja, ConstraintSet.START, 30);
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.START, R.id.below, ConstraintSet.START, 30);
                 constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.TOP, R.id.chooseAmount, ConstraintSet.BOTTOM, 40); // Hier wird die obere View referenziert
-                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.BOTTOM, R.id.ja, ConstraintSet.BOTTOM, 30);
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.BOTTOM, R.id.below, ConstraintSet.BOTTOM, 30);
 
                 constraintSet.applyTo(ja);
 
@@ -161,9 +161,9 @@ public class PopupIngredientsEdit implements View.OnClickListener {
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(ja);
 
-                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.START, R.id.ja, ConstraintSet.START, 30);
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.START, R.id.below, ConstraintSet.START, 30);
                 constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.TOP, R.id.addIngredientLayout, ConstraintSet.BOTTOM, 40); // Hier wird die obere View referenziert
-                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.BOTTOM, R.id.ja, ConstraintSet.BOTTOM, 30);
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.BOTTOM, R.id.below, ConstraintSet.BOTTOM, 30);
 
                 constraintSet.applyTo(ja);
             }
@@ -181,9 +181,9 @@ public class PopupIngredientsEdit implements View.OnClickListener {
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(ja);
 
-                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.START, R.id.ja, ConstraintSet.START, 30);
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.START, R.id.below, ConstraintSet.START, 30);
                 constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.TOP, R.id.chooseAmount, ConstraintSet.BOTTOM, 40); // Hier wird die obere View referenziert
-                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.BOTTOM, R.id.ja, ConstraintSet.BOTTOM, 30);
+                constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.BOTTOM, R.id.below, ConstraintSet.BOTTOM, 30);
 
                 constraintSet.applyTo(ja);
                 

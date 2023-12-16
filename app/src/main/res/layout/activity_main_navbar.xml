@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background = "@color/background">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -16,7 +15,7 @@
         android:layout_marginBottom="50sp"
         android:contentDescription="@string/ImageViewDescription"
         android:src="@drawable/logo_und_text"
-        tools:ignore="ImageContrastCheck" />
+        tools:ignore="ImageContrastCheck"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -32,12 +31,10 @@
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/backgroundGreen"
-            app:menu="@menu/bottom_nav_bar"
+            style="@style/BottomNavigationBarStyle"
             android:layout_gravity="bottom"
-            app:itemIconSize="30dp">
+            app:menu="@menu/bottom_nav_bar"
+            >
         </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

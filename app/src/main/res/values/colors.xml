@@ -8,4 +8,11 @@
     <color name = "darkerYellow">#EEC131</color>
     <color name ="backgroundGreen">#4D713D</color>
     <color name ="errorDelete">#f70202</color>
+    <color name="colorPrimary">#FFECAF</color>
+    <color name ="colorOnPrimary">#FFFFFF</color>
+    <color name ="colorPrimaryVariant">#4D713D</color>
+    <color name ="colorSecondary">#EEC131</color>
+    <color name ="colorSecondaryVariant">#EEC131</color>
+    <color name ="colorOnSecondary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#34492A</color>
 </resources>
