@@ -1,6 +1,5 @@
 package com.example.eaeprojekt.activity;
 
-import static com.example.eaeprojekt.R.id.amount;
 import static com.example.eaeprojekt.R.id.menu_edit;
 
 import androidx.annotation.RequiresApi;
@@ -17,7 +16,6 @@ import android.graphics.Paint;
 import android.media.ExifInterface;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
@@ -93,7 +91,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
 
         //Bild aus DB holen
         RecipeDTO recipe = db.getRecipeById(recipeid);
-        if (recipe.getImagePath()!= null && Shared.checkPermission(this)) {
+        if (recipe.getImagePath()!= null && Shared.checkPermission(this, false)) {
             File imgFile = new File(recipe.getImagePath());
             if(imgFile.exists()) {
                 try {

@@ -112,7 +112,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
 
         pictureView = findViewById(R.id.picture);
 
-        if (image != null && Shared.checkPermission(this)) {
+        if (image != null && Shared.checkPermission(this, true)) {
             File imgFile = new File(image);
             if(imgFile.exists()){
                 try {

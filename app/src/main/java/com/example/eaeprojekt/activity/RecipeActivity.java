@@ -1,17 +1,13 @@
 package com.example.eaeprojekt.activity;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.media.ExifInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -87,15 +82,7 @@ public class RecipeActivity extends AppCompatActivity {
              */
             de.hdodenhof.circleimageview.CircleImageView picture = new de.hdodenhof.circleimageview.CircleImageView(this);
 
-            if (recipe.getImagePath()!= null && Shared.checkPermission(this)) {
-                    /*Uri selectedImageUri = Uri.parse(recipe.getImagePath());
-                    grantUriPermission(
-                            getPackageName(), selectedImageUri,
-                            Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION |
-                                    Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    getContentResolver().takePersistableUriPermission(
-                            selectedImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION |
-                                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);*/
+            if (recipe.getImagePath()!= null && Shared.checkPermission(this, false)) {
 
                     File imgFile = new File(recipe.getImagePath());
                     if (imgFile.exists()) {

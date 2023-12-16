@@ -18,7 +18,7 @@ public class Shared {
     public static final int MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES = 12;
 
 
-    public static boolean checkPermission(final Context context)
+    public static boolean checkPermission(final Context context, boolean reminder)
     {
         int currentAPIVersion = Build.VERSION.SDK_INT;
         if(currentAPIVersion>= Build.VERSION_CODES.TIRAMISU)
@@ -36,7 +36,7 @@ public class Shared {
                     AlertDialog alert = alertBuilder.create();
                     alert.show();
                 }
-                else {
+                else if (reminder){
                     // ask the user to allow the permission in the settings
                     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
                     alertBuilder.setCancelable(true);
