@@ -93,7 +93,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
 
         //Bild aus DB holen
         RecipeDTO recipe = db.getRecipeById(recipeid);
-        if (recipe.getImagePath()!= null) {
+        if (recipe.getImagePath()!= null && Shared.checkPermission(this)) {
             File imgFile = new File(recipe.getImagePath());
             if(imgFile.exists()) {
                 try {
@@ -241,10 +241,8 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
 
                         ImageView shoppingBag = new ImageView(this);
                         if(ingredient.getOnShoppingList() == 0) {
-                            Log.d("abc", "Deail0");
                             shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
                         }else{
-                            Log.d("abc", "Deail1");
                             shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
                         }
                         ViewGroup.LayoutParams bagParams = new ViewGroup.LayoutParams(

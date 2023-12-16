@@ -1,8 +1,5 @@
 package com.example.eaeprojekt.activity;
 
-import static com.example.eaeprojekt.activity.NewRecipeActivity.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE;
-import static com.example.eaeprojekt.activity.NewRecipeActivity.MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -13,8 +10,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.media.ExifInterface;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -28,8 +23,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.DTO.RecipeDTO;
@@ -94,7 +87,7 @@ public class RecipeActivity extends AppCompatActivity {
              */
             de.hdodenhof.circleimageview.CircleImageView picture = new de.hdodenhof.circleimageview.CircleImageView(this);
 
-            if (recipe.getImagePath()!= null && checkPermission(this)) {
+            if (recipe.getImagePath()!= null && Shared.checkPermission(this)) {
                     /*Uri selectedImageUri = Uri.parse(recipe.getImagePath());
                     grantUriPermission(
                             getPackageName(), selectedImageUri,
@@ -247,7 +240,6 @@ public class RecipeActivity extends AppCompatActivity {
                     Context context = v.getContext();
                     Intent i = new Intent(context, RecipeDetailViewActivity.class);
                     i.putExtra("ID", recipeItem.getId());
-                    Log.d("CookIt", "Id in Intent gemacht: "+recipeItem.getId());
                     startActivity(i);
                 }
             });
@@ -286,45 +278,16 @@ public class RecipeActivity extends AppCompatActivity {
         }
     }
 
-    @Override
+    /*@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.d("HSKL", "Öffne PermissionResult");
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE || requestCode == MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES) {
+        if (requestCode == Shared.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE || requestCode == Shared.MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
             }
         }
-    }
-
-    public static boolean checkPermission(final Context context)
-    {
-        int currentAPIVersion = Build.VERSION.SDK_INT;
-        if(currentAPIVersion>= Build.VERSION_CODES.TIRAMISU)
-        {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_MEDIA_IMAGES)) {
-                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES);
-                } else {
-                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES);
-                }
-                return false;
-            } else {
-                return true;
-            }
-        } else {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                } else {
-                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                }
-                return false;
-            } else {
-                return true;
-            }
-        }
-    }
+    }*/
 }
 

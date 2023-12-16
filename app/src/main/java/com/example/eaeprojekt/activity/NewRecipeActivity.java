@@ -72,10 +72,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     public static long newRecipeId;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
 
-    public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 10;
-    //private static final int MY_PERMISSIONS_REQUEST_CAMERA = 11;
-    public static final int MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES = 12;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,31 +259,10 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void openImagePicker() {
-        if (checkPermission(this)) {
+        if (Shared.checkPermission(this)) {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.setType("image/*");
             imagePickerLauncher.launch(intent);
-        }
-    }
-
-    public static boolean checkPermission(final Context context)
-    {
-        int currentAPIVersion = Build.VERSION.SDK_INT;
-        if(currentAPIVersion>= Build.VERSION_CODES.TIRAMISU)
-        {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES);
-                return false;
-            } else {
-                return true;
-            }
-        } else {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                return false;
-            } else {
-                return true;
-            }
         }
     }
 
@@ -295,7 +270,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE || requestCode == MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES) {
+        if (requestCode == Shared.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE || requestCode == Shared.MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openImagePicker();
             }
