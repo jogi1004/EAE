@@ -10,7 +10,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.media.ExifInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
@@ -36,6 +36,7 @@ public class RecipeActivity extends AppCompatActivity {
     private LinearLayout recipeLayout;
     private DatabaseManager db;
     private SwitchCompat favSwitch;
+    private static AlertDialog alert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +64,6 @@ public class RecipeActivity extends AppCompatActivity {
 
     private void updateRecipeList(List<RecipeDTO> recipes) {
         recipeLayout.removeAllViews();
-
-
         for (RecipeDTO recipe : recipes) {
             long recipeid = recipe.getId();
             RelativeLayout recipeItem = new RelativeLayout(this);
@@ -85,32 +84,33 @@ public class RecipeActivity extends AppCompatActivity {
              */
             de.hdodenhof.circleimageview.CircleImageView picture = new de.hdodenhof.circleimageview.CircleImageView(this);
 
-            if (recipe.getImagePath()!= null) {
-                File imgFile = new File(recipe.getImagePath());
-                if(imgFile.exists()){
-                    try {
-                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                        int rotate = 0;
-                        ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
-                        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-                        switch (orientation) {
-                            case ExifInterface.ORIENTATION_ROTATE_270:
-                                rotate = 270;
-                                break;
-                            case ExifInterface.ORIENTATION_ROTATE_180:
-                                rotate = 180;
-                                break;
-                            case ExifInterface.ORIENTATION_ROTATE_90:
-                                rotate = 90;
-                                break;
+            if (recipe.getImagePath()!= null && Shared.checkPermission(this, false)) {
+
+                    File imgFile = new File(recipe.getImagePath());
+                    if (imgFile.exists()) {
+                        try {
+                            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                            int rotate = 0;
+                            ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
+                            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                            switch (orientation) {
+                                case ExifInterface.ORIENTATION_ROTATE_270:
+                                    rotate = 270;
+                                    break;
+                                case ExifInterface.ORIENTATION_ROTATE_180:
+                                    rotate = 180;
+                                    break;
+                                case ExifInterface.ORIENTATION_ROTATE_90:
+                                    rotate = 90;
+                                    break;
+                            }
+                            picture.setImageBitmap(myBitmap);
+                            picture.setRotation(rotate);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
                         }
-                        picture.setImageBitmap(myBitmap);
-                        picture.setRotation(rotate);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
                     }
                 }
-            }
             else {
                 picture.setImageResource(R.drawable.camera_small);
             }
@@ -230,7 +230,6 @@ public class RecipeActivity extends AppCompatActivity {
                     Context context = v.getContext();
                     Intent i = new Intent(context, RecipeDetailViewActivity.class);
                     i.putExtra("ID", recipeItem.getId());
-                    Log.d("CookIt", "Id in Intent gemacht: "+recipeItem.getId());
                     startActivity(i);
                 }
             });
@@ -268,5 +267,17 @@ public class RecipeActivity extends AppCompatActivity {
             }
         }
     }
+
+    /*@Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.d("HSKL", "Öffne PermissionResult");
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == Shared.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE || requestCode == Shared.MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            }
+        }
+    }*/
 }
 
