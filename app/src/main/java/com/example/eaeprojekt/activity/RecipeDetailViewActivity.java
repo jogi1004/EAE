@@ -4,8 +4,10 @@ import static com.example.eaeprojekt.R.id.menu_edit;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.exifinterface.media.ExifInterface;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -15,7 +17,6 @@ import android.graphics.Color;
 
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
-import android.media.ExifInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuInflater;
@@ -54,7 +55,7 @@ import java.util.Locale;
  * RecipeDetail View provides all functional Methods for showing
  * Image, Ingredients and Steps of your recipe
  */
-public class RecipeDetailViewActivity extends AppCompatActivity implements View.OnClickListener, PopupMenu.OnMenuItemClickListener, AdapterView.OnItemSelectedListener {
+public class RecipeDetailViewActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, AdapterView.OnItemSelectedListener {
 
     private DatabaseManager db;
     RecipeDTO rDTO;
@@ -93,35 +94,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
 
         //Bild aus DB holen
         RecipeDTO recipe = db.getRecipeById(recipeid);
-        if (recipe.getImagePath()!= null && Shared.checkPermission(this, false)) {
-            File imgFile = new File(recipe.getImagePath());
-            if(imgFile.exists()) {
-                try {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    int rotate = 0;
-                    ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
-                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-                    switch (orientation) {
-                        case ExifInterface.ORIENTATION_ROTATE_270:
-                            rotate = 270;
-                            break;
-                        case ExifInterface.ORIENTATION_ROTATE_180:
-                            rotate = 180;
-                            break;
-                        case ExifInterface.ORIENTATION_ROTATE_90:
-                            rotate = 90;
-                            break;
-                    }
-                    circleViewImage.setImageBitmap(myBitmap);
-                    circleViewImage.setRotation(rotate);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        else {
-            circleViewImage.setImageResource(R.drawable.camera_small);
-        }
+        updateImage(recipe.getImagePath());
 
         rDTO = db.getRecipeById(recipeid);
         recipeTitle = rDTO.getTitle();
@@ -331,7 +304,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
         durationLayout.addView(durationView);
         durationLayout.addView(portionsIcon);
 
-            // Iterate above iADTO to get ID of Ingredient
+        // Iterate above iADTO to get ID of Ingredient
         TextView portionsDescription = new TextView(this);
         portionsDescription.setPadding(10, 10, 0, 0);
         portionsDescription.setTextColor(getColor(R.color.white));
@@ -359,7 +332,6 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
             durationLayout.addView(convertSpinner);
         }
         durationLayout.addView(portionsDescription);
-        //durationLayout.setBackground(gshape);
 
 
         /**
@@ -406,7 +378,40 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
         stepsLayout.setBackground(gshape);
 
     }
-        private boolean onNavigationItemSelected(MenuItem item) {
+
+    private void updateImage(String path) {
+        if (path != null && Shared.checkPermission(this, false)) {
+            File imgFile = new File(path);
+            if(imgFile.exists()) {
+                try {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    int rotate = 0;
+                    ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
+                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                    switch (orientation) {
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            rotate = 270;
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            rotate = 180;
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            rotate = 90;
+                            break;
+                    }
+                    circleViewImage.setImageBitmap(myBitmap);
+                    circleViewImage.setRotation(rotate);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        else {
+            circleViewImage.setImageResource(R.drawable.camera_small);
+        }
+    }
+
+    private boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.AddButtonNavBar) {
             /**
@@ -457,11 +462,6 @@ public void showMenu(View v) {
 
     popupMenu.show();
 }
-
-    @Override
-    public void onClick(View v) {
-
-    }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
@@ -557,5 +557,12 @@ public void showMenu(View v) {
             } catch (Exception ignore) {
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        RecipeDTO recipe = db.getRecipeById(recipeid);
+        updateImage(recipe.getImagePath());
     }
 }
