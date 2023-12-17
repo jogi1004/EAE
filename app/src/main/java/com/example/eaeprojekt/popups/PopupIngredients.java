@@ -115,16 +115,16 @@ public class PopupIngredients implements View.OnClickListener {
         adapter = new CustomAdapter(mainActivity, ingredientList);
         ingredients.setAdapter(adapter);
 
-        String selectedItem = adapter.getItem(0);
-        String[] separated = selectedItem.split(", ");
-        choosedIngredient = separated[0];
-        choosedUnit = separated[1];
+        if (!adapter.isEmpty()) {
+            String selectedItem = adapter.getItem(0);
+            assert selectedItem != null;
+            String[] separated = selectedItem.split(", ");
+            choosedIngredient = separated[0];
+            choosedUnit = separated[1];
 
         unitTV = popupView.findViewById(R.id.textViewUnit);
-        unitTV.setText(choosedUnit.toString());
-
-
-
+        unitTV.setText(choosedUnit);
+        }
 
         addIngredientCross = popupView.findViewById(R.id.addIngredientCross);
         addIngredientCross.setOnClickListener(this);
@@ -213,7 +213,7 @@ public class PopupIngredients implements View.OnClickListener {
                 
             }else{
                 Toast toast = new Toast(mainActivity);
-                toast.setText("Füllen sie zuerst die Felder aus");
+                toast.setText(R.string.pleaseFillAllFields);
                 toast.show();
             }
 
