@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.AddButtonNavBar) {
+            Log.d("CookIt","Versuche Add-Activity zu öffnen");
             Intent i = new Intent(this, NewRecipeActivity.class);
             startActivity(i);
             //Öffne ADDActivity
