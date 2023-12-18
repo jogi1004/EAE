@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.eaeprojekt.DTO.IngredientAmountDTO;
 import com.example.eaeprojekt.DTO.IngredientDTO;
@@ -114,7 +115,6 @@ public class DatabaseManager {
 
     public RecipeDTO getRecipeById(long id) {
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_RECIPES + " WHERE " + COLUMN_RECIPE_ID + " = ?", new String[]{String.valueOf(id)});
-        RecipeDTO recipeDTO = null;
 
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(COLUMN_RECIPE_ID);
@@ -131,14 +131,14 @@ public class DatabaseManager {
                 int istFavorit = cursor.getInt(istFavoritIndex);
                 String bildpfad = cursor.getString(bildpfadIndex);
 
-                recipeDTO = new RecipeDTO(id, title, portionsmenge, dauer, istFavorit, bildpfad);
+                cursor.close();
+                return (new RecipeDTO(id, title, portionsmenge, dauer, istFavorit, bildpfad));
             }
         }
-
         cursor.close();
-
-        return recipeDTO;
+        return null;
     }
+
 
     public RecipeDTO getRecipeByName(String name) {
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_RECIPES + " WHERE " + COLUMN_RECIPE_TITLE + " = ?", new String[]{name});
@@ -272,7 +272,6 @@ public class DatabaseManager {
 
     public IngredientDTO getIngredientById(long id) {
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENTS + " WHERE " + COLUMN_INGREDIENT_ID + " = ?", new String[]{String.valueOf(id)});
-        IngredientDTO ingredientDTO = null;
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_ID);
             int nameIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_NAME);

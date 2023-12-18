@@ -70,6 +70,8 @@
     <string name="pleaseAllowGalleryAccessInSettings">Bitte erlaube den Zugriff auf die Galerie in den Einstellungen, um Bilder zu verwenden</string>
     <string name="pleaseAllowStorageAccess">Bitte erlaube den Zugriff auf den Speicher, um Bilder zu verwenden</string>
     <string name="pleaseAllowStorageAccessInSettings">Bitte erlaube den Zugriff auf den Speicher in den Einstellungen, um Bilder zu verwenden</string>
+    <string name="randomRecipe">Zufälliges Rezept</string>
+    <string name="reload">↻</string>
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge"> <!-- TODO: Das sollte schöner werden -->
         <item>1</item>
