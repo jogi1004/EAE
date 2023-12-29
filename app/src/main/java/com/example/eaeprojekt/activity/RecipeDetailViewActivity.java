@@ -450,6 +450,10 @@ public void showMenu(View v) {
             i.putExtra("ID", recipeid);
             startActivity(i);
         } else if (item.getItemId() == R.id.menu_delete) {
+            // remove all ingredientAmounts
+            for (IngredientAmountDTO ingr : db.getIngredientsForRecipe(recipeid)) {
+                db.deleteIngredientQuantity(ingr.getId());
+            }
             db.deleteRecipe(recipeid);
             Intent back = new Intent(this, RecipeActivity.class);
             Toast toast = new Toast(this);
