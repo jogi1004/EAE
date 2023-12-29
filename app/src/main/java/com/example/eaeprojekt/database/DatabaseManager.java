@@ -170,7 +170,7 @@ public class DatabaseManager {
     }
 
 
-    public int updateRecipe(long recipeId, String newTitle, int newPortionsmenge,int newDauer, int newIstFavorit, String newBildpfad) {
+    public int updateRecipe(long recipeId, String newTitle, int newPortionsmenge, int newDauer, int newIstFavorit, String newBildpfad) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_RECIPE_TITLE, newTitle);
         values.put(COLUMN_RECIPE_PORTIONSMENGE, newPortionsmenge);
@@ -283,7 +283,7 @@ public class DatabaseManager {
                 String unit = cursor.getString(unitIndex);
 
                 cursor.close();
-                return(new IngredientDTO(id, name, unit));
+                return (new IngredientDTO(id, name, unit));
             }
         }
 
@@ -365,6 +365,37 @@ public class DatabaseManager {
     }
 
     // CRUD-Operationen für ZutatenMenge
+
+    public List<IngredientAmountDTO> getAllIngredientAmounts() {
+        List<IngredientAmountDTO> ingredientAmountList = new ArrayList<>();
+
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENT_QUANTITY, null);
+
+        while (cursor.moveToNext()) {
+            int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_ID);
+            int amountIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_AMOUNT);
+            int recipeIdIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_RECIPE_ID);
+            int ingredientIdIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_INGREDIENT_ID);
+            int isOnShoppingListIndex = cursor.getColumnIndex(COLUMN_IS_ON_SHOPPING_LIST);
+            int isCheckedIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_QUANTITY_IS_CHECKED);
+
+            if (idIndex >= 0 && amountIndex >= 0 && recipeIdIndex >= 0 && isOnShoppingListIndex >= 0) {
+                long id = cursor.getLong(idIndex);
+                double amount = cursor.getDouble(amountIndex);
+                long recipeId = cursor.getLong(recipeIdIndex);
+                long ingredientId = cursor.getLong(ingredientIdIndex);
+                int isOnShoppingList = cursor.getInt(isOnShoppingListIndex);
+                int isChecked = cursor.getInt(isCheckedIndex);
+
+                IngredientAmountDTO ingredientAmountDTO = new IngredientAmountDTO(id, amount, recipeId, ingredientId, isOnShoppingList, isChecked);
+                ingredientAmountList.add(ingredientAmountDTO);
+            }
+        }
+            cursor.close();
+            return ingredientAmountList;
+        }
+
+
 
     public IngredientAmountDTO getIngredientQuantity(long ingredientId) {
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENT_QUANTITY + " WHERE " + COLUMN_INGREDIENT_QUANTITY_ID + " = ?", new String[]{String.valueOf(ingredientId)});
