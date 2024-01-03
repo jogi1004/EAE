@@ -5,10 +5,11 @@
         android:drawable="@drawable/track_bg"/>
 
     <item android:gravity="center"
-        android:drawable="@drawable/ic_switch"
+        android:drawable="@drawable/switch_star_off"
         android:top="5dp"
         android:bottom="7dp"
         android:left="5dp"
-        android:right="5dp"/>
+        android:right="5dp"
+        android:state_checked="false"/>
 
 </layer-list>
