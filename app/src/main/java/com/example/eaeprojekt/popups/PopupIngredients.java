@@ -337,13 +337,11 @@ public class PopupIngredients implements View.OnClickListener {
         trash.setId(View.generateViewId());
 
         ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
-                50,
-                50
+                45,
+                45
         );
         trash.setLayoutParams(trashParams);
         layout.addView(trash);
-
-        Log.d("inhalt", "" + ingredientToAdd.getName() + " " + amount + " " + ingredientToAdd.getUnit());
 
             /*
             Constraints
@@ -356,7 +354,7 @@ public class PopupIngredients implements View.OnClickListener {
         constraintSet.connect(ingredientText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
         constraintSet.connect(ingredientText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
         //Menge
-        constraintSet.connect(amountText.getId(), ConstraintSet.START, ingredientText.getId(), ConstraintSet.START, 200);
+        constraintSet.connect(amountText.getId(), ConstraintSet.START, ingredientText.getId(), ConstraintSet.START, 250);
         constraintSet.connect(amountText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
         constraintSet.connect(amountText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
         //Einheit
@@ -408,17 +406,13 @@ public class PopupIngredients implements View.OnClickListener {
                     1
             );
             line.setLayoutParams(viewParams);
-            Log.d("abc", "vorView");
             parentLayout.addView(line);
-            Log.d("abc", "nachView");
 
             i = -9;
         }
 
         // Zutat in die Einkaufsliste hinzufügen
         long ingredientId = db.insertIngredientQuantity(-9, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()),1, 0);
-
-        Log.d("abc", "nachInsert");
 
 
             /*
@@ -432,7 +426,6 @@ public class PopupIngredients implements View.OnClickListener {
         layout.setPadding(20,20,20,20);
         layout.setLayoutParams(layoutParams);
         layoutParams.setMargins(40, 0, 40, 0);
-        Log.d("abc", "nachLayout");
             /*
             Zutat
              */
@@ -467,7 +460,6 @@ public class PopupIngredients implements View.OnClickListener {
         amountText.setLayoutParams(amountParams);
 
         layout.addView(amountText);
-        Log.d("abc", "nachAmount");
 
             /*
             Einheit
@@ -485,7 +477,6 @@ public class PopupIngredients implements View.OnClickListener {
         unitText.setLayoutParams(unitParams);
 
         layout.addView(unitText);
-        Log.d("abc", "nachUnit");
 
             /*
             Checkbox
@@ -499,7 +490,6 @@ public class PopupIngredients implements View.OnClickListener {
         );
         checkBox.setLayoutParams(checkBoxParams);
         layout.addView(checkBox);
-        Log.d("abc", "nachBox");
 
             /*
             Mülleimer
@@ -514,16 +504,12 @@ public class PopupIngredients implements View.OnClickListener {
         );
         trash.setLayoutParams(trashParams);
         layout.addView(trash);
-        Log.d("abc", "nachMüll");
-
-        Log.d("inhalt", "" + ingredientToAdd.getName() + " " + amount + " " + ingredientToAdd.getUnit());
 
             /*
             Constraints
              */
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.clone(layout);
-        Log.d("abc", "nachClone");
 
         //Zutat
         constraintSet.connect(ingredientText.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
@@ -547,12 +533,8 @@ public class PopupIngredients implements View.OnClickListener {
         constraintSet.connect(trash.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
 
         constraintSet.applyTo(layout);
-        Log.d("abc", "nachApply");
-
 
         parentLayout.addView(layout);
-
-        Log.d("abc", "nachAllem");
 
         /*
         noch bearbeiten

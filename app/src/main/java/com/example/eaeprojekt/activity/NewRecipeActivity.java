@@ -405,8 +405,8 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             trash.setId(View.generateViewId());
 
             ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
-                    50,
-                    50
+                    45,
+                    45
             );
             trash.setLayoutParams(trashParams);
             layout.addView(trash);
@@ -421,7 +421,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             constraintSet.connect(ingredientText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
             constraintSet.connect(ingredientText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
             //Menge
-            constraintSet.connect(amountText.getId(), ConstraintSet.START, ingredientText.getId(), ConstraintSet.START, 200);
+            constraintSet.connect(amountText.getId(), ConstraintSet.START, ingredientText.getId(), ConstraintSet.START, 250);
             constraintSet.connect(amountText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
             constraintSet.connect(amountText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
             //Einheit
@@ -462,7 +462,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             layout.setBackgroundResource(R.drawable.background_with_rounded_corners_green);
             layout.setPadding(20, 20, 20, 20);
             layout.setLayoutParams(layoutParams);
-            layoutParams.setMargins(40, 10, 40, 10);
+            layoutParams.setMargins(20, 10, 20, 10);
 
             // Text der Schrittbeschreibung
             TextView stepDescriptionText = new TextView(this);
@@ -485,8 +485,8 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             trash.setId(View.generateViewId());
 
             ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
-                    70,
-                    70
+                    45,
+                    45
             );
             trash.setLayoutParams(trashParams);
             layout.addView(trash);
@@ -497,7 +497,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             constraintSet.clone(layout);
 
             constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
-            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.END, trash.getId(), ConstraintSet.START);
+            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.END, trash.getId(), ConstraintSet.START, 20);
             constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
             constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
 
