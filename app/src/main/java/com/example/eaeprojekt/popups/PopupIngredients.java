@@ -117,7 +117,6 @@ public class PopupIngredients implements View.OnClickListener {
         adapter = new CustomAdapter(mainActivity, ingredientList);
         ingredients.setAdapter(adapter);
 
-
         unitTV = popupView.findViewById(R.id.textViewUnit);
 
         if(!adapter.isEmpty()) {
@@ -127,6 +126,7 @@ public class PopupIngredients implements View.OnClickListener {
             choosedUnit = separated[1];
 
             unitTV.setText(choosedUnit.toString());
+
         }
 
         addIngredientCross = popupView.findViewById(R.id.addIngredientCross);
@@ -225,7 +225,7 @@ public class PopupIngredients implements View.OnClickListener {
 
             }else{
                 Toast toast = new Toast(mainActivity);
-                toast.setText("Füllen sie zuerst die Felder aus");
+                toast.setText(R.string.pleaseFillAllFields);
                 toast.show();
             }
 
