@@ -11,13 +11,18 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.activity.NewRecipeActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
 
+
+import java.util.ArrayList;
+import java.util.List;
 public class PopupEditIngredient implements View.OnClickListener {
 
 
@@ -27,12 +32,17 @@ public class PopupEditIngredient implements View.OnClickListener {
     ConstraintLayout buttonBack;
     ConstraintLayout buttonDelete;
     FrameLayout frame;
+
     Activity mainActivity;
 
     long id;
 
+    PopupIngredients.CustomAdapter ada;
 
-    public void insideEdit(final View view, Activity activity, long ingredientId) {
+    ArrayList<String> ingredientList;
+
+
+    public void insideEdit(final View view, Activity activity, long ingredientId, PopupIngredients.CustomAdapter adapter, ArrayList<String> ingredientList) {
 
         id = ingredientId;
 
@@ -40,6 +50,9 @@ public class PopupEditIngredient implements View.OnClickListener {
 
         mainActivity = activity;
 
+        ada = adapter;
+
+        this.ingredientList = ingredientList;
 
         //Buttons
         buttonEdit = view.findViewById(R.id.edit_button);
@@ -73,6 +86,16 @@ public class PopupEditIngredient implements View.OnClickListener {
             parentView.findViewById(R.id.above).setVisibility(View.GONE);
             parentView.findViewById(R.id.bbelow).setVisibility(View.VISIBLE);
 
+            ingredientList.clear();
+
+            List<IngredientDTO> allIngredients = db.getAllIngredients();
+            for(IngredientDTO newIngredient : allIngredients){
+                ingredientList.add(newIngredient.getName() + ", " + newIngredient.getUnit());
+            }
+
+            ada.notifyDataSetChanged();
+
+            PopupIngredients p = new PopupIngredients();
 
 
         } else if (viewClick == buttonDelete) {
@@ -83,6 +106,16 @@ public class PopupEditIngredient implements View.OnClickListener {
 
             parentView.findViewById(R.id.above).setVisibility(View.GONE);
             parentView.findViewById(R.id.bbelow).setVisibility(View.VISIBLE);
+
+
+            ingredientList.clear();
+
+            List<IngredientDTO> allIngredients = db.getAllIngredients();
+            for(IngredientDTO newIngredient : allIngredients){
+                ingredientList.add(newIngredient.getName() + ", " + newIngredient.getUnit());
+            }
+
+            ada.notifyDataSetChanged();
 
         }
     }

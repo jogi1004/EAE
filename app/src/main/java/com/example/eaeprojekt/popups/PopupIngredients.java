@@ -39,6 +39,8 @@ import com.example.eaeprojekt.DTO.IngredientDTO;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
@@ -115,16 +117,17 @@ public class PopupIngredients implements View.OnClickListener {
         adapter = new CustomAdapter(mainActivity, ingredientList);
         ingredients.setAdapter(adapter);
 
-        String selectedItem = adapter.getItem(0);
-        String[] separated = selectedItem.split(", ");
-        choosedIngredient = separated[0];
-        choosedUnit = separated[1];
 
         unitTV = popupView.findViewById(R.id.textViewUnit);
-        unitTV.setText(choosedUnit.toString());
 
+        if(!adapter.isEmpty()) {
+            String selectedItem = adapter.getItem(0);
+            String[] separated = selectedItem.split(", ");
+            choosedIngredient = separated[0];
+            choosedUnit = separated[1];
 
-
+            unitTV.setText(choosedUnit.toString());
+        }
 
         addIngredientCross = popupView.findViewById(R.id.addIngredientCross);
         addIngredientCross.setOnClickListener(this);
@@ -168,7 +171,6 @@ public class PopupIngredients implements View.OnClickListener {
                 addIngredientCross.setImageResource(R.drawable.plus_dark);
 
 
-
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(bbelow);
 
@@ -198,9 +200,19 @@ public class PopupIngredients implements View.OnClickListener {
 
                 ingredientList.add(nameTextString + ", " + unitTextString);
                 adapter.notifyDataSetChanged();
-                ingredients.setSelection(ingredientList.size()-1);
+
+                ingredients.setSelection(ingredientList.size() - 1);
+
+                String selectedItem = adapter.getItem(ingredientList.size() - 1);
+                String[] separated = selectedItem.split(", ");
+                choosedIngredient = separated[0];
+                choosedUnit = separated[1];
+
+                unitTV.setText(choosedUnit.toString());
+
 
                 layoutAddIngredient.setVisibility(View.INVISIBLE);
+                addIngredientCross.setImageResource(R.drawable.plus_dark);
 
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(bbelow);
@@ -210,7 +222,7 @@ public class PopupIngredients implements View.OnClickListener {
                 constraintSet.connect(R.id.add_button_ingredient, ConstraintSet.BOTTOM, R.id.bbelow, ConstraintSet.BOTTOM, 30);
 
                 constraintSet.applyTo(bbelow);
-                
+
             }else{
                 Toast toast = new Toast(mainActivity);
                 toast.setText("Füllen sie zuerst die Felder aus");
@@ -594,6 +606,7 @@ public class PopupIngredients implements View.OnClickListener {
                     choosedIngredient = separated[0];
                     choosedUnit = separated[1];
 
+
                     EditText editName = popupView.findViewById(R.id.nameText2);
                     editName.setText(choosedIngredient);
 
@@ -601,10 +614,11 @@ public class PopupIngredients implements View.OnClickListener {
                     editUnit.setText(choosedUnit);
 
                     IngredientDTO ingredient = db.getIngredientByNameAndUnit(choosedIngredient, choosedUnit);
-                    Log.d("eehm", "Ingredient" + ingredient);
+
 
                     PopupEditIngredient popup = new PopupEditIngredient();
-                    popup.insideEdit(popupView, mainActivity, ingredient.getId());
+
+                    popup.insideEdit(popupView, mainActivity, ingredient.getId(), adapter, ingredientList);
 
                     return true;
                 }
@@ -641,5 +655,136 @@ public class PopupIngredients implements View.OnClickListener {
         return adapter;
     }
 
+
+
+
+
+
+
+
+
+
+    class PopupEditIngredient implements View.OnClickListener {
+
+
+        DatabaseManager db;
+        View parentView;
+        ConstraintLayout buttonEdit;
+        ConstraintLayout buttonBack;
+        ConstraintLayout buttonDelete;
+        Activity mainActivity;
+
+        long id;
+
+        PopupIngredients.CustomAdapter ada;
+
+        ArrayList<String> ingredientList;
+
+
+        public void insideEdit(final View view, Activity activity, long ingredientId, PopupIngredients.CustomAdapter adapter, ArrayList<String> ingredientList) {
+
+            id = ingredientId;
+
+            parentView = view;
+
+            mainActivity = activity;
+
+            ada = adapter;
+
+            this.ingredientList = ingredientList;
+
+
+            //Buttons
+            buttonEdit = view.findViewById(R.id.edit_button);
+            buttonEdit.setOnClickListener(this);
+
+            buttonBack = view.findViewById(R.id.cancel_edit);
+            buttonBack.setOnClickListener(this);
+
+            buttonDelete = view.findViewById(R.id.delete_button);
+            buttonDelete.setOnClickListener(this);
+
+
+        }
+
+        @Override
+        public void onClick(View viewClick) {
+
+            if(viewClick == buttonBack){
+                parentView.findViewById(R.id.above).setVisibility(View.GONE);
+                parentView.findViewById(R.id.bbelow).setVisibility(View.VISIBLE);
+            }else if(viewClick == buttonEdit){
+                //datenbankzugriff
+                db = new DatabaseManager(mainActivity);
+                db.open();
+
+                EditText name = (EditText) parentView.findViewById(R.id.nameText2);
+                EditText unit = (EditText) parentView.findViewById(R.id.unitText2);
+
+                db.updateIngredient(id, name.getText().toString(), unit.getText().toString());
+
+                parentView.findViewById(R.id.above).setVisibility(View.GONE);
+                parentView.findViewById(R.id.bbelow).setVisibility(View.VISIBLE);
+
+                ingredientList.clear();
+
+                List<IngredientDTO> allIngredients = db.getAllIngredients();
+                for(IngredientDTO newIngredient : allIngredients){
+                    ingredientList.add(newIngredient.getName() + ", " + newIngredient.getUnit());
+                }
+
+                ada.notifyDataSetChanged();
+
+                //String selectedItem = ingredientList.get(0);
+                //String[] separated = selectedItem.split(", ");
+                choosedIngredient = name.getText().toString();
+                choosedUnit = unit.getText().toString();
+
+                unitTV = popupView.findViewById(R.id.textViewUnit);
+                unitTV.setText(choosedUnit);
+
+                int pos = 0;
+
+                for(int i = 0; i < ingredientList.size(); i++){
+                    if(ingredientList.get(i).equals(choosedIngredient + ", " + choosedUnit)){
+                        pos = i;
+                        break;
+                    }
+                    Log.d("void", ingredientList.get(i) + "____" +  choosedIngredient + ", " + choosedUnit);
+                }
+                ingredients.setSelection(pos);
+
+
+            } else if (viewClick == buttonDelete) {
+                db = new DatabaseManager(mainActivity);
+                db.open();
+
+                db.deleteIngredient(id);
+
+                parentView.findViewById(R.id.above).setVisibility(View.GONE);
+                parentView.findViewById(R.id.bbelow).setVisibility(View.VISIBLE);
+
+                ingredientList.clear();
+
+                List<IngredientDTO> allIngredients = db.getAllIngredients();
+                for(IngredientDTO newIngredient : allIngredients){
+                    ingredientList.add(newIngredient.getName() + ", " + newIngredient.getUnit());
+                }
+
+                ada.notifyDataSetChanged();
+
+                String selectedItem = ingredientList.get(0);
+                String[] separated = selectedItem.split(", ");
+                choosedIngredient = separated[0];
+                choosedUnit = separated[1];
+
+                unitTV = popupView.findViewById(R.id.textViewUnit);
+                unitTV.setText(choosedUnit.toString());
+
+                ingredients.setSelection(0);
+
+            }
+        }
+    }
 
 }
