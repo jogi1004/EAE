@@ -11,8 +11,7 @@
         android:id="@+id/imageView2"
         android:layout_width="250sp"
         android:layout_height="400sp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="300sp"
+        android:layout_gravity="top|center"
         android:contentDescription="@string/ImageViewDescription"
         android:src="@drawable/logo_und_text"
         tools:ignore="ImageContrastCheck" />
@@ -24,8 +23,9 @@
         android:contentDescription="@string/titleBelowLogo"
         android:text="@string/titleBelowLogo"
         android:textAlignment="center"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textStyle="bold"
+        android:layout_gravity="top|center"
         app:layout_anchor="@id/imageView2"
         app:layout_anchorGravity="bottom|center" />
 
@@ -36,6 +36,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_anchor="@id/textView1"
+        android:layout_gravity="bottom|center"
         app:layout_anchorGravity="bottom|center">
 
         <LinearLayout
@@ -47,7 +48,8 @@
             app:layout_anchor="@id/textView1"
             app:layout_anchorGravity="bottom|center"
             android:layout_gravity="center"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginTop="20sp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -66,32 +68,38 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/circleViewRecipe"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_marginTop="15sp"
+                android:layout_marginBottom="15sp"
                 app:civ_border_color="@color/darkerYellow"
                 app:civ_border_width="4dp"
                 android:layout_marginStart="20sp" />
 
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
             <TextView
                 android:id="@+id/randomRecipeTitle"
                 android:layout_width="match_parent"
-                android:layout_height="20sp"
-                android:textSize="18sp" />
+                android:layout_height="40sp"
+                android:layout_marginTop="10sp"
+                android:textSize="20sp" />
 
+            <Button
+                android:id="@+id/reloadButton"
+                android:layout_width="120dp"
+                android:layout_height="60dp"
+                android:backgroundTint="@color/backgroundGreen"
+                android:text="@string/reload"
+                android:textSize="25sp"
+                android:layout_gravity="bottom|end"
+                android:layout_marginEnd="5sp"/>
+                
+            </LinearLayout>
         </LinearLayout>
-        <Button
-            android:id="@+id/reloadButton"
-            android:layout_width="160dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/black"
-            android:gravity="center"
-            android:text="@string/reload"
-            android:textSize="30sp" />
-
     </LinearLayout>
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavView"
         style="@style/BottomNavigationBarStyle"

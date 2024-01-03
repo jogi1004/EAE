@@ -22,7 +22,6 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.R;
-import com.example.eaeprojekt.activity.NewRecipeActivity;
 import com.example.eaeprojekt.activity.RecipeEditActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
 
@@ -96,7 +95,7 @@ public class PopupIngredientsEdit implements View.OnClickListener {
                 choosedUnit = separated[1];
 
                 unitTV = popupView.findViewById(R.id.textViewUnit);
-                unitTV.setText(choosedUnit.toString());
+                unitTV.setText(choosedUnit);
 
             }
 
@@ -189,7 +188,7 @@ public class PopupIngredientsEdit implements View.OnClickListener {
                 
             }else{
                 Toast toast = new Toast(mainActivity);
-                toast.setText("Füllen sie zuerst die Felder aus");
+                toast.setText(R.string.pleaseFillAllFields);
                 toast.show();
             }
 
@@ -289,8 +288,6 @@ public class PopupIngredientsEdit implements View.OnClickListener {
             );
             trash.setLayoutParams(trashParams);
             layout.addView(trash);
-
-            Log.d("inhalt", "" + ingredientToAdd.getName() + " " + amount + " " + ingredientToAdd.getUnit());
 
             /*
             Constraints
