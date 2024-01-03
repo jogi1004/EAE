@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    tools:context=".activity.RecipeActivity">
+
+    <RelativeLayout
+        android:id="@+id/WelcomeLinearLayoutRecipes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/RecipeListHeader"
+            style="@style/TextViewHeader"
+            android:text="@string/BannerTextRecipeList" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="107dp"
+            android:layout_height="100dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="15sp"
+            android:layout_marginTop="10sp"
+            android:layout_below="@id/RecipeListHeader"
+            android:contentDescription="@string/ImageViewDescription"
+            app:srcCompat="@drawable/burger_andre" />
+
+            <TextView
+                android:id="@+id/TextViewRecipeList"
+                style="@style/TextViewsgeneral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/imageView"
+                android:layout_marginTop="10sp"
+                android:layout_below="@id/RecipeListHeader"
+                android:text="@string/RecipeTxt"
+                android:textSize="20sp"
+                android:layout_marginEnd="15sp"
+                android:background="@drawable/background_with_rounded_corners"
+                android:gravity="center"
+                android:padding="10sp"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/favSwitch"
+                style="@style/favSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_below="@id/TextViewRecipeList"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="5dp"
+                android:textSize="17sp"
+                android:layout_marginEnd="15sp"
+                android:text="@string/favoritesSwitch"
+                />
+
+
+    </RelativeLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0sp"
+        android:layout_above="@id/bottomNavView"
+        android:layout_below="@id/WelcomeLinearLayoutRecipes">
+
+        <ScrollView
+            android:id="@+id/ScrollViewRecipes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp">
+
+            <LinearLayout
+                android:id="@+id/recipeLayoutinScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+            </LinearLayout>
+
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavView"
+        style="@style/BottomNavigationBarStyle"
+        app:menu="@menu/bottom_nav_bar"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom" />
+
+</RelativeLayout>

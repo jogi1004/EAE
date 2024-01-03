@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name = "black">#FF000000</color>
+    <color name = "white">#FFFFFFFF</color>
+    <color name = "buttonGrey">#D9D9D9</color>
+    <color name = "background">#FFECAF</color>
+    <color name="fontColor">#884D20</color>
+    <color name = "darkerYellow">#EEC131</color>
+    <color name ="backgroundGreen">#4D713D</color>
+    <color name ="errorDelete">#f70202</color>
+    <color name="colorPrimary">#FFECAF</color>
+    <color name ="colorOnPrimary">#FFFFFF</color>
+    <color name ="colorPrimaryVariant">#4D713D</color>
+    <color name ="colorSecondary">#EEC131</color>
+    <color name ="colorSecondaryVariant">#EEC131</color>
+    <color name ="colorOnSecondary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#34492A</color>
+</resources>
