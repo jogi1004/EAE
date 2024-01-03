@@ -5,7 +5,7 @@
         android:drawable="@drawable/track_bg"/>
 
     <item android:gravity="center"
-        android:drawable="@drawable/switch_star_off"
+        android:drawable="@drawable/ic_switch"
         android:top="5dp"
         android:bottom="7dp"
         android:left="5dp"
