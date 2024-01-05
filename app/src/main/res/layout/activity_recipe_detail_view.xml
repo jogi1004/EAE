@@ -38,17 +38,15 @@
         android:layout_height="35dp"
         android:layout_below="@id/circleViewRecipe"
         android:layout_centerInParent="true"
-        android:layout_centerHorizontal="false"
         android:layout_marginStart="5sp"
         android:layout_marginTop="7sp"
         android:layout_marginEnd="5sp"
         android:background="@color/backgroundGreen"
         android:columnCount="5"
+
         android:paddingTop="5sp"
         android:paddingBottom="5sp"
-        android:rowCount="1"
-
-        />
+        android:rowCount="1" />
 
     <ScrollView
         android:id="@+id/recipeScrollView"
