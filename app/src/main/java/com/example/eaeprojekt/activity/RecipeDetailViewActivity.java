@@ -17,7 +17,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
@@ -90,17 +89,9 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
         db = new DatabaseManager(this);
         db.open();
         iADTO = db.getIngredientsForRecipe(recipeid);
-        Log.d("HSKL", "RecipeId: "+recipeid);
 
         //Bild aus DB holen
         RecipeDTO recipe = db.getRecipeById(recipeid);
-        Log.d("HSKL", "Ich bin schon hier");
-        Log.d("HSKL", ""+recipe.getId());
-        Log.d("HSKL", ""+recipe.getTitle());
-        Log.d("HSKL", ""+recipe.getPortions());
-        Log.d("HSKL", ""+recipe.getDuration());
-        Log.d("HSKL", ""+recipe.getIsFavorite());
-        Log.d("HSKL", ""+recipe.getImagePath());
         updateImage(recipe.getImagePath());
 
         rDTO = db.getRecipeById(recipeid);

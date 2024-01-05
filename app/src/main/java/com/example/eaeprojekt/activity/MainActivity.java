@@ -13,7 +13,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -113,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Image
             String path = allRecipes.get(randomNumber).getImagePath();
+            imageView.setRotation(0); // reset rotation
             if (path != null && Shared.checkPermission(this, false)) {
                 File imgFile = new File(path);
                 if(imgFile.exists()) {
