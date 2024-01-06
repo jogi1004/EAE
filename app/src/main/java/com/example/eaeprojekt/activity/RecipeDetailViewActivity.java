@@ -6,8 +6,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.exifinterface.media.ExifInterface;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -438,7 +436,6 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
     }
 
 @RequiresApi(api = Build.VERSION_CODES.Q)
-@SuppressLint({"RestrictedApi", "NonConstantResourceId"})
 public void showMenu(View v) {
     PopupMenu popupMenu = new PopupMenu(this, v);
     MenuInflater inflater = popupMenu.getMenuInflater();

@@ -18,8 +18,7 @@ import java.util.List;
 
 public class DatabaseManager {
 
-    // TODO vor Release unbedingt auf private umstellen - dient dem Löschen
-    public static final String DATABASE_NAME = "Recipe.db";
+    private static final String DATABASE_NAME = "Recipe.db";
     private static final int DATABASE_VERSION = 1;
 
     // Tabelle für Rezepte
@@ -114,7 +113,6 @@ public class DatabaseManager {
 
     public RecipeDTO getRecipeById(long id) {
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_RECIPES + " WHERE " + COLUMN_RECIPE_ID + " = ?", new String[]{String.valueOf(id)});
-        RecipeDTO recipeDTO = null;
 
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(COLUMN_RECIPE_ID);
@@ -131,14 +129,14 @@ public class DatabaseManager {
                 int istFavorit = cursor.getInt(istFavoritIndex);
                 String bildpfad = cursor.getString(bildpfadIndex);
 
-                recipeDTO = new RecipeDTO(id, title, portionsmenge, dauer, istFavorit, bildpfad);
+                cursor.close();
+                return (new RecipeDTO(id, title, portionsmenge, dauer, istFavorit, bildpfad));
             }
         }
-
         cursor.close();
-
-        return recipeDTO;
+        return null;
     }
+
 
     public RecipeDTO getRecipeByName(String name) {
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_RECIPES + " WHERE " + COLUMN_RECIPE_TITLE + " = ?", new String[]{name});
@@ -272,7 +270,6 @@ public class DatabaseManager {
 
     public IngredientDTO getIngredientById(long id) {
         Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_INGREDIENTS + " WHERE " + COLUMN_INGREDIENT_ID + " = ?", new String[]{String.valueOf(id)});
-        IngredientDTO ingredientDTO = null;
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_ID);
             int nameIndex = cursor.getColumnIndex(COLUMN_INGREDIENT_NAME);
