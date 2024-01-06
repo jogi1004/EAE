@@ -267,12 +267,12 @@
                 <!--Layout für die Schritte -->
                 <LinearLayout
                     android:id="@+id/stepsLayout"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ingredientsLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal" />
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ingredientsLayout" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
