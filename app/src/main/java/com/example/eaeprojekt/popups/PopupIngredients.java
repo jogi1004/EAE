@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Looper;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -369,6 +370,7 @@ public class PopupIngredients implements View.OnClickListener {
         constraintSet.applyTo(layout);
 
 
+        //LinearLayout parentLayout = NewRecipeActivity.binding.ingredientsLayout;
         LinearLayout parentLayout = mainActivity.findViewById(R.id.ingredientsLayout);
         parentLayout.addView(layout);
 
@@ -717,8 +719,6 @@ public class PopupIngredients implements View.OnClickListener {
 
                 ada.notifyDataSetChanged();
 
-                //String selectedItem = ingredientList.get(0);
-                //String[] separated = selectedItem.split(", ");
                 choosedIngredient = name.getText().toString();
                 choosedUnit = unit.getText().toString();
 
@@ -732,9 +732,12 @@ public class PopupIngredients implements View.OnClickListener {
                         pos = i;
                         break;
                     }
-                    Log.d("void", ingredientList.get(i) + "____" +  choosedIngredient + ", " + choosedUnit);
                 }
                 ingredients.setSelection(pos);
+
+                LinearLayout ingredientLayout = mainActivity.findViewById(R.id.ingredientsLayout);
+                ingredientLayout.removeAllViews();
+                NewRecipeActivity.addIngredients(db, NewRecipeActivity.newRecipeId, mainActivity, mainActivity.findViewById(android.R.id.content));
 
 
             } else if (viewClick == buttonDelete) {
