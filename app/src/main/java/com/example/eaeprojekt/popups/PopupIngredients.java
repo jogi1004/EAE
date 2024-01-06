@@ -768,6 +768,11 @@ public class PopupIngredients implements View.OnClickListener {
 
                 ingredients.setSelection(0);
 
+                LinearLayout ingredientLayout = mainActivity.findViewById(R.id.ingredientsLayout);
+                ingredientLayout.removeAllViews();
+                NewRecipeActivity.addIngredients(db, NewRecipeActivity.newRecipeId, mainActivity, mainActivity.findViewById(android.R.id.content));
+
+
             }
         }
     }
