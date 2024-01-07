@@ -45,17 +45,17 @@
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/favSwitch"
-                style="@style/favSwitch"
+                android:thumb="@drawable/thumb_layer_list"
+                app:thumbTint="@null"
+                app:trackTint="@null"
+                app:showText="false"
+                app:track="@drawable/switch_bg"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/TextViewRecipeList"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="5dp"
-                android:textSize="17sp"
-                android:layout_marginEnd="15sp"
-                android:text="@string/favoritesSwitch"
-                />
-
+                android:layout_marginEnd="15sp" />
 
     </RelativeLayout>
 
