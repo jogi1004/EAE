@@ -5,7 +5,6 @@ package com.example.eaeprojekt.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.exifinterface.media.ExifInterface;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -45,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     Button reloadButton;
     int oldRandomNumber;
 
-    @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,12 +76,12 @@ public class MainActivity extends AppCompatActivity {
         showRandomRecipe();
 
         //Abfragen der Displaygröße um die Positionierung der Item u.ä. prozentual anzuordnen
-        /** DisplayMetrics dM = new DisplayMetrics();
+        /* DisplayMetrics dM = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dM);
         int height = dM.heightPixels;
         int width = dM.widthPixels;
         Toast.makeText(this, "Höhe des Bildschirms: " + height + " Breite des Bildschirms: " + width, Toast.LENGTH_LONG).show();
-**/
+        */
     }
 
     public void showRandomRecipe() {
@@ -192,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
             /**
              Erstellen eines Intents zum Öffnen der RecipeActivity
             sobald in der Navbar der entsprechende Button gedrückt wurde
-             **/
+             */
             Intent i = new Intent(this, RecipeActivity.class);
             startActivity(i);
         }

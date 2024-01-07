@@ -72,6 +72,10 @@
     <string name="ingredientAmountCannotBeDeleted">Ingredient is still in use and cannot be deleted</string>
     <string name="randomRecipe">Random recipe</string>
     <string name="reload">↻</string>
+    <string name="ingredientAdded">Ingredient added to shoppingbag</string>
+    <string name="ingredientDeleted">Ingredient deleted from shoppingbag</string>
+    <string name="otherIngredients">Other ingredients</string>
+    <string name="wasRemoved">was removed.</string>
 
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge"> <!-- TODO: This should be improved -->

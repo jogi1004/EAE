@@ -73,6 +73,10 @@
     <string name="ingredientAmountCannotBeDeleted">Zutat wird noch verwendet und kann nicht gelöscht werden</string>
     <string name="randomRecipe">Zufallsrezept</string>
     <string name="reload">↻</string>
+    <string name="ingredientAdded">Zutat zur Einkaufsliste hinzugefügt</string>
+    <string name="ingredientDeleted">Zutat aus der Einkaufsliste entfernt</string>
+    <string name="otherIngredients">Andere Zutaten</string>
+    <string name="wasRemoved">wurde entfernt.</string>
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge"> <!-- TODO: Das sollte schöner werden -->
         <item>1</item>

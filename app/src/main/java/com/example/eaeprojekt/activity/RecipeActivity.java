@@ -67,7 +67,7 @@ public class RecipeActivity extends AppCompatActivity {
                         RelativeLayout.LayoutParams.MATCH_PARENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT
                 ));
-                /**
+                /*
                  * Creating Backgroundshape with rounded Corners
                  */
                 GradientDrawable shape = new GradientDrawable();
@@ -75,7 +75,7 @@ public class RecipeActivity extends AppCompatActivity {
                 shape.setCornerRadius(30); // Radius für abgerundete Ecken in Pixeln
                 shape.setColor(getColor(R.color.darkerYellow));
 
-                /**
+                /*
                  * Picture of the Recipe
                  */
                 de.hdodenhof.circleimageview.CircleImageView picture = new de.hdodenhof.circleimageview.CircleImageView(this);
@@ -193,7 +193,7 @@ public class RecipeActivity extends AppCompatActivity {
                     }
                 });
 
-                /**
+                /*
                  * Layout for adding Margins between Recipes
                  */
                 RelativeLayout.LayoutParams marginLayout = new RelativeLayout.LayoutParams(
@@ -212,11 +212,11 @@ public class RecipeActivity extends AppCompatActivity {
                 llayout.addView(dataLayout);
                 recipeItem.addView(llayout);
                 recipeItem.addView(favIcon);
-                /**
-                 * Use Recipe ID to identify which Layout got which Recipe
+                /*
+                  Use Recipe ID to identify which Layout got which Recipe
                  */
                 recipeItem.setId((int) recipeid);
-                /**
+                /*
                  * OnClickListener for opening DetailView of Recipe
                  */
                 recipeItem.setOnClickListener(v -> {
