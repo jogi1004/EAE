@@ -2,19 +2,11 @@ package com.example.eaeprojekt.popups;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.os.Looper;
-import android.text.Layout;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -29,21 +21,16 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
-import com.example.eaeprojekt.DTO.IngredientAmountDTO;
 import com.example.eaeprojekt.R;
-import com.example.eaeprojekt.activity.MainActivity;
 import com.example.eaeprojekt.activity.NewRecipeActivity;
 import com.example.eaeprojekt.activity.ShoppingBagActivity;
+import com.example.eaeprojekt.activity.ShoppingBagUpdateListener;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.example.eaeprojekt.DTO.IngredientDTO;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 
 public class PopupIngredients implements View.OnClickListener {
@@ -73,10 +60,16 @@ public class PopupIngredients implements View.OnClickListener {
 
     ImageView addIngredientCross;
 
-    String choosedIngredient;
-    String choosedUnit;
-
+    String chosenIngredient;
+    String chosenUnit;
     View parentView;
+
+    private ShoppingBagUpdateListener updateListener = null;
+
+    public PopupIngredients() {}
+    public PopupIngredients(ShoppingBagUpdateListener updateListener) {
+        this.updateListener = updateListener;
+    }
 
     public void showPopupWindow(final View view, Activity activity) {
 
@@ -89,7 +82,7 @@ public class PopupIngredients implements View.OnClickListener {
         parentView = view;
 
 
-        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.add_ingredients_popup, null);
         this.popupView = popupView;
 
@@ -122,11 +115,11 @@ public class PopupIngredients implements View.OnClickListener {
 
         if(!adapter.isEmpty()) {
             String selectedItem = adapter.getItem(0);
-            String[] separated = selectedItem.split(", ");
-            choosedIngredient = separated[0];
-            choosedUnit = separated[1];
+            String[] separated = selectedItem != null ? selectedItem.split(", ") : new String[0];
+            chosenIngredient = separated[0];
+            chosenUnit = separated[1];
 
-            unitTV.setText(choosedUnit.toString());
+            unitTV.setText(chosenUnit);
 
         }
 
@@ -166,7 +159,6 @@ public class PopupIngredients implements View.OnClickListener {
 
         if (view == addIngredientCross){
 
-
             if(layoutAddIngredient.getVisibility() == View.VISIBLE){
                 layoutAddIngredient.setVisibility(View.INVISIBLE);
                 addIngredientCross.setImageResource(R.drawable.plus_dark);
@@ -205,11 +197,11 @@ public class PopupIngredients implements View.OnClickListener {
                 ingredients.setSelection(ingredientList.size() - 1);
 
                 String selectedItem = adapter.getItem(ingredientList.size() - 1);
-                String[] separated = selectedItem.split(", ");
-                choosedIngredient = separated[0];
-                choosedUnit = separated[1];
+                String[] separated = selectedItem != null ? selectedItem.split(", ") : new String[0];
+                chosenIngredient = separated[0];
+                chosenUnit = separated[1];
 
-                unitTV.setText(choosedUnit.toString());
+                unitTV.setText(chosenUnit);
 
 
                 layoutAddIngredient.setVisibility(View.INVISIBLE);
@@ -229,7 +221,6 @@ public class PopupIngredients implements View.OnClickListener {
                 toast.setText(R.string.pleaseFillAllFields);
                 toast.show();
             }
-
         }else if (view == cancelButtonIngredient) {
             frame.getForeground().setAlpha(0);
             frame.setElevation(0);
@@ -244,6 +235,9 @@ public class PopupIngredients implements View.OnClickListener {
 
             if(mainActivity.getClass() == ShoppingBagActivity.class){
                 addIngredientToShoppingBag();
+                if (updateListener != null) {
+                    updateListener.onUpdateShoppingBag();
+                }
             }else {
                 addIngredientToNewRecipe();
             }
@@ -260,7 +254,7 @@ public class PopupIngredients implements View.OnClickListener {
 
     public void addIngredientToNewRecipe(){
 
-        IngredientDTO ingredientToAdd = db.getIngredientByNameAndUnit(choosedIngredient, choosedUnit);
+        IngredientDTO ingredientToAdd = db.getIngredientByNameAndUnit(chosenIngredient, chosenUnit);
 
         EditText amount = popupView.findViewById(R.id.amount);
 
@@ -286,7 +280,7 @@ public class PopupIngredients implements View.OnClickListener {
         ingredientText.setId(View.generateViewId());
         ingredientText.setText(ingredientToAdd.getName());
         ingredientText.setGravity(Gravity.CENTER);
-        ingredientText.setTextColor(Color.parseColor("#FFFFFF"));
+        ingredientText.setTextColor(mainActivity.getColor(R.color.fontColor));
 
         ViewGroup.LayoutParams ingredientParams = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -303,7 +297,7 @@ public class PopupIngredients implements View.OnClickListener {
         amountText.setId(View.generateViewId());
         amountText.setText(amount.getText().toString());
         amountText.setGravity(Gravity.CENTER);
-        amountText.setTextColor(Color.parseColor("#FFFFFF"));
+        amountText.setTextColor(mainActivity.getColor(R.color.white));
 
         ViewGroup.LayoutParams amountParams = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -320,7 +314,7 @@ public class PopupIngredients implements View.OnClickListener {
         unitText.setId(View.generateViewId());
         unitText.setText(ingredientToAdd.getUnit());
         unitText.setGravity(Gravity.CENTER);
-        unitText.setTextColor(Color.parseColor("#FFFFFF"));
+        unitText.setTextColor(mainActivity.getColor(R.color.white));
 
         ViewGroup.LayoutParams unitParams = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -382,177 +376,13 @@ public class PopupIngredients implements View.OnClickListener {
 /*
 =============================================addIngredientToShoppingBag=============================================================================================
  */
-    public void addIngredientToShoppingBag(){
+    public void addIngredientToShoppingBag()  {
 
-        IngredientDTO ingredientToAdd = db.getIngredientByNameAndUnit(choosedIngredient, choosedUnit);
-
+        IngredientDTO ingredientToAdd = db.getIngredientByNameAndUnit(chosenIngredient, chosenUnit);
         EditText amount = popupView.findViewById(R.id.amount);
-
-        LinearLayout parentLayout = mainActivity.findViewById(R.id.ingredientWithoutRecipe);
-        ConstraintLayout layout = new ConstraintLayout(mainActivity);
-
-        List<IngredientAmountDTO> list = db.getIngredientsForRecipe(-9);
-        long i = 0;
-        if(list.isEmpty()) {
-
-            TextView titleOther = new TextView(mainActivity);
-            titleOther.setId(View.generateViewId());
-            titleOther.setText("Andere Zutaten");
-            parentLayout.addView(titleOther);
-
-            View line = new View(mainActivity);
-            line.setId(View.generateViewId());
-            line.setBackgroundColor(Color.parseColor("#844D29"));
-            ViewGroup.LayoutParams viewParams = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    1
-            );
-            line.setLayoutParams(viewParams);
-            parentLayout.addView(line);
-
-            i = -9;
-        }
-
         // Zutat in die Einkaufsliste hinzufügen
-        long ingredientId = db.insertIngredientQuantity(-9, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()),1, 0);
-
-
-            /*
-            Zutaten in der view hinzufügen
-             */
-
-        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
-                ConstraintLayout.LayoutParams.MATCH_PARENT,
-                ConstraintLayout.LayoutParams.WRAP_CONTENT
-        );
-        layout.setPadding(20,20,20,20);
-        layout.setLayoutParams(layoutParams);
-        layoutParams.setMargins(40, 0, 40, 0);
-            /*
-            Zutat
-             */
-        TextView ingredientText = new TextView(mainActivity);
-        ingredientText.setId(View.generateViewId());
-        ingredientText.setText(ingredientToAdd.getName());
-        ingredientText.setGravity(Gravity.CENTER);
-        ingredientText.setTextColor(Color.parseColor("#844D29"));
-
-        ViewGroup.LayoutParams ingredientParams = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        ingredientText.setLayoutParams(ingredientParams);
-
-        layout.addView(ingredientText);
-        Log.d("abc", "nachText");
-
-            /*
-            Menge
-             */
-        TextView amountText = new TextView(mainActivity);
-        amountText.setId(View.generateViewId());
-        amountText.setText(amount.getText().toString());
-        amountText.setGravity(Gravity.CENTER);
-        amountText.setTextColor(Color.parseColor("#844D29"));
-
-        ViewGroup.LayoutParams amountParams = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        amountText.setLayoutParams(amountParams);
-
-        layout.addView(amountText);
-
-            /*
-            Einheit
-             */
-        TextView unitText = new TextView(mainActivity);
-        unitText.setId(View.generateViewId());
-        unitText.setText(ingredientToAdd.getUnit());
-        unitText.setGravity(Gravity.CENTER);
-        unitText.setTextColor(Color.parseColor("#844D29"));
-
-        ViewGroup.LayoutParams unitParams = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        unitText.setLayoutParams(unitParams);
-
-        layout.addView(unitText);
-
-            /*
-            Checkbox
-            */
-        CheckBox checkBox = new CheckBox(mainActivity);
-        checkBox.setId(View.generateViewId());
-
-        ViewGroup.LayoutParams checkBoxParams = new ViewGroup.LayoutParams(
-                50,
-                50
-        );
-        checkBox.setLayoutParams(checkBoxParams);
-        layout.addView(checkBox);
-
-            /*
-            Mülleimer
-             */
-        ImageView trash = new ImageView(mainActivity);
-        trash.setImageResource(R.drawable.trashcan_dark);
-        trash.setId(View.generateViewId());
-
-        ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
-                50,
-                50
-        );
-        trash.setLayoutParams(trashParams);
-        layout.addView(trash);
-
-            /*
-            Constraints
-             */
-        ConstraintSet constraintSet = new ConstraintSet();
-        constraintSet.clone(layout);
-
-        //Zutat
-        constraintSet.connect(ingredientText.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
-        constraintSet.connect(ingredientText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-        constraintSet.connect(ingredientText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
-        //Menge
-        constraintSet.connect(amountText.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 250);
-        constraintSet.connect(amountText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-        constraintSet.connect(amountText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
-        //Einheit
-        constraintSet.connect(unitText.getId(), ConstraintSet.START, amountText.getId(), ConstraintSet.END, 20);
-        constraintSet.connect(unitText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-        constraintSet.connect(unitText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
-        //Checkbox
-        constraintSet.connect(checkBox.getId(), ConstraintSet.END, trash.getId(), ConstraintSet.START, 20);
-        constraintSet.connect(unitText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-        constraintSet.connect(unitText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
-        //Mülleimer
-        constraintSet.connect(trash.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
-        constraintSet.connect(trash.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-        constraintSet.connect(trash.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
-
-        constraintSet.applyTo(layout);
-
-        parentLayout.addView(layout);
-
-        /*
-        noch bearbeiten
-         */
-        trash.setOnClickListener(v ->{
-            db.deleteIngredientQuantity(ingredientId);
-            List<IngredientAmountDTO> li = db.getIngredientsForRecipe(-9);
-            parentLayout.removeView(layout);
-            if(li.isEmpty()){
-                parentLayout.removeAllViews();
-            }
-        });
-
+        db.insertIngredientQuantity(-9, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()),1, 0);
     }
-
-
 
     class CustomAdapter extends ArrayAdapter<String> {
 
@@ -566,70 +396,63 @@ public class PopupIngredients implements View.OnClickListener {
             View view = super.getDropDownView(position, convertView, parent);
 
             // Füge den OnLongClickListener zu jedem Element in der Dropdown-Liste hinzu
-            view.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
+            view.setOnLongClickListener(v -> {
 
-                    try {
-                        Method method = Spinner.class.getDeclaredMethod("onDetachedFromWindow");
-                        method.setAccessible(true);
-                        method.invoke(ingredients);
-                        Log.d("eehm", "Hat geklappt");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    ConstraintLayout editView = popupView.findViewById(R.id.above);
-                    editView.setVisibility(View.VISIBLE);
-
-                    ConstraintLayout belowView = popupView.findViewById(R.id.bbelow);
-                    belowView.setVisibility(View.GONE);
-
-
-                    String selectedItem = getItem(position);
-                    String[] separated = selectedItem.split(", ");
-                    choosedIngredient = separated[0];
-                    choosedUnit = separated[1];
-
-
-                    EditText editName = popupView.findViewById(R.id.nameText2);
-                    editName.setText(choosedIngredient);
-
-                    EditText editUnit = popupView.findViewById(R.id.unitText2);
-                    editUnit.setText(choosedUnit);
-
-                    IngredientDTO ingredient = db.getIngredientByNameAndUnit(choosedIngredient, choosedUnit);
-
-
-                    PopupEditIngredient popup = new PopupEditIngredient();
-
-                    popup.insideEdit(popupView, mainActivity, ingredient.getId(), adapter, ingredientList);
-
-                    return true;
+                try {
+                    Method method = Spinner.class.getDeclaredMethod("onDetachedFromWindow");
+                    method.setAccessible(true);
+                    method.invoke(ingredients);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+                ConstraintLayout editView = popupView.findViewById(R.id.above);
+                editView.setVisibility(View.VISIBLE);
+
+                ConstraintLayout belowView = popupView.findViewById(R.id.bbelow);
+                belowView.setVisibility(View.GONE);
+
+
+                String selectedItem = getItem(position);
+                String[] separated = selectedItem != null ? selectedItem.split(", ") : new String[0];
+                chosenIngredient = separated[0];
+                chosenUnit = separated[1];
+
+
+                EditText editName = popupView.findViewById(R.id.nameText2);
+                editName.setText(chosenIngredient);
+
+                EditText editUnit = popupView.findViewById(R.id.unitText2);
+                editUnit.setText(chosenUnit);
+
+                IngredientDTO ingredient = db.getIngredientByNameAndUnit(chosenIngredient, chosenUnit);
+
+
+                PopupEditIngredient popup = new PopupEditIngredient();
+
+                popup.insideEdit(popupView, mainActivity, ingredient.getId(), adapter, ingredientList);
+
+                return true;
             });
 
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String selectedItem = getItem(position);
-                    String[] separated = selectedItem.split(", ");
-                    choosedIngredient = separated[0];
-                    choosedUnit = separated[1];
+            view.setOnClickListener(view1 -> {
+                String selectedItem = getItem(position);
+                String[] separated = selectedItem != null ? selectedItem.split(", ") : new String[0];
+                chosenIngredient = separated[0];
+                chosenUnit = separated[1];
 
-                    unitTV = popupView.findViewById(R.id.textViewUnit);
-                    unitTV.setText(choosedUnit.toString());
+                unitTV = popupView.findViewById(R.id.textViewUnit);
+                unitTV.setText(chosenUnit);
 
-                    ingredients.setSelection(position);
+                ingredients.setSelection(position);
 
-                    try {
-                        Method method = Spinner.class.getDeclaredMethod("onDetachedFromWindow");
-                        method.setAccessible(true);
-                        method.invoke(ingredients);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
+                try {
+                    Method method = Spinner.class.getDeclaredMethod("onDetachedFromWindow");
+                    method.setAccessible(true);
+                    method.invoke(ingredients);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+
             });
             return view;
         }
@@ -638,14 +461,6 @@ public class PopupIngredients implements View.OnClickListener {
     public CustomAdapter getAdapter() {
         return adapter;
     }
-
-
-
-
-
-
-
-
 
 
     class PopupEditIngredient implements View.OnClickListener {
@@ -719,16 +534,16 @@ public class PopupIngredients implements View.OnClickListener {
 
                 ada.notifyDataSetChanged();
 
-                choosedIngredient = name.getText().toString();
-                choosedUnit = unit.getText().toString();
+                chosenIngredient = name.getText().toString();
+                chosenUnit = unit.getText().toString();
 
                 unitTV = popupView.findViewById(R.id.textViewUnit);
-                unitTV.setText(choosedUnit);
+                unitTV.setText(chosenUnit);
 
                 int pos = 0;
 
                 for(int i = 0; i < ingredientList.size(); i++){
-                    if(ingredientList.get(i).equals(choosedIngredient + ", " + choosedUnit)){
+                    if(ingredientList.get(i).equals(chosenIngredient + ", " + chosenUnit)){
                         pos = i;
                         break;
                     }
@@ -760,11 +575,11 @@ public class PopupIngredients implements View.OnClickListener {
 
                 String selectedItem = ingredientList.get(0);
                 String[] separated = selectedItem.split(", ");
-                choosedIngredient = separated[0];
-                choosedUnit = separated[1];
+                chosenIngredient = separated[0];
+                chosenUnit = separated[1];
 
                 unitTV = popupView.findViewById(R.id.textViewUnit);
-                unitTV.setText(choosedUnit.toString());
+                unitTV.setText(chosenUnit);
 
                 ingredients.setSelection(0);
 

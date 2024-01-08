@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +34,6 @@ import androidx.exifinterface.media.ExifInterface;
 
 import com.example.eaeprojekt.DTO.IngredientAmountDTO;
 import com.example.eaeprojekt.DTO.IngredientDTO;
-import com.example.eaeprojekt.databinding.ActivityNewRecipeBinding;
 import com.example.eaeprojekt.popups.PopupIngredients;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.popups.PopupSteps;
@@ -66,8 +64,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     String imagePath;
     public static long newRecipeId;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
-
-    public static ActivityNewRecipeBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,13 +234,13 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                 db.open();
                 // Rezepteinträge aktualisieren
                 db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), 0, imagePath);
-                toast.setText(getText(R.string.recipeCreated));
+                toast.setText(R.string.recipeCreated);
                 Intent intent = new Intent(this, RecipeActivity.class);
                 startActivity(intent);
 
                 finish();
             }else{
-                toast.setText(getText(R.string.pleaseFillAllFields));
+                toast.setText(R.string.pleaseFillAllFields);
             }
             toast.show();
 
@@ -279,6 +275,8 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openImagePicker();
             }
+
+            // Vorbereitung für die Zukunft
 
             /*case MY_PERMISSIONS_REQUEST_CAMERA:
                 Log.d("HSKL", "case Camera");

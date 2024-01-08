@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,10 +89,10 @@ public class PopupDeleteShoppingBag implements View.OnClickListener {
 
             Toast toast = new Toast(context);
             if (rowCount > 0) {
-                toast.setText(rowCount + " Einträge entfernt.");
+                toast.setText(rowCount + " " + mainActivity.getString(R.string.XEntriesRemoved));
                 toast.show();
             } else {
-                toast.setText("Keine Einträge entfernt.");
+                toast.setText(R.string.noEntriesRemoved);
                 toast.show();
             }
         } else if (viewClick == buttonDeleteAll) {
@@ -110,17 +109,9 @@ public class PopupDeleteShoppingBag implements View.OnClickListener {
                 updateListener.onUpdateShoppingBag();
             }
 
-            //text in der view hinzufügen
-
-            RelativeLayout layout = new RelativeLayout(context);
-
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT
-            );
-
-            layout.setLayoutParams(layoutParams);
-
+            Toast toast = new Toast(context);
+            toast.setText(R.string.allEntriesRemoved);
+            toast.show();
         }
     }
 }

@@ -72,6 +72,7 @@
             android:layout_height="30dp"
             android:layout_below="@id/textShoppingBag"
             android:layout_marginTop="10sp"
+            android:layout_marginBottom="10sp"
             android:layout_toStartOf="@id/addButtonShoppingBag"
             android:layout_marginEnd="20sp"
             android:contentDescription="@string/AddSymbolDescription"
@@ -90,7 +91,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
-            android:padding="8dp"
             android:text="@string/shoppingBagHelperText"
             android:textStyle="italic"
             android:textSize="20sp" />
@@ -102,8 +102,8 @@
             android:background="@color/background"
             android:orientation="vertical"
             tools:ignore="MissingConstraints"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp">
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

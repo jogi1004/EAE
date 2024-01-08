@@ -77,6 +77,9 @@
     <string name="ingredientDeleted">Zutat aus der Einkaufsliste entfernt</string>
     <string name="otherIngredients">Andere Zutaten</string>
     <string name="wasRemoved">wurde entfernt.</string>
+    <string name="allEntriesRemoved">Alle Einträge entfernt</string>
+    <string name="XEntriesRemoved">Einträge entfernt</string>
+    <string name="noEntriesRemoved">Keine Einträge entfernt</string>
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge"> <!-- TODO: Das sollte schöner werden -->
         <item>1</item>
