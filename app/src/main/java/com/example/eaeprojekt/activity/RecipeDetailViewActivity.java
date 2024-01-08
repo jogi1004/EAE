@@ -137,7 +137,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
         ingredientsLayout.setBackground(ishape);
         durationLayout = findViewById(R.id.durationLayout);
 
-        //Favoriten Stern anpassen
+        //Favoriten Stern anpassen je nach Einstellung des Smartphones (darkmode/non-darkmode)
         favoriteStar = findViewById(R.id.favoriteStar);
         if(isFavorite == 1) {
             if (darkmode == Configuration.UI_MODE_NIGHT_YES) {
