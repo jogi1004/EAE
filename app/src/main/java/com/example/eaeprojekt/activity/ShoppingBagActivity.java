@@ -352,13 +352,14 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
 
         if (view == deleteAllIcon) {
             deleteShoppingBagPopup.showPopupWindow(view, this);
+
+            dimmableLayoutShoppingBag.getForeground().setAlpha(220);
+            dimmableLayoutShoppingBag.setElevation(1);
         } else if (view == addIngredient) {
             PopupIngredients popup = new PopupIngredients(this);
             popup.showPopupWindow(view, this);
 
             //background-dimming
-            //layout_MainMenu.getForeground().setAlpha(220);
-            //layout_MainMenu.setElevation(1);
             dimmableLayoutShoppingBag.getForeground().setAlpha(220);
             dimmableLayoutShoppingBag.setElevation(1);
         }
