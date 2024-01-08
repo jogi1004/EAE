@@ -593,6 +593,7 @@ public void showMenu(View v) {
 
         // Fügen Sie das horizontale Layout zum vertikalen Layout hinzu
         ingredientsLinearLayout.addView(ingredientLayout);
+        ingredientsLayout.removeAllViews();
         ingredientsLayout.addView(ingredientsLinearLayout);
     }
     }
