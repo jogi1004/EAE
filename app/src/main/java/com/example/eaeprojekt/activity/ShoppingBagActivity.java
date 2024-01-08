@@ -13,7 +13,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -44,12 +43,14 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
     FrameLayout dimmableLayoutShoppingBag;
     TextView helperTextView;
     ImageView trashCanIconImageView;
+    LinearLayout ingredientWithoutRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_bag);
 
+        ingredientWithoutRecipe = findViewById(R.id.ingredientWithoutRecipe);
         shoppingLayout = findViewById(R.id.shoppingLayoutinScrollView);
         deleteAllIcon = findViewById(R.id.deleteAllIcon);
         deleteAllIcon.setOnClickListener(this);
@@ -69,12 +70,14 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
 
     public void updateShoppingBag() {
         shoppingLayout.removeAllViews();
+        ingredientWithoutRecipe.removeAllViews();
         db = new DatabaseManager(this);
         db.open();
         List<IngredientAmountDTO> ingredientsOnShoppingList = db.getIngredientsOnShoppingList();
         /*
          * Show helper-text while list is empty
          */
+
         helperTextView.setVisibility(ingredientsOnShoppingList.isEmpty()? View.VISIBLE : View.INVISIBLE);
 
         /*
@@ -97,8 +100,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             parentLayout2.setLayoutParams(pp);
 
 
-            if((int) ingredientAmount.getRecipeId() == -9){
-
+            if((int) ingredientAmount.getRecipeId() == -9){ // using -9 as id for "no recipe"
 
                 if(i != ingredientAmount.getRecipeId()) {
                     TextView titleOther = new TextView(this);
@@ -243,6 +245,11 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             trash.setLayoutParams(trashParams);
             layout.addView(trash);
 
+            checkBox.setOnClickListener(v -> {
+                handleCheckboxClick(ingredientAmount);
+                updateShoppingBag();
+            });
+
             /*
             Constraints
              */
@@ -281,10 +288,6 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                 parentparent2.addView(parentLayout2);
             }
 
-
-        /*
-        noch bearbeiten
-         */
             trash.setOnClickListener(v ->{
                 if(ingredientAmount.getRecipeId() == -9) {
 
@@ -293,7 +296,6 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                     parentLayout1.removeView(layout);
                     if(li.isEmpty()){
                         parentLayout1.removeAllViews();
-                        helperTextView.setVisibility(View.VISIBLE);
                     }
                 }else{
 
@@ -311,10 +313,9 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                         parentLayout2.removeAllViews();
                     else
                         parentLayout2.removeView(layout);
-
-
-                    helperTextView.setVisibility(ingredientsOnShoppingList.isEmpty()? View.VISIBLE : View.INVISIBLE);
                 }
+                helperTextView.setVisibility(ingredientsOnShoppingList.isEmpty()? View.VISIBLE : View.INVISIBLE);
+                updateShoppingBag();
             });
         }
     }
@@ -352,36 +353,27 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
         if (view == deleteAllIcon) {
             deleteShoppingBagPopup.showPopupWindow(view, this);
         } else if (view == addIngredient) {
-            PopupIngredients popup = new PopupIngredients();
+            PopupIngredients popup = new PopupIngredients(this);
             popup.showPopupWindow(view, this);
 
             //background-dimming
-            layout_MainMenu.getForeground().setAlpha(220);
-            layout_MainMenu.setElevation(1);
+            //layout_MainMenu.getForeground().setAlpha(220);
+            //layout_MainMenu.setElevation(1);
+            dimmableLayoutShoppingBag.getForeground().setAlpha(220);
+            dimmableLayoutShoppingBag.setElevation(1);
         }
     }
 
     @Override
-    public void onUpdateShoppingBag() {
+    public void onUpdateShoppingBag() { // used in Popups
         updateShoppingBag();
     }
 
-        // Method to handle the deletion of a shopping bag item
-        private void handleItemDeletion(long id, long ingredientId, String name, double amount, String unit) {
-            db.open();
-            db.updateIngredientQuantity(id, ingredientId, amount, 0, 0);
-            updateShoppingBag();
-            Toast toast = new Toast(this);
-            toast.setText(amount + " " + unit + " " + name + R.string.wasRemoved);
-            toast.setDuration(Toast.LENGTH_SHORT);
-            toast.show();
-            db.close();
-        }
-        private void handleCheckboxClick(IngredientAmountDTO ingredientAmount) {
-            db.open();
-            db.updateIngredientQuantity(ingredientAmount.getId(), ingredientAmount.getIngredientId(), ingredientAmount.getAmount(), ingredientAmount.getOnShoppingList(), ingredientAmount.getIsChecked()==0? 1:0 );
-            db.close();
-        }
+    private void handleCheckboxClick(IngredientAmountDTO ingredientAmount) {
+        db.open();
+        db.updateIngredientQuantity(ingredientAmount.getId(), ingredientAmount.getIngredientId(), ingredientAmount.getAmount(), ingredientAmount.getOnShoppingList(), ingredientAmount.getIsChecked()==0? 1:0 );
+        db.close();
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

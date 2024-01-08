@@ -76,6 +76,9 @@
     <string name="ingredientDeleted">Ingredient deleted from shoppingbag</string>
     <string name="otherIngredients">Other ingredients</string>
     <string name="wasRemoved">was removed.</string>
+    <string name="allEntriesRemoved">All entries removed</string>
+    <string name="XEntriesRemoved">entries removed</string>
+    <string name="noEntriesRemoved">No entries removed</string>
 
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge"> <!-- TODO: This should be improved -->
