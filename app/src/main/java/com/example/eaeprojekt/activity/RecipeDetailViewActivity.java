@@ -6,8 +6,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.exifinterface.media.ExifInterface;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -74,19 +72,19 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail_view);
-        /**
+        /*
          * Setting up BottomNavigationBar Buttons
          */
         b = findViewById(R.id.bottomNavView);
         b.setSelectedItemId(R.id.recipeListButtonNavBar);
         b.setOnItemSelectedListener(this::onNavigationItemSelected);
-        /**
+        /*
          * Receive Intent from RecipeActivity and extracting ID
          */
         Intent receive = getIntent();
         recipeid = receive.getIntExtra("ID", 0);
         circleViewImage = findViewById(R.id.circleViewRecipe);
-        /**
+        /*
          * Open DB for getting Ingredients
          */
         db = new DatabaseManager(this);
@@ -174,7 +172,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
                 }
                 });
 
-        /**
+        /*
          * LayoutParams for TextViews in IngredientsLayout
          */
 
@@ -186,12 +184,12 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
         textViewParamsName.setMargins(25, 0, 60, 0);
 
 
-        /**
+        /*
          * Set Title to Recipe Name
          */
         TextView RecipeTitle = findViewById(R.id.RecipeName);
         RecipeTitle.setText(recipeTitle);
-        /**
+        /*
          * Creating TextViews for Ingredients
          */
         RelativeLayout.LayoutParams textViewParamsIngredientHeader = new RelativeLayout.LayoutParams(
@@ -226,8 +224,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
 
             }
         }
-
-         /**
+        /**
          * Creating TextViews and Icons for durationView
          */
          TextView durationView = new TextView(this);
@@ -277,7 +274,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
         durationLayout.addView(portionsDescription);
 
 
-        /**
+        /*
          * BEGIN OF STEPS
          */
 
@@ -433,21 +430,21 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
     private boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.AddButtonNavBar) {
-            /**
+            /*
              Creating Intent for starting NewRecipeActivity
              */
             Intent i = new Intent(this, NewRecipeActivity.class);
             startActivity(i);
         }
         if (id == R.id.recipeListButtonNavBar) {
-            /**
+            /*
              Creating Intent for starting RecipeActivity
              */
             Intent i = new Intent(this, RecipeActivity.class);
             startActivity(i);
         }
         if(id == R.id.shoppingBagButtonNavBar){
-            /**
+            /*
              * Creating Intent for starting ShoppingBagLayout
              */
             Intent i = new Intent(this, ShoppingBagActivity.class);
@@ -457,7 +454,6 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
     }
 
 @RequiresApi(api = Build.VERSION_CODES.Q)
-@SuppressLint({"RestrictedApi", "NonConstantResourceId"})
 public void showMenu(View v) {
     PopupMenu popupMenu = new PopupMenu(this, v);
     MenuInflater inflater = popupMenu.getMenuInflater();

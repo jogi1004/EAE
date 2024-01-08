@@ -318,7 +318,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
                 ingredientText.setId(View.generateViewId());
                 ingredientText.setText(ingredientBare.getName());
                 ingredientText.setGravity(Gravity.CENTER);
-                ingredientText.setTextColor(Color.parseColor("#FFFFFF"));
+                ingredientText.setTextColor(getColor(R.color.white));
 
                 ViewGroup.LayoutParams ingredientParams = new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -335,7 +335,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
                 amountText.setId(View.generateViewId());
                 amountText.setText(String.valueOf((int) ingredient.getAmount()));
                 amountText.setGravity(Gravity.CENTER);
-                amountText.setTextColor(Color.parseColor("#FFFFFF"));
+                amountText.setTextColor(getColor(R.color.white));
 
                 ViewGroup.LayoutParams amountParams = new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -352,7 +352,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
                 unitText.setId(View.generateViewId());
                 unitText.setText(ingredientBare.getUnit());
                 unitText.setGravity(Gravity.CENTER);
-                unitText.setTextColor(Color.parseColor("#FFFFFF"));
+                unitText.setTextColor(getColor(R.color.white));
 
                 ViewGroup.LayoutParams unitParams = new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -437,7 +437,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
                 stepDescriptionText.setId(View.generateViewId());
                 stepDescriptionText.setText(step.getText());
                 stepDescriptionText.setGravity(Gravity.CENTER);
-                stepDescriptionText.setTextColor(Color.parseColor("#FFFFFF"));
+                stepDescriptionText.setTextColor(getColor(R.color.white));
 
                 ViewGroup.LayoutParams textViewParams = new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,

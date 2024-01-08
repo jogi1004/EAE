@@ -1,6 +1,6 @@
 package com.example.eaeprojekt.popups;
 
-import android.graphics.Color;
+import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
 
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.activity.RecipeEditActivity;
@@ -34,7 +35,7 @@ public class PopupStepsEdit implements View.OnClickListener {
 
         mainActivity = recipeEditActivity;
 
-            LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View popupView = inflater.inflate(R.layout.add_steps_popup, null);
             this.view = popupView;
 
@@ -105,7 +106,7 @@ public class PopupStepsEdit implements View.OnClickListener {
             stepDescriptionText.setId(View.generateViewId());
             stepDescriptionText.setText(stepDescription.getText().toString());
             stepDescriptionText.setGravity(Gravity.CENTER);
-            stepDescriptionText.setTextColor(Color.parseColor("#FFFFFF"));
+            stepDescriptionText.setTextColor(ContextCompat.getColor(mainActivity, R.color.white));
 
             ViewGroup.LayoutParams textViewParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,

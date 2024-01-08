@@ -1,5 +1,6 @@
 package com.example.eaeprojekt.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -64,10 +65,18 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     public static long newRecipeId;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_recipe);
+        // Erhalte die Root-Ansicht der Activity
+        View rootView = findViewById(android.R.id.content);
+
+
+        //binding = ActivityNewRecipeBinding.inflate(getLayoutInflater());
+        //View view = binding.getRoot();
+        //setContentView(view);
+
         setContentView(R.layout.activity_new_recipe);
         button_add_ingredients = findViewById(R.id.button_add_ingredients);
 
@@ -189,7 +198,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
-        addIngredients();
+        addIngredients(db, newRecipeId, this, rootView);
 
         addSteps();
 
@@ -225,13 +234,13 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                 db.open();
                 // Rezepteinträge aktualisieren
                 db.updateRecipe(newRecipeId, title.getText().toString(), portionsmenge, Integer.parseInt(time.getText().toString()), 0, imagePath);
-                toast.setText(getText(R.string.recipeCreated));
+                toast.setText(R.string.recipeCreated);
                 Intent intent = new Intent(this, RecipeActivity.class);
                 startActivity(intent);
 
                 finish();
             }else{
-                toast.setText(getText(R.string.pleaseFillAllFields));
+                toast.setText(R.string.pleaseFillAllFields);
             }
             toast.show();
 
@@ -266,6 +275,8 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openImagePicker();
             }
+
+            // Vorbereitung für die Zukunft
 
             /*case MY_PERMISSIONS_REQUEST_CAMERA:
                 Log.d("HSKL", "case Camera");
@@ -328,15 +339,15 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     }
 
 
-    public void addIngredients(){
-        List<IngredientAmountDTO> ingredientDTOs = db.getIngredientsForRecipe(newRecipeId);
+    public static void addIngredients(DatabaseManager db, long recipeId, Context context, View view){
+        List<IngredientAmountDTO> ingredientDTOs = db.getIngredientsForRecipe(recipeId);
 
 
         for(IngredientAmountDTO ingredient : ingredientDTOs){
 
             IngredientDTO ingredientBare = db.getIngredientById(ingredient.getIngredientId());
 
-            ConstraintLayout layout = new ConstraintLayout(this);
+            ConstraintLayout layout = new ConstraintLayout(context);
 
             ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
                     ConstraintLayout.LayoutParams.MATCH_PARENT,
@@ -349,7 +360,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             /*
             Zutat
              */
-            TextView ingredientText = new TextView(this);
+            TextView ingredientText = new TextView(context);
             ingredientText.setId(View.generateViewId());
             ingredientText.setText(ingredientBare.getName());
             ingredientText.setGravity(Gravity.CENTER);
@@ -366,7 +377,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             /*
             Menge
              */
-            TextView amountText = new TextView(this);
+            TextView amountText = new TextView(context);
             amountText.setId(View.generateViewId());
             amountText.setText(String.valueOf((int) ingredient.getAmount()));
             amountText.setGravity(Gravity.CENTER);
@@ -383,7 +394,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             /*
             Einheit
              */
-            TextView unitText = new TextView(this);
+            TextView unitText = new TextView(context);
             unitText.setId(View.generateViewId());
             unitText.setText(ingredientBare.getUnit());
             unitText.setGravity(Gravity.CENTER);
@@ -400,13 +411,13 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             /*
             Mülleimer
              */
-            ImageView trash = new ImageView(this);
+            ImageView trash = new ImageView(context);
             trash.setImageResource(R.drawable.trashcan_light);
             trash.setId(View.generateViewId());
 
             ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
-                    50,
-                    50
+                    45,
+                    45
             );
             trash.setLayoutParams(trashParams);
             layout.addView(trash);
@@ -421,7 +432,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             constraintSet.connect(ingredientText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
             constraintSet.connect(ingredientText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
             //Menge
-            constraintSet.connect(amountText.getId(), ConstraintSet.START, ingredientText.getId(), ConstraintSet.START, 200);
+            constraintSet.connect(amountText.getId(), ConstraintSet.START, ingredientText.getId(), ConstraintSet.START, 250);
             constraintSet.connect(amountText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
             constraintSet.connect(amountText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
             //Einheit
@@ -435,7 +446,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
             constraintSet.applyTo(layout);
 
-            LinearLayout parentLayout = findViewById(R.id.ingredientsLayout);
+            LinearLayout parentLayout = view.findViewById(R.id.ingredientsLayout);
             parentLayout.addView(layout);
 
             trash.setOnClickListener(v ->{
@@ -462,7 +473,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             layout.setBackgroundResource(R.drawable.background_with_rounded_corners_green);
             layout.setPadding(20, 20, 20, 20);
             layout.setLayoutParams(layoutParams);
-            layoutParams.setMargins(40, 10, 40, 10);
+            layoutParams.setMargins(20, 10, 20, 10);
 
             // Text der Schrittbeschreibung
             TextView stepDescriptionText = new TextView(this);
@@ -485,8 +496,8 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             trash.setId(View.generateViewId());
 
             ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
-                    70,
-                    70
+                    45,
+                    45
             );
             trash.setLayoutParams(trashParams);
             layout.addView(trash);
@@ -497,7 +508,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             constraintSet.clone(layout);
 
             constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
-            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.END, trash.getId(), ConstraintSet.START);
+            constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.END, trash.getId(), ConstraintSet.START, 20);
             constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
             constraintSet.connect(stepDescriptionText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
 

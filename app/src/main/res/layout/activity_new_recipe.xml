@@ -124,7 +124,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@id/title"
-                        android:maxLength="20"
+                        android:maxLength="18"
                         android:maxLines="1"
                         android:hint="@string/titleHint"
                         android:inputType="text"
@@ -147,7 +147,7 @@
                         android:layout_height="25dp"
                         android:inputType="number"
                         android:textAlignment="center"
-                        android:maxLength="10"
+                        android:maxLength="4"
                         android:maxLines="1"
                         app:layout_constraintBottom_toBottomOf="@+id/time"
                         app:layout_constraintStart_toStartOf="@+id/title_text"
@@ -267,12 +267,12 @@
                 <!--Layout für die Schritte -->
                 <LinearLayout
                     android:id="@+id/stepsLayout"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ingredientsLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" />
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ingredientsLayout" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
