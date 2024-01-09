@@ -71,13 +71,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_new_recipe);
         // Erhalte die Root-Ansicht der Activity
         View rootView = findViewById(android.R.id.content);
-
-
-        //binding = ActivityNewRecipeBinding.inflate(getLayoutInflater());
-        //View view = binding.getRoot();
-        //setContentView(view);
-
-        setContentView(R.layout.activity_new_recipe);
         button_add_ingredients = findViewById(R.id.button_add_ingredients);
 
         //datenbankzugriff
