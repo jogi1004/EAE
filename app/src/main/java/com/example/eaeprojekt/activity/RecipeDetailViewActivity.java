@@ -20,6 +20,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
@@ -74,21 +75,18 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail_view);
-        /**
-         * Setting up BottomNavigationBar Buttons
-         */
+
+        //Setting Up Bottom Nav View
         b = findViewById(R.id.bottomNavView);
         b.setSelectedItemId(R.id.recipeListButtonNavBar);
         b.setOnItemSelectedListener(this::onNavigationItemSelected);
-        /**
-         * Receive Intent from RecipeActivity and extracting ID
-         */
+
+        //Receive Intent from RecipeActivity and extracting ID
         Intent receive = getIntent();
         recipeid = receive.getIntExtra("ID", 0);
         circleViewImage = findViewById(R.id.circleViewRecipe);
-        /**
-         * Open DB for getting Ingredients
-         */
+
+        //Open DB for getting Ingredients
         db = new DatabaseManager(this);
         db.open();
         iADTO = db.getIngredientsForRecipe(recipeid);
@@ -215,14 +213,14 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
             //Layout das den Inhalt wie Name, Menge usw enthält
             ingredientsLinearLayout = new LinearLayout(this);
             ingredientsLinearLayout.setOrientation(LinearLayout.VERTICAL);
-            ingredientsLinearLayout.setPadding(50, 0, 0, 10);
+            ingredientsLinearLayout.setPadding(10, 10, 10, 10);
 
             // Auslesen des DTOs für die Zutaten mit Menge und Einheit
             for (IngredientAmountDTO ingredient : iADTO) {
 
                 IngredientDTO currIngredient = db.getIngredientById(ingredient.getIngredientId());
                 LinearLayout singleIngredient = createIngredientRow(currIngredient, ingredient);
-                ingredientsLayout.addView(singleIngredient);
+                ingredientsLinearLayout.addView(singleIngredient);
 
             }
         }
@@ -327,7 +325,9 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
         // Erstellen Sie ein horizontales Layout für Name, Einheit und Menge
         LinearLayout ingredientLayout = new LinearLayout(this);
         ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
+        ingredientLayout.setGravity(Gravity.CENTER_VERTICAL);
         ingredientLayout.setDividerPadding(50);
+
 
         // TextView für den Namen
         TextView ingredientName = new TextView(this);
@@ -337,10 +337,11 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
         // TextView für die Einheit mit passendes Regeln
         RelativeLayout.LayoutParams ingredientUnitLayoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
+                60
         );
         ingredientUnitLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         TextView ingredientUnit = new TextView(this);
+        //ingredientUnit.setTextSize(50);
         ingredientUnit.setText(currIngredient.getUnit());
         ingredientUnit.setPadding(20, 0, 0, 0);
         ingredientUnit.setLayoutParams(ingredientUnitLayoutParams);
@@ -348,7 +349,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
         // TextView für die Menge der Zutat
         RelativeLayout.LayoutParams ingredientAmountLayoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
+                60
         );
         ingredientAmountLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         TextView ingredientAmount = new TextView(this);
@@ -365,6 +366,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
             60,
             60
         );
+        shoppingBagParams.gravity = Gravity.END;
 
         shoppingBag.setLayoutParams(shoppingBagParams);
         //Schneidet die Hälfte der textview weg wenn auf true
@@ -518,7 +520,6 @@ public void showMenu(View v) {
     }
 
     private void updateIngredientTextViews(List<String> newPortions) {
-
         if (ingredientsLinearLayout != null && !iADTO.isEmpty()) {
         //Entfernen aller bereits bestehenden Views und ersetzen durch die Korrekten
         ingredientsLinearLayout.removeAllViews();
@@ -532,11 +533,20 @@ public void showMenu(View v) {
         // Erstellen eines horizontalen Layouts für Name, Einheit und Menge
         LinearLayout ingredientLayout = new LinearLayout(this);
         ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
+        ingredientLayout.setGravity(Gravity.CENTER_VERTICAL);
+        ingredientLayout.setPadding(10,10,10,10);
+
+        //layout zum Anpassen der Zeilenbreite und -höhe
+        LinearLayout.LayoutParams ingLayoutParams = new LinearLayout.LayoutParams(
+          LinearLayout.LayoutParams.MATCH_PARENT,
+          LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        ingredientLayout.setLayoutParams(ingLayoutParams);
 
         // TextView für den Namen
         TextView ingredientName = new TextView(this);
         ingredientName.setText(currIngredient.getName());
-        ingredientName.setPadding(20, 0, 0, 0);
+        ingredientName.setPadding(20, 0, 20, 0);
 
         // TextView für die Einheit
         RelativeLayout.LayoutParams ingredientUnitLayoutParams = new RelativeLayout.LayoutParams(
@@ -554,7 +564,6 @@ public void showMenu(View v) {
         //Counter macht keine Probleme bei mehreren Rezepten
         ingredientAmount.setText(String.valueOf(newPortions.get(counter++)));
 
-
         ImageView shoppingBag = new ImageView(this);
         if(ingredient.getOnShoppingList() == 0){
             shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
@@ -562,11 +571,12 @@ public void showMenu(View v) {
             shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
         }
         LinearLayout.LayoutParams shoppingBagParams = new LinearLayout.LayoutParams(
-                60,
-                60
+                55,
+                55,
+                Gravity.END
         );
-
         shoppingBag.setLayoutParams(shoppingBagParams);
+        shoppingBag.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         // OnClick Listener zur Shopping Bag hinzufügen
         shoppingBag.setOnClickListener(v -> {
