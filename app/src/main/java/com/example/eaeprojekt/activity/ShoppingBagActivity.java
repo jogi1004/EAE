@@ -359,7 +359,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             PopupIngredients popup = new PopupIngredients(this);
             popup.showPopupWindow(view, this);
 
-            //background-dimming
+            //background-dimminge
             dimmableLayoutShoppingBag.getForeground().setAlpha(220);
             dimmableLayoutShoppingBag.setElevation(1);
         }

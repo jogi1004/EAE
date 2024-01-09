@@ -70,8 +70,8 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/picture_layout"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
                     android:layout_marginTop="30dp"
                     android:background="@drawable/background_add_picture"
                     app:layout_constraintEnd_toEndOf="parent"
