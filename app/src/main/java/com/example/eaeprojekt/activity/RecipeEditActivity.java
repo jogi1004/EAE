@@ -154,7 +154,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
         else {
             pictureView.setImageResource(R.drawable.camera_small);
         }
-        
+
         // initialisiere den ActivityResultLauncher
         imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK) {
