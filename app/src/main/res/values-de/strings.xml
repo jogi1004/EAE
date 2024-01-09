@@ -80,8 +80,14 @@
     <string name="allEntriesRemoved">Alle Einträge entfernt</string>
     <string name="XEntriesRemoved">Einträge entfernt</string>
     <string name="noEntriesRemoved">Keine Einträge entfernt</string>
+    <string name="chooseIngredient">Zutat aussuchen</string>
+    <string name="setAmount">Menge festlegen</string>
+    <string name="createIngredient">Zutat erstellen</string>
+    <string name="nameColon">Name:</string>
+    <string name="unitColon">Einheit:</string>
+    <string name="create">Erstellen</string>
     <!--Spinner Portionsmenge-->
-    <string-array name="portionsmenge"> <!-- TODO: Das sollte schöner werden -->
+    <string-array name="portionsmenge">
         <item>1</item>
         <item>2</item>
         <item>3</item>

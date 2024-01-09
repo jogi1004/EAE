@@ -79,6 +79,13 @@
     <string name="allEntriesRemoved">All entries removed</string>
     <string name="XEntriesRemoved">entries removed</string>
     <string name="noEntriesRemoved">No entries removed</string>
+    <string name="chooseIngredient">Choose ingredient</string>
+    <string name="createIngredientButtonDescription" translatable="false">Button to create a new ingredient</string>
+    <string name="setAmount">Set amount</string>
+    <string name="createIngredient">Create ingredient</string>
+    <string name="nameColon">Name:</string>
+    <string name="unitColon">Unit:</string>
+    <string name="create">Create</string>
 
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge"> <!-- TODO: This should be improved -->

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
@@ -18,7 +17,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -323,7 +321,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
              */
                 TextView amountText = new TextView(this);
                 amountText.setId(View.generateViewId());
-                amountText.setText(String.valueOf((int) ingredient.getAmount()));
+                amountText.setText(String.valueOf(ingredient.getAmount()));
                 amountText.setGravity(Gravity.CENTER);
                 amountText.setTextColor(getColor(R.color.white));
 
