@@ -467,7 +467,7 @@ public class DatabaseManager {
             while (!cursor.isAfterLast()) {
                 if (idIndex >= 0 && amountIndex >= 0 && ingredientIdIndex >= 0 && isOnShoppingListIndex >= 0) {
                     int id = cursor.getInt(idIndex);
-                    int amount = cursor.getInt(amountIndex);
+                    double amount = cursor.getDouble(amountIndex);
                     int ingredientId = cursor.getInt(ingredientIdIndex);
                     int isOnShoppingList = cursor.getInt(isOnShoppingListIndex);
                     int isChecked = cursor.getInt(isCheckedIndex);
@@ -502,7 +502,7 @@ public class DatabaseManager {
                     int id = cursor.getInt(idIndex);
                     int recipeId = cursor.getInt(recipeIdIndex);
                     int ingredientId = cursor.getInt(ingredientIdIndex);
-                    int amount = cursor.getInt(amountIndex);
+                    double amount = cursor.getDouble(amountIndex);
                     int isOnShoppingList = cursor.getInt(isOnShoppingListIndex);
                     int isChecked = cursor.getInt(isCheckedIndex);
 
