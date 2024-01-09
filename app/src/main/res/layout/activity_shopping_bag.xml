@@ -117,8 +117,9 @@
                     app:layout_constraintBottom_toTopOf="@+id/shoppingLayoutinScrollView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
+                    app:layout_constraintTop_toTopOf="parent"/>
+                    <!-- hier muss das Theme angepasst werden -->
+                    
 
                 <LinearLayout
                     android:id="@+id/shoppingLayoutinScrollView"

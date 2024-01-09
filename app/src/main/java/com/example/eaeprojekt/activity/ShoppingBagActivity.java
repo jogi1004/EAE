@@ -1,7 +1,9 @@
 package com.example.eaeprojekt.activity;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -45,6 +47,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
     ImageView trashCanIconImageView;
     LinearLayout ingredientWithoutRecipe;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,11 +71,13 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
         updateShoppingBag();
     }
 
+    @SuppressLint("ResourceAsColor")
     public void updateShoppingBag() {
         shoppingLayout.removeAllViews();
         ingredientWithoutRecipe.removeAllViews();
         db = new DatabaseManager(this);
         db.open();
+        int darkmode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         List<IngredientAmountDTO> ingredientsOnShoppingList = db.getIngredientsOnShoppingList();
         /*
          * Show helper-text while list is empty
@@ -98,7 +103,11 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             );
             parentLayout2.setOrientation(LinearLayout.VERTICAL);
             parentLayout2.setLayoutParams(pp);
-
+            if(darkmode == Configuration.UI_MODE_NIGHT_YES) {
+                parentLayout2.setBackgroundColor(R.color.backgroundGreen);
+            } else {
+                parentLayout2.setBackgroundColor(R.color.background);
+            }
 
             if((int) ingredientAmount.getRecipeId() == -9){ // using -9 as id for "no recipe"
 
@@ -116,6 +125,11 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                     );
                     view.setLayoutParams(viewParams);
                     parentLayout1.addView(view);
+                    if(darkmode == Configuration.UI_MODE_NIGHT_YES) {
+                        parentLayout1.setBackgroundColor(R.color.backgroundGreen);
+                    } else {
+                        parentLayout1.setBackgroundColor(R.color.background);
+                    }
 
                     i = ingredientAmount.getRecipeId();
                 }
@@ -160,6 +174,12 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             layout.setPadding(20,20,20,20);
             layout.setLayoutParams(layoutParams);
             layoutParams.setMargins(40, 0, 40, 0);
+
+            if(darkmode == Configuration.UI_MODE_NIGHT_YES){
+                layout.setBackgroundColor(R.color.backgroundGreen);
+            } else {
+                layout.setBackgroundColor(R.color.background);
+            }
 
             /*
             Zutat
