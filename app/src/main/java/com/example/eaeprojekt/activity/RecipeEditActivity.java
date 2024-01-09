@@ -155,7 +155,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
             pictureView.setImageResource(R.drawable.camera_small);
         }
 
-        pictureView.setPadding(15, 15, 15, 15);
+        pictureView.setPadding(0, 0, 100, 100);
 
         // initialisiere den ActivityResultLauncher
         imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
