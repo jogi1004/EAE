@@ -280,7 +280,7 @@ public class PopupIngredients implements View.OnClickListener {
         ingredientText.setId(View.generateViewId());
         ingredientText.setText(ingredientToAdd.getName());
         ingredientText.setGravity(Gravity.CENTER);
-        ingredientText.setTextColor(mainActivity.getColor(R.color.fontColor));
+        ingredientText.setTextColor(mainActivity.getColor(R.color.white));
 
         ViewGroup.LayoutParams ingredientParams = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,

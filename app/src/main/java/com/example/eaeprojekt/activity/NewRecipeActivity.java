@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
@@ -30,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
 import androidx.exifinterface.media.ExifInterface;
 
 import com.example.eaeprojekt.DTO.IngredientAmountDTO;
@@ -194,7 +194,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
         addIngredients(db, newRecipeId, this, rootView);
 
-        addSteps();
+        addSteps(this);
 
     }
 
@@ -336,8 +336,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     public static void addIngredients(DatabaseManager db, long recipeId, Context context, View view){
         List<IngredientAmountDTO> ingredientDTOs = db.getIngredientsForRecipe(recipeId);
 
-
-        for(IngredientAmountDTO ingredient : ingredientDTOs){
+        for(IngredientAmountDTO ingredient : ingredientDTOs) {
 
             IngredientDTO ingredientBare = db.getIngredientById(ingredient.getIngredientId());
 
@@ -347,7 +346,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                     ConstraintLayout.LayoutParams.MATCH_PARENT,
                     ConstraintLayout.LayoutParams.WRAP_CONTENT
             );
-            layout.setPadding(20,20,20,20);
+            layout.setPadding(20, 20, 20, 20);
             layout.setLayoutParams(layoutParams);
             layoutParams.setMargins(40, 0, 40, 0);
 
@@ -358,7 +357,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             ingredientText.setId(View.generateViewId());
             ingredientText.setText(ingredientBare.getName());
             ingredientText.setGravity(Gravity.CENTER);
-            ingredientText.setTextColor(Color.parseColor("#FFFFFF"));
+            ingredientText.setTextColor(ContextCompat.getColor(context, R.color.white));
 
             ViewGroup.LayoutParams ingredientParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -375,7 +374,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             amountText.setId(View.generateViewId());
             amountText.setText(String.valueOf((int) ingredient.getAmount()));
             amountText.setGravity(Gravity.CENTER);
-            amountText.setTextColor(Color.parseColor("#FFFFFF"));
+            amountText.setTextColor(ContextCompat.getColor(context, R.color.white));
 
             ViewGroup.LayoutParams amountParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -392,7 +391,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             unitText.setId(View.generateViewId());
             unitText.setText(ingredientBare.getUnit());
             unitText.setGravity(Gravity.CENTER);
-            unitText.setTextColor(Color.parseColor("#FFFFFF"));
+            unitText.setTextColor(ContextCompat.getColor(context, R.color.white));
 
             ViewGroup.LayoutParams unitParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -450,7 +449,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    public void addSteps() {
+    public void addSteps(Context context) {
         //schrittbeschreibungen in der view hinzufügen
         List<StepDTO> steps = db.getAllStepsForRecipe((int) newRecipeId);
 
@@ -474,7 +473,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             stepDescriptionText.setId(View.generateViewId());
             stepDescriptionText.setText(step.getText());
             stepDescriptionText.setGravity(Gravity.CENTER);
-            stepDescriptionText.setTextColor(Color.parseColor("#FFFFFF"));
+            stepDescriptionText.setTextColor(ContextCompat.getColor(context, R.color.white));
 
             ViewGroup.LayoutParams textViewParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
