@@ -154,9 +154,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
         else {
             pictureView.setImageResource(R.drawable.camera_small);
         }
-
-        pictureView.setPadding(0, 0, 100, 100);
-
+        
         // initialisiere den ActivityResultLauncher
         imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK) {
@@ -216,14 +214,6 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
                 }
             }
         });
-
-        LinearLayout llayout = new LinearLayout(this);
-        llayout.setOrientation(LinearLayout.HORIZONTAL);
-
-        RelativeLayout.LayoutParams pictureParams = new RelativeLayout.LayoutParams(300, 300);
-        pictureParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);  // Align the picture to the left
-        pictureParams.addRule(RelativeLayout.CENTER_VERTICAL);  // Center the picture vertically
-        pictureView.setLayoutParams(pictureParams);
 
             addIngredients();
 
