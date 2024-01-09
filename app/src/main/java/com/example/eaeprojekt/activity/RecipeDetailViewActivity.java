@@ -371,7 +371,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
         shoppingBag.setLayoutParams(shoppingBagParams);
         //Schneidet die Hälfte der textview weg wenn auf true
         //shoppingBag.setBaselineAlignBottom(true);
-        
+
         // OnClick Listener zur Shopping Bag hinzufügen
         shoppingBag.setOnClickListener(v -> {
                    if (ingredient.getOnShoppingList() == 0) {
@@ -564,19 +564,25 @@ public void showMenu(View v) {
         //Counter macht keine Probleme bei mehreren Rezepten
         ingredientAmount.setText(String.valueOf(newPortions.get(counter++)));
 
+        RelativeLayout shoppingBaglayout = new RelativeLayout(this);
+        shoppingBaglayout.setLayoutParams(new RelativeLayout.LayoutParams (
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+        
         ImageView shoppingBag = new ImageView(this);
         if(ingredient.getOnShoppingList() == 0){
             shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
         } else {
             shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
         }
-        LinearLayout.LayoutParams shoppingBagParams = new LinearLayout.LayoutParams(
+        RelativeLayout.LayoutParams shoppingBagParams = new RelativeLayout.LayoutParams(
                 55,
-                55,
-                Gravity.END
+                55
         );
+        shoppingBagParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         shoppingBag.setLayoutParams(shoppingBagParams);
-        shoppingBag.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        shoppingBaglayout.addView(shoppingBag);
 
         // OnClick Listener zur Shopping Bag hinzufügen
         shoppingBag.setOnClickListener(v -> {
@@ -599,7 +605,7 @@ public void showMenu(View v) {
         ingredientLayout.addView(ingredientAmount);
         ingredientLayout.addView(ingredientUnit);
         ingredientLayout.addView(ingredientName);
-        ingredientLayout.addView(shoppingBag);
+        ingredientLayout.addView(shoppingBaglayout);
 
         // Fügen Sie das horizontale Layout zum vertikalen Layout hinzu
         ingredientsLinearLayout.addView(ingredientLayout);
