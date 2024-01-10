@@ -17,6 +17,8 @@ import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
@@ -131,9 +133,10 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
 
 
         ingredientsLayout = findViewById(R.id.ingredientsLayout);
+        ingredientsLayout.setBackground(ishape);
         durationLayout = findViewById(R.id.durationLayout);
 
-        //Favoriten Stern anpassen
+        //Favoriten Stern anpassen je nach Einstellung des Smartphones (darkmode/non-darkmode)
         favoriteStar = findViewById(R.id.favoriteStar);
         if(isFavorite == 1) {
             if (darkmode == Configuration.UI_MODE_NIGHT_YES) {
@@ -195,7 +198,9 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         );
 
+
         if(!iADTO.isEmpty()) {
+
             textViewParamsIngredientHeader.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             textViewParamsIngredientHeader.setMargins(50, 10, 0, 10);
             TextView ingredientsHeader = new TextView(this);
@@ -203,105 +208,46 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
             ingredientsHeader.setLayoutParams(textViewParamsIngredientHeader);
             ingredientsHeader.setPaintFlags(ingredientsHeader.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
+            //Hinzufügen des "Zutaten" Headers auf das Layout für die Zutaten
             ingredientsLayout.addView(ingredientsHeader);
+
+            //Layout das den Inhalt wie Name, Menge usw enthält
             ingredientsLinearLayout = new LinearLayout(this);
             ingredientsLinearLayout.setOrientation(LinearLayout.VERTICAL);
-            ingredientsLinearLayout.setPadding(50, 0, 0, 10);
-            ingredientsLayout.addView(ingredientsLinearLayout);
+            ingredientsLinearLayout.setPadding(10, 10, 10, 10);
 
+            // Auslesen des DTOs für die Zutaten mit Menge und Einheit
             for (IngredientAmountDTO ingredient : iADTO) {
 
                 IngredientDTO currIngredient = db.getIngredientById(ingredient.getIngredientId());
-
-                // Erstellen Sie ein horizontales Layout für Name, Einheit und Menge
-                LinearLayout ingredientLayout = new LinearLayout(this);
-                ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
-                ingredientLayout.setDividerPadding(50);
-
-                // TextView für den Namen
-                TextView ingredientName = new TextView(this);
-                ingredientName.setText(currIngredient.getName());
-                ingredientName.setPadding(20, 0,0 , 0);
-
-                // TextView für die Einheit
-                RelativeLayout.LayoutParams ingredientUnitLayoutParams = new RelativeLayout.LayoutParams(
-                        RelativeLayout.LayoutParams.WRAP_CONTENT,
-                        RelativeLayout.LayoutParams.WRAP_CONTENT
-                );
-                ingredientUnitLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                TextView ingredientUnit = new TextView(this);
-                ingredientUnit.setText(currIngredient.getUnit());
-                ingredientUnit.setPadding(20, 0, 0, 0);
-                ingredientUnit.setLayoutParams(ingredientUnitLayoutParams);
+                LinearLayout singleIngredient = createIngredientRow(currIngredient, ingredient);
+                ingredientsLinearLayout.addView(singleIngredient);
 
 
-                TextView ingredientAmount = new TextView(this);
-                ingredientAmount.setText(String.valueOf((int) ingredient.getAmount()));
-                ingredientLayout.addView(ingredientAmount);
-
-                // Fügen Sie die TextViews für Name und Einheit zum horizontalen Layout hinzu
-
-                ingredientLayout.addView(ingredientUnit);
-                ingredientLayout.addView(ingredientName);
-
-
-                        ImageView shoppingBag = new ImageView(this);
-                        if(ingredient.getOnShoppingList() == 0) {
-                            shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
-                        }else{
-                            shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
-                        }
-                        ViewGroup.LayoutParams bagParams = new ViewGroup.LayoutParams(
-                                40,
-                                40
-                        );
-                        shoppingBag.setLayoutParams(bagParams);
-                        ingredientLayout.addView(shoppingBag);
-
-                        shoppingBag.setOnClickListener(v ->{
-                            if(ingredient.getOnShoppingList() == 0) {
-                                db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), 1, 0);
-                                Toast toast = new Toast(this);
-                                toast.setText(R.string.ingredientAdded);
-                                toast.show();
-                                shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
-                            }else{
-                                db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), 0, 0);
-                                Toast toast = new Toast(this);
-                                toast.setText(R.string.ingredientDeleted);
-                                toast.show();
-                                shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
-                            }
-                        });
-
-                ingredientsLinearLayout.addView(ingredientLayout);
             }
         }
-        ingredientsLayout.setBackground(ishape);
+
+         //Creating TextViews and Icons for durationView
+
+         TextView durationView = new TextView(this);
+         durationView.setLayoutParams(textViewParamsName);
+         durationView.setText(time);
+         durationView.setTextColor(Color.WHITE);
+
+         ImageView durationIcon = new ImageView(this);
+         durationIcon.setImageResource(R.drawable.baseline_timer_24);
+         durationIcon.setPadding(20, 0, 0, 0);
+         ImageView portionsIcon = new ImageView(this);
+         portionsIcon.setImageResource(R.drawable.baseline_person_24);
 
 
-        /*
-         * Creating TextViews and Icons for durationView
-         */
-        TextView durationView = new TextView(this);
-        durationView.setLayoutParams(textViewParamsName);
-        durationView.setText(time);
-        durationView.setTextColor(Color.WHITE);
-
-        ImageView durationIcon = new ImageView(this);
-        durationIcon.setImageResource(R.drawable.baseline_timer_24);
-        durationIcon.setPadding(20, 0, 0, 0);
-        ImageView portionsIcon = new ImageView(this);
-        portionsIcon.setImageResource(R.drawable.baseline_person_24);
-
-        /*
+         /**
          * Adding Views to GridLayout
          */
-        durationLayout.addView(durationIcon);
-        durationLayout.addView(durationView);
-        durationLayout.addView(portionsIcon);
+         durationLayout.addView(durationIcon);
+         durationLayout.addView(durationView);
+         durationLayout.addView(portionsIcon);
 
-        // Iterate above iADTO to get ID of Ingredient
         TextView portionsDescription = new TextView(this);
         portionsDescription.setPadding(10, 10, 0, 0);
         portionsDescription.setTextColor(getColor(R.color.white));
@@ -376,7 +322,87 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
 
     }
 
-    private void updateImage(String path) {
+    private LinearLayout createIngredientRow(IngredientDTO currIngredient, IngredientAmountDTO ingredient) {
+
+        // Erstellen Sie ein horizontales Layout für Name, Einheit und Menge
+        LinearLayout ingredientLayout = new LinearLayout(this);
+        ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
+        ingredientLayout.setGravity(Gravity.CENTER_VERTICAL);
+        ingredientLayout.setDividerPadding(50);
+
+
+        // TextView für den Namen
+        TextView ingredientName = new TextView(this);
+        ingredientName.setText(currIngredient.getName());
+        ingredientName.setPadding(60, 0, 0, 0);
+
+        // TextView für die Einheit mit passendes Regeln
+        RelativeLayout.LayoutParams ingredientUnitLayoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                60
+        );
+        ingredientUnitLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        TextView ingredientUnit = new TextView(this);
+        //ingredientUnit.setTextSize(50);
+        ingredientUnit.setText(currIngredient.getUnit());
+        ingredientUnit.setPadding(20, 0, 0, 0);
+        ingredientUnit.setLayoutParams(ingredientUnitLayoutParams);
+
+        // TextView für die Menge der Zutat
+        RelativeLayout.LayoutParams ingredientAmountLayoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                60
+        );
+        ingredientAmountLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        TextView ingredientAmount = new TextView(this);
+        ingredientAmount.setText(String.valueOf((int) ingredient.getAmount()));
+        ingredientAmount.setPadding(50,0,0,0);
+
+        ImageView shoppingBag = new ImageView(this);
+        if(ingredient.getOnShoppingList() == 0){
+            shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
+        } else {
+            shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
+        }
+        LinearLayout.LayoutParams shoppingBagParams = new LinearLayout.LayoutParams(
+            60,
+            60
+        );
+        shoppingBagParams.gravity = Gravity.END;
+
+        shoppingBag.setLayoutParams(shoppingBagParams);
+        //Schneidet die Hälfte der textview weg wenn auf true
+        //shoppingBag.setBaselineAlignBottom(true);
+
+        // OnClick Listener zur Shopping Bag hinzufügen
+        shoppingBag.setOnClickListener(v -> {
+                   if (ingredient.getOnShoppingList() == 0) {
+                      db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), 1, 0);
+                      Toast toast = new Toast(this);
+                      toast.setText("Zutat zur Einkaufsliste hinzugefügt");
+                      toast.show();
+                      shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
+                   } else {
+                       db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), 0, 0);
+                       Toast toast = new Toast(this);
+                       toast.setText("Zutat aus der Einkaufsliste entfernt");
+                       toast.show();
+                       shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
+                   }
+        });
+
+
+
+        // Hinzufügen von Name, Einheit, Menge und Einkaufstasche zum Layout
+
+        ingredientLayout.addView(ingredientAmount);
+        ingredientLayout.addView(ingredientUnit);
+        ingredientLayout.addView(ingredientName);
+        ingredientLayout.addView(shoppingBag);
+
+        return ingredientLayout;
+    }
+        private void updateImage(String path) {
         if (path != null && Shared.checkPermission(this, false)) {
             File imgFile = new File(path);
             if(imgFile.exists()) {
@@ -495,21 +521,33 @@ public void showMenu(View v) {
     }
 
     private void updateIngredientTextViews(List<String> newPortions) {
-
         if (ingredientsLinearLayout != null && !iADTO.isEmpty()) {
-    ingredientsLinearLayout.removeAllViews();
-    int counter = 0;
+        //Entfernen aller bereits bestehenden Views und ersetzen durch die Korrekten
+        ingredientsLinearLayout.removeAllViews();
+        ingredientsLayout.removeAllViews();
+        int counter = 0;
     for (IngredientAmountDTO ingredient : iADTO) {
+
+        //Alle Zutaten die benötigt werden aus der DB auslesen und in currIngredient speichern
         IngredientDTO currIngredient = db.getIngredientById(ingredient.getIngredientId());
 
-        // Erstellen Sie ein horizontales Layout für Name, Einheit und Menge
+        // Erstellen eines horizontalen Layouts für Name, Einheit und Menge
         LinearLayout ingredientLayout = new LinearLayout(this);
         ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
+        ingredientLayout.setGravity(Gravity.CENTER_VERTICAL);
+        ingredientLayout.setPadding(10,10,10,10);
+
+        //layout zum Anpassen der Zeilenbreite und -höhe
+        LinearLayout.LayoutParams ingLayoutParams = new LinearLayout.LayoutParams(
+          LinearLayout.LayoutParams.MATCH_PARENT,
+          LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        ingredientLayout.setLayoutParams(ingLayoutParams);
 
         // TextView für den Namen
         TextView ingredientName = new TextView(this);
         ingredientName.setText(currIngredient.getName());
-        ingredientName.setPadding(20, 0, 0, 0);
+        ingredientName.setPadding(20, 0, 20, 0);
 
         // TextView für die Einheit
         RelativeLayout.LayoutParams ingredientUnitLayoutParams = new RelativeLayout.LayoutParams(
@@ -524,16 +562,56 @@ public void showMenu(View v) {
 
 
         TextView ingredientAmount = new TextView(this);
+        //Counter macht keine Probleme bei mehreren Rezepten
         ingredientAmount.setText(String.valueOf(newPortions.get(counter++)));
+
+        RelativeLayout shoppingBaglayout = new RelativeLayout(this);
+        shoppingBaglayout.setLayoutParams(new RelativeLayout.LayoutParams (
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+        
+        ImageView shoppingBag = new ImageView(this);
+        if(ingredient.getOnShoppingList() == 0){
+            shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
+        } else {
+            shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
+        }
+        RelativeLayout.LayoutParams shoppingBagParams = new RelativeLayout.LayoutParams(
+                55,
+                55
+        );
+        shoppingBagParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        shoppingBag.setLayoutParams(shoppingBagParams);
+        shoppingBaglayout.addView(shoppingBag);
+
+        // OnClick Listener zur Shopping Bag hinzufügen
+        shoppingBag.setOnClickListener(v -> {
+            if (ingredient.getOnShoppingList() == 0) {
+                db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), 1, 0);
+                Toast toast = new Toast(this);
+                toast.setText("Zutat zur Einkaufsliste hinzugefügt");
+                toast.show();
+                shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
+            } else {
+                db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), 0, 0);
+                Toast toast = new Toast(this);
+                toast.setText("Zutat aus der Einkaufsliste entfernt");
+                toast.show();
+                shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
+            }
+        });
+
+        // Einfügen der Text und ImageViews
         ingredientLayout.addView(ingredientAmount);
-
-        // Fügen Sie die TextViews für Name und Einheit zum horizontalen Layout hinzu
-
         ingredientLayout.addView(ingredientUnit);
         ingredientLayout.addView(ingredientName);
+        ingredientLayout.addView(shoppingBaglayout);
 
         // Fügen Sie das horizontale Layout zum vertikalen Layout hinzu
         ingredientsLinearLayout.addView(ingredientLayout);
+        ingredientsLayout.removeAllViews();
+        ingredientsLayout.addView(ingredientsLinearLayout);
     }
     }
     }
