@@ -124,6 +124,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
         GradientDrawable gshape = new GradientDrawable();
         gshape.setShape(GradientDrawable.RECTANGLE);
         gshape.setCornerRadius(30);
+
         int darkmode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if(darkmode == Configuration.UI_MODE_NIGHT_YES){
             gshape.setColor(getColor(R.color.fontColor));

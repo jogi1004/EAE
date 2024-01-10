@@ -2,6 +2,10 @@ package com.example.eaeprojekt.activity;
 
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -34,21 +38,22 @@ import java.util.List;
  */
 public class ShoppingBagActivity extends AppCompatActivity implements View.OnClickListener,ShoppingBagUpdateListener {
 
-    ImageButton addIngredient;
-    ImageButton deleteAllIcon;
+    ImageButton addIngredient, deleteAllIcon;
     PopupDeleteShoppingBag deleteShoppingBagPopup;
-    LinearLayout shoppingLayout;
+    LinearLayout shoppingLayout, ingredientWithoutRecipe;
     DatabaseManager db;
     BottomNavigationView b;
     FrameLayout dimmableLayoutShoppingBag;
     TextView helperTextView;
-    ImageView trashCanIconImageView;
-    LinearLayout ingredientWithoutRecipe;
+    int darkmode = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_bag);
+
+        //Abfragen des Darkmodes
+        darkmode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
 
         ingredientWithoutRecipe = findViewById(R.id.ingredientWithoutRecipe);
         shoppingLayout = findViewById(R.id.shoppingLayoutinScrollView);
@@ -147,11 +152,17 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                     i = ingredientAmount.getRecipeId();
                 }
             }
-
             /*
             Zutaten in der view hinzufügen
              */
             ConstraintLayout layout = new ConstraintLayout(this);
+
+            //Ändern der Farben wenn Darkmode aktiviert ist
+            if(Configuration.UI_MODE_NIGHT_YES == darkmode){
+                parentLayout1.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+                parentLayout2.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+                layout.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+            }
 
             ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
                     ConstraintLayout.LayoutParams.MATCH_PARENT,
@@ -168,17 +179,14 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             ingredientText.setId(View.generateViewId());
             ingredientText.setText(ingredient.getName());
             ingredientText.setGravity(Gravity.CENTER);
-            ingredientText.setTextColor(getColor(R.color.fontColor));
+            ingredientText.setTextAppearance(R.style.TextViewShopping);
 
             ViewGroup.LayoutParams ingredientParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
+
             );
             ingredientText.setLayoutParams(ingredientParams);
-            trashCanIconImageView = new ImageView(this);
-            trashCanIconImageView.setImageResource(R.drawable.trashcan_dark);
-            trashCanIconImageView.setId(View.generateViewId());
-
             layout.addView(ingredientText);
 
             /*
@@ -188,7 +196,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             amountText.setId(View.generateViewId());
             amountText.setText(String.valueOf((int) ingredientAmount.getAmount()));
             amountText.setGravity(Gravity.CENTER);
-            amountText.setTextColor(getColor(R.color.fontColor));
+            amountText.setTextAppearance(R.style.TextViewShopping);
 
             ViewGroup.LayoutParams amountParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -205,7 +213,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             unitText.setId(View.generateViewId());
             unitText.setText(ingredient.getUnit());
             unitText.setGravity(Gravity.CENTER);
-            unitText.setTextColor(getColor(R.color.fontColor));
+            unitText.setTextAppearance(R.style.TextViewShopping);
 
             ViewGroup.LayoutParams unitParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -220,10 +228,11 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             */
             CheckBox checkBox = new CheckBox(this);
             checkBox.setId(View.generateViewId());
+            checkBox.setButtonTintList(ColorStateList.valueOf(getResources().getColor(R.color.background)));
 
             ViewGroup.LayoutParams checkBoxParams = new ViewGroup.LayoutParams(
-                    50,
-                    50
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
             );
             checkBox.setLayoutParams(checkBoxParams);
             if(ingredientAmount.getIsChecked() == 1){
@@ -235,7 +244,11 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             Mülleimer
              */
             ImageView trash = new ImageView(this);
-            trash.setImageResource(R.drawable.trashcan_dark);
+            if(darkmode == Configuration.UI_MODE_NIGHT_YES){
+             trash.setImageResource(R.drawable.trashcan_light);
+            } else {
+                trash.setImageResource(R.drawable.trashcan_dark);
+            }
             trash.setId(View.generateViewId());
 
             ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
@@ -249,6 +262,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                 handleCheckboxClick(ingredientAmount);
                 updateShoppingBag();
             });
+
 
             /*
             Constraints
@@ -269,7 +283,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             constraintSet.connect(unitText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
             constraintSet.connect(unitText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
             //Checkbox
-            constraintSet.connect(checkBox.getId(), ConstraintSet.END, trash.getId(), ConstraintSet.START, 20);
+            constraintSet.connect(checkBox.getId(), ConstraintSet.END, trash.getId(), ConstraintSet.START, dpToPx(8));
             constraintSet.connect(unitText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
             constraintSet.connect(unitText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
             //Mülleimer
