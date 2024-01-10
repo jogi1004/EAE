@@ -81,9 +81,7 @@ public class PopupIngredientsEdit implements View.OnClickListener {
 
         List<IngredientDTO> allIngredients = db.getAllIngredients();
         for(IngredientDTO newIngredient : allIngredients){
-            Log.d("spinner"," "+ newIngredient.getName() + " " + newIngredient.getUnit());
             ingredientList.add(newIngredient.getName() + ", " + newIngredient.getUnit());
-            Log.d("spinner"," "+ newIngredient.getName() + " " + newIngredient.getUnit() + " wurde hinzugefügt");
         }
 
         adapterIngredients = new ArrayAdapter<>(mainActivity, android.R.layout.simple_spinner_dropdown_item, ingredientList);
