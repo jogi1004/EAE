@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.activity.RecipeEditActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
+import com.example.eaeprojekt.utility.KeyboardUtils;
 
 public class PopupStepsEdit implements View.OnClickListener {
 
@@ -38,6 +39,8 @@ public class PopupStepsEdit implements View.OnClickListener {
             LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View popupView = inflater.inflate(R.layout.add_steps_popup, null);
             this.view = popupView;
+
+            KeyboardUtils.setupUI(popupView.findViewById(R.id.parentView), mainActivity);
 
             //length and width from the Window
             int width = LinearLayout.LayoutParams.WRAP_CONTENT;

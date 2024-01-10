@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ import com.example.eaeprojekt.popups.PopupSteps;
 import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.DTO.StepDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
+import com.example.eaeprojekt.utility.KeyboardUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,6 +69,8 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_new_recipe);
         // Erhalte die Root-Ansicht der Activity
         View rootView = findViewById(android.R.id.content);
+
+        KeyboardUtils.setupUI(findViewById(R.id.layout_new_recipe), this);
 
         button_add_ingredients = findViewById(R.id.button_add_ingredients);
 

@@ -24,6 +24,7 @@ import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.activity.RecipeEditActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
+import com.example.eaeprojekt.utility.KeyboardUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,8 @@ public class PopupIngredientsEdit implements View.OnClickListener {
         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.add_ingredients_popup, null);
         this.popupView = popupView;
+
+        KeyboardUtils.setupUI(popupView.findViewById(R.id.below), mainActivity);
 
         //length and width from the Window
         int width = LinearLayout.LayoutParams.MATCH_PARENT;

@@ -36,6 +36,7 @@ import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.example.eaeprojekt.popups.PopupIngredientsEdit;
 import com.example.eaeprojekt.popups.PopupStepsEdit;
+import com.example.eaeprojekt.utility.KeyboardUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,6 +59,8 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_edit);
+
+        KeyboardUtils.setupUI(findViewById(R.id.layout_edit_recipe), this);
 
         Intent receive = getIntent();
         recipeIDEdit = receive.getIntExtra("ID", 0);
