@@ -54,8 +54,7 @@ public class PopupIngredients implements View.OnClickListener {
     ConstraintLayout cancelButtonIngredient;
     ConstraintLayout addButtonIngredient;
 
-    EditText nameText;
-    EditText unitText;
+    EditText nameText, unitText, amountText;
     ConstraintLayout createIngredient;
 
 
@@ -158,6 +157,8 @@ public class PopupIngredients implements View.OnClickListener {
         unitText = popupView.findViewById(R.id.unitText);
         String unitTextString = unitText.getText().toString();
 
+        amountText = popupView.findViewById(R.id.amount);
+
         ConstraintLayout bbelow = popupView.findViewById(R.id.bbelow);
 
         if (view == addIngredientCross){
@@ -231,18 +232,26 @@ public class PopupIngredients implements View.OnClickListener {
             frame.performClick();
         } else if (view == addButtonIngredient) {
 
-            frame.getForeground().setAlpha(0);
-            frame.setElevation(0);
-            popupWindow.dismiss();
-            frame.performClick();
+            if (!amountText.getText().toString().isEmpty()) {
 
-            if(mainActivity.getClass() == ShoppingBagActivity.class){
-                addIngredientToShoppingBag();
-                if (updateListener != null) {
-                    updateListener.onUpdateShoppingBag();
+                frame.getForeground().setAlpha(0);
+                frame.setElevation(0);
+                popupWindow.dismiss();
+                frame.performClick();
+
+                if (mainActivity.getClass() == ShoppingBagActivity.class) {
+                    addIngredientToShoppingBag();
+                    if (updateListener != null) {
+                        updateListener.onUpdateShoppingBag();
+                    }
+                } else {
+                    addIngredientToNewRecipe();
                 }
-            }else {
-                addIngredientToNewRecipe();
+            }
+            else {
+                Toast toast = new Toast(mainActivity);
+                toast.setText(R.string.pleaseFillAllFields);
+                toast.show();
             }
 
         }else if (view == frame) {
@@ -461,10 +470,6 @@ public class PopupIngredients implements View.OnClickListener {
         }
     }
 
-    public CustomAdapter getAdapter() {
-        return adapter;
-    }
-
 
     class PopupEditIngredient implements View.OnClickListener {
 
@@ -520,8 +525,8 @@ public class PopupIngredients implements View.OnClickListener {
                 db = new DatabaseManager(mainActivity);
                 db.open();
 
-                EditText name = (EditText) parentView.findViewById(R.id.nameText2);
-                EditText unit = (EditText) parentView.findViewById(R.id.unitText2);
+                EditText name = parentView.findViewById(R.id.nameText2);
+                EditText unit = parentView.findViewById(R.id.unitText2);
 
                 db.updateIngredient(id, name.getText().toString(), unit.getText().toString());
 
