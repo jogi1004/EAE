@@ -71,8 +71,8 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/picture_layout"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
                     android:layout_marginTop="30dp"
                     android:background="@drawable/background_add_picture"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -83,14 +83,14 @@
                         android:id="@+id/picture"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:civ_border_width="4dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/camera_small"
                         app:civ_border_color="@color/darkerYellow"
+                        app:civ_border_width="4dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_centerHorizontal="true"
-                        android:src="@drawable/camera_small" />
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout

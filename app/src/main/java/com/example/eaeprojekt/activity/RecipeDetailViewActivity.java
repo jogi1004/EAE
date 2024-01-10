@@ -4,8 +4,8 @@ import static com.example.eaeprojekt.R.id.menu_edit;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.exifinterface.media.ExifInterface;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -15,10 +15,8 @@ import android.graphics.Color;
 
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
-import android.media.ExifInterface;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
@@ -55,7 +53,7 @@ import java.util.Locale;
  * RecipeDetail View provides all functional Methods for showing
  * Image, Ingredients and Steps of your recipe
  */
-public class RecipeDetailViewActivity extends AppCompatActivity implements View.OnClickListener, PopupMenu.OnMenuItemClickListener, AdapterView.OnItemSelectedListener {
+public class RecipeDetailViewActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, AdapterView.OnItemSelectedListener {
 
     private DatabaseManager db;
     RecipeDTO rDTO;
@@ -73,19 +71,19 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail_view);
-        /**
+        /*
          * Setting up BottomNavigationBar Buttons
          */
         b = findViewById(R.id.bottomNavView);
         b.setSelectedItemId(R.id.recipeListButtonNavBar);
         b.setOnItemSelectedListener(this::onNavigationItemSelected);
-        /**
+        /*
          * Receive Intent from RecipeActivity and extracting ID
          */
         Intent receive = getIntent();
         recipeid = receive.getIntExtra("ID", 0);
         circleViewImage = findViewById(R.id.circleViewRecipe);
-        /**
+        /*
          * Open DB for getting Ingredients
          */
         db = new DatabaseManager(this);
@@ -94,35 +92,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
 
         //Bild aus DB holen
         RecipeDTO recipe = db.getRecipeById(recipeid);
-        if (recipe.getImagePath()!= null) {
-            File imgFile = new File(recipe.getImagePath());
-            if(imgFile.exists()) {
-                try {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    int rotate = 0;
-                    ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
-                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-                    switch (orientation) {
-                        case ExifInterface.ORIENTATION_ROTATE_270:
-                            rotate = 270;
-                            break;
-                        case ExifInterface.ORIENTATION_ROTATE_180:
-                            rotate = 180;
-                            break;
-                        case ExifInterface.ORIENTATION_ROTATE_90:
-                            rotate = 90;
-                            break;
-                    }
-                    circleViewImage.setImageBitmap(myBitmap);
-                    circleViewImage.setRotation(rotate);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        else {
-            circleViewImage.setImageResource(R.drawable.camera_small);
-        }
+        updateImage(recipe.getImagePath());
 
         rDTO = db.getRecipeById(recipeid);
         recipeTitle = rDTO.getTitle();
@@ -200,7 +170,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
                 }
                 });
 
-        /**
+        /*
          * LayoutParams for TextViews in IngredientsLayout
          */
 
@@ -212,12 +182,12 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
         textViewParamsName.setMargins(25, 0, 60, 0);
 
 
-        /**
+        /*
          * Set Title to Recipe Name
          */
         TextView RecipeTitle = findViewById(R.id.RecipeName);
         RecipeTitle.setText(recipeTitle);
-        /**
+        /*
          * Creating TextViews for Ingredients
          */
         RelativeLayout.LayoutParams textViewParamsIngredientHeader = new RelativeLayout.LayoutParams(
@@ -277,10 +247,8 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
 
                         ImageView shoppingBag = new ImageView(this);
                         if(ingredient.getOnShoppingList() == 0) {
-                            Log.d("abc", "Deail0");
                             shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
                         }else{
-                            Log.d("abc", "Deail1");
                             shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
                         }
                         ViewGroup.LayoutParams bagParams = new ViewGroup.LayoutParams(
@@ -294,26 +262,25 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
                             if(ingredient.getOnShoppingList() == 0) {
                                 db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), 1, 0);
                                 Toast toast = new Toast(this);
-                                toast.setText("Zutat zur Einkaufsliste hinzugefügt");
+                                toast.setText(R.string.ingredientAdded);
                                 toast.show();
                                 shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
                             }else{
                                 db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), 0, 0);
                                 Toast toast = new Toast(this);
-                                toast.setText("Zutat aus der Einkaufsliste entfernt");
+                                toast.setText(R.string.ingredientDeleted);
                                 toast.show();
                                 shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
                             }
                         });
 
-                // Fügen Sie das horizontale Layout zum vertikalen Layout hinzu
                 ingredientsLinearLayout.addView(ingredientLayout);
             }
         }
         ingredientsLayout.setBackground(ishape);
 
 
-        /**
+        /*
          * Creating TextViews and Icons for durationView
          */
         TextView durationView = new TextView(this);
@@ -327,14 +294,14 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
         ImageView portionsIcon = new ImageView(this);
         portionsIcon.setImageResource(R.drawable.baseline_person_24);
 
-        /**
+        /*
          * Adding Views to GridLayout
          */
         durationLayout.addView(durationIcon);
         durationLayout.addView(durationView);
         durationLayout.addView(portionsIcon);
 
-            // Iterate above iADTO to get ID of Ingredient
+        // Iterate above iADTO to get ID of Ingredient
         TextView portionsDescription = new TextView(this);
         portionsDescription.setPadding(10, 10, 0, 0);
         portionsDescription.setTextColor(getColor(R.color.white));
@@ -362,10 +329,9 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
             durationLayout.addView(convertSpinner);
         }
         durationLayout.addView(portionsDescription);
-        //durationLayout.setBackground(gshape);
 
 
-        /**
+        /*
          * BEGIN OF STEPS
          */
 
@@ -409,24 +375,57 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
         stepsLayout.setBackground(gshape);
 
     }
-        private boolean onNavigationItemSelected(MenuItem item) {
+
+    private void updateImage(String path) {
+        if (path != null && Shared.checkPermission(this, false)) {
+            File imgFile = new File(path);
+            if(imgFile.exists()) {
+                try {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    int rotate = 0;
+                    ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
+                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                    switch (orientation) {
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            rotate = 270;
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            rotate = 180;
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            rotate = 90;
+                            break;
+                    }
+                    circleViewImage.setImageBitmap(myBitmap);
+                    circleViewImage.setRotation(rotate);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        else {
+            circleViewImage.setImageResource(R.drawable.camera_small);
+        }
+    }
+
+    private boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.AddButtonNavBar) {
-            /**
+            /*
              Creating Intent for starting NewRecipeActivity
              */
             Intent i = new Intent(this, NewRecipeActivity.class);
             startActivity(i);
         }
         if (id == R.id.recipeListButtonNavBar) {
-            /**
+            /*
              Creating Intent for starting RecipeActivity
              */
             Intent i = new Intent(this, RecipeActivity.class);
             startActivity(i);
         }
         if(id == R.id.shoppingBagButtonNavBar){
-            /**
+            /*
              * Creating Intent for starting ShoppingBagLayout
              */
             Intent i = new Intent(this, ShoppingBagActivity.class);
@@ -436,7 +435,6 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements View.
     }
 
 @RequiresApi(api = Build.VERSION_CODES.Q)
-@SuppressLint({"RestrictedApi", "NonConstantResourceId"})
 public void showMenu(View v) {
     PopupMenu popupMenu = new PopupMenu(this, v);
     MenuInflater inflater = popupMenu.getMenuInflater();
@@ -448,6 +446,10 @@ public void showMenu(View v) {
             i.putExtra("ID", recipeid);
             startActivity(i);
         } else if (item.getItemId() == R.id.menu_delete) {
+            // remove all ingredientAmounts
+            for (IngredientAmountDTO ingr : db.getIngredientsForRecipe(recipeid)) {
+                db.deleteIngredientQuantity(ingr.getId());
+            }
             db.deleteRecipe(recipeid);
             Intent back = new Intent(this, RecipeActivity.class);
             Toast toast = new Toast(this);
@@ -460,11 +462,6 @@ public void showMenu(View v) {
 
     popupMenu.show();
 }
-
-    @Override
-    public void onClick(View v) {
-
-    }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
@@ -560,5 +557,12 @@ public void showMenu(View v) {
             } catch (Exception ignore) {
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        RecipeDTO recipe = db.getRecipeById(recipeid);
+        updateImage(recipe.getImagePath());
     }
 }

@@ -1,28 +1,18 @@
 package com.example.eaeprojekt.activity;
 
-import static com.google.android.material.internal.ViewUtils.dpToPx;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.text.Layout;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -36,7 +26,6 @@ import com.example.eaeprojekt.database.DatabaseManager;
 import com.example.eaeprojekt.popups.PopupDeleteShoppingBag;
 import com.example.eaeprojekt.popups.PopupIngredients;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -54,13 +43,14 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
     FrameLayout dimmableLayoutShoppingBag;
     TextView helperTextView;
     ImageView trashCanIconImageView;
+    LinearLayout ingredientWithoutRecipe;
 
-    @SuppressLint({"MissingInflatedId", "ResourceAsColor"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_bag);
 
+        ingredientWithoutRecipe = findViewById(R.id.ingredientWithoutRecipe);
         shoppingLayout = findViewById(R.id.shoppingLayoutinScrollView);
         deleteAllIcon = findViewById(R.id.deleteAllIcon);
         deleteAllIcon.setOnClickListener(this);
@@ -78,18 +68,19 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
         updateShoppingBag();
     }
 
-    @SuppressLint("ResourceType")
     public void updateShoppingBag() {
         shoppingLayout.removeAllViews();
+        ingredientWithoutRecipe.removeAllViews();
         db = new DatabaseManager(this);
         db.open();
         List<IngredientAmountDTO> ingredientsOnShoppingList = db.getIngredientsOnShoppingList();
-        /**
+        /*
          * Show helper-text while list is empty
          */
+
         helperTextView.setVisibility(ingredientsOnShoppingList.isEmpty()? View.VISIBLE : View.INVISIBLE);
 
-        /**
+        /*
          * Using DTO to get all Ingredients from the DB
          */
 
@@ -109,17 +100,16 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             parentLayout2.setLayoutParams(pp);
 
 
-            if((int) ingredientAmount.getRecipeId() == -9){
-
+            if((int) ingredientAmount.getRecipeId() == -9){ // using -9 as id for "no recipe"
 
                 if(i != ingredientAmount.getRecipeId()) {
                     TextView titleOther = new TextView(this);
-                    titleOther.setText("Andere Zutaten");
+                    titleOther.setText(R.string.otherIngredients);
 
                     parentLayout1.addView(titleOther);
 
                     View view = new View(this);
-                    view.setBackgroundColor(Color.parseColor("#844D29"));
+                    view.setBackgroundColor(getColor(R.color.fontColor));
                     ViewGroup.LayoutParams viewParams = new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             1
@@ -146,7 +136,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                     parentLayout2.addView(titleRecipes);
 
                     View line = new View(this);
-                    line.setBackgroundColor(Color.parseColor("#844D29"));
+                    line.setBackgroundColor(getColor(R.color.fontColor));
                     ViewGroup.LayoutParams lineParams = new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             dpToPx(1)
@@ -178,7 +168,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             ingredientText.setId(View.generateViewId());
             ingredientText.setText(ingredient.getName());
             ingredientText.setGravity(Gravity.CENTER);
-            ingredientText.setTextColor(Color.parseColor("#844D29"));
+            ingredientText.setTextColor(getColor(R.color.fontColor));
 
             ViewGroup.LayoutParams ingredientParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -198,7 +188,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             amountText.setId(View.generateViewId());
             amountText.setText(String.valueOf((int) ingredientAmount.getAmount()));
             amountText.setGravity(Gravity.CENTER);
-            amountText.setTextColor(Color.parseColor("#844D29"));
+            amountText.setTextColor(getColor(R.color.fontColor));
 
             ViewGroup.LayoutParams amountParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -215,7 +205,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             unitText.setId(View.generateViewId());
             unitText.setText(ingredient.getUnit());
             unitText.setGravity(Gravity.CENTER);
-            unitText.setTextColor(Color.parseColor("#844D29"));
+            unitText.setTextColor(getColor(R.color.fontColor));
 
             ViewGroup.LayoutParams unitParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -255,6 +245,11 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             trash.setLayoutParams(trashParams);
             layout.addView(trash);
 
+            checkBox.setOnClickListener(v -> {
+                handleCheckboxClick(ingredientAmount);
+                updateShoppingBag();
+            });
+
             /*
             Constraints
              */
@@ -293,10 +288,6 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                 parentparent2.addView(parentLayout2);
             }
 
-
-        /*
-        noch bearbeiten
-         */
             trash.setOnClickListener(v ->{
                 if(ingredientAmount.getRecipeId() == -9) {
 
@@ -305,7 +296,6 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                     parentLayout1.removeView(layout);
                     if(li.isEmpty()){
                         parentLayout1.removeAllViews();
-                        helperTextView.setVisibility(View.VISIBLE);
                     }
                 }else{
 
@@ -319,19 +309,13 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                         }
                     }
 
-                    if(empty == true){
-                        Log.d("true", "ja");
-                        Log.d("true", "ja2: " + parentLayout2.getChildCount());
+                    if(empty)
                         parentLayout2.removeAllViews();
-                        Log.d("true", "ja3: " + parentLayout2.getChildCount());
-                    }else{
-                        Log.d("true", "nein");
-                        Log.d("true", "nein2: " + parentLayout2.getChildCount());
+                    else
                         parentLayout2.removeView(layout);
-                    }
-
-                    helperTextView.setVisibility(ingredientsOnShoppingList.isEmpty()? View.VISIBLE : View.INVISIBLE);
                 }
+                helperTextView.setVisibility(ingredientsOnShoppingList.isEmpty()? View.VISIBLE : View.INVISIBLE);
+                updateShoppingBag();
             });
         }
     }
@@ -344,7 +328,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
     private boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.AddButtonNavBar) {
-            /**
+            /*
              Creating Intent for starting NewRecipeActivity
              **/
 
@@ -352,7 +336,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             startActivity(i);
         }
         if (id == R.id.recipeListButtonNavBar) {
-            /**
+            /*
              Creating Intent for starting RecipeActivity
              **/
             Intent i = new Intent(this, RecipeActivity.class);
@@ -368,37 +352,29 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
 
         if (view == deleteAllIcon) {
             deleteShoppingBagPopup.showPopupWindow(view, this);
+
+            dimmableLayoutShoppingBag.getForeground().setAlpha(220);
+            dimmableLayoutShoppingBag.setElevation(1);
         } else if (view == addIngredient) {
-            PopupIngredients popup = new PopupIngredients();
+            PopupIngredients popup = new PopupIngredients(this);
             popup.showPopupWindow(view, this);
 
-            //background-dimming
-            layout_MainMenu.getForeground().setAlpha(220);
-            layout_MainMenu.setElevation(1);
+            //background-dimminge
+            dimmableLayoutShoppingBag.getForeground().setAlpha(220);
+            dimmableLayoutShoppingBag.setElevation(1);
         }
     }
 
     @Override
-    public void onUpdateShoppingBag() {
+    public void onUpdateShoppingBag() { // used in Popups
         updateShoppingBag();
     }
 
-        // Method to handle the deletion of a shopping bag item
-        private void handleItemDeletion(long id, long ingredientId, String name, double amount, String unit) {
-            db.open();
-            db.updateIngredientQuantity(id, ingredientId, amount, 0, 0);
-            updateShoppingBag();
-            Toast toast = new Toast(this);
-            toast.setText(amount + " " + unit + " " + name + " wurde entfernt.");
-            toast.setDuration(Toast.LENGTH_SHORT);
-            toast.show();
-            db.close();
-        }
-        private void handleCheckboxClick(IngredientAmountDTO ingredientAmount) {
-            db.open();
-            db.updateIngredientQuantity(ingredientAmount.getId(), ingredientAmount.getIngredientId(), ingredientAmount.getAmount(), ingredientAmount.getOnShoppingList(), ingredientAmount.getIsChecked()==0? 1:0 );
-            db.close();
-        }
+    private void handleCheckboxClick(IngredientAmountDTO ingredientAmount) {
+        db.open();
+        db.updateIngredientQuantity(ingredientAmount.getId(), ingredientAmount.getIngredientId(), ingredientAmount.getAmount(), ingredientAmount.getOnShoppingList(), ingredientAmount.getIsChecked()==0? 1:0 );
+        db.close();
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

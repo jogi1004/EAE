@@ -71,8 +71,8 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/picture_layout"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
                     android:layout_marginTop="30dp"
                     android:background="@drawable/background_add_picture"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -121,16 +121,16 @@
                         android:layout_width="200dp"
                         android:layout_height="25dp"
                         android:layout_marginStart="60dp"
-                        android:hint="@string/titleHint"
-                        android:importantForAutofill="no"
-                        android:inputType="text"
-                        android:maxLength="20"
-                        android:maxLines="1"
                         app:layout_constraintBottom_toBottomOf="@+id/title"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@id/title"
-                        tools:ignore="TouchTargetSizeCheck" />
+                        tools:ignore="TouchTargetSizeCheck"
+                        android:maxLength="18"
+                        android:maxLines="1"
+                        android:hint="@string/titleHint"
+                        android:inputType="text"
+                        android:importantForAutofill="no" />
 
                     <TextView
                         android:id="@+id/time"
@@ -150,7 +150,7 @@
                         android:hint="@string/durationHint"
                         android:importantForAutofill="no"
                         android:inputType="number"
-                        android:maxLength="10"
+                        android:maxLength="4"
                         android:maxLines="1"
                         android:textAlignment="center"
                         android:textColor="@color/fontColor"
@@ -274,7 +274,7 @@
                     android:id="@+id/stepsLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ingredientsLayout" />
