@@ -117,7 +117,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                     view.setBackgroundColor(getColor(R.color.fontColor));
                     ViewGroup.LayoutParams viewParams = new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
-                            1
+                            dpToPx(1)
                     );
                     view.setLayoutParams(viewParams);
                     parentLayout1.addView(view);
