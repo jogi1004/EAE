@@ -59,7 +59,7 @@ public class PopupIngredientsEdit implements View.OnClickListener {
         this.popupView = popupView;
 
         //length and width from the Window
-        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int width = LinearLayout.LayoutParams.MATCH_PARENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = true;
 

@@ -43,14 +43,8 @@ import java.util.List;
 
 public class RecipeEditActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    ImageView backButton;
-
-    ConstraintLayout button_add_image;
-    ImageView pictureView;
-    ConstraintLayout button_add_ingredients;
-    ConstraintLayout button_add_steps;
-    ConstraintLayout button_add_recipe;
-    ConstraintLayout button_cancel;
+    ImageView backButton, pictureView;
+    ConstraintLayout button_cancel, button_add_ingredients, button_add_recipe, button_add_steps, button_add_image;
     DatabaseManager db;
     EditText time, title;
     Spinner spinner_portionsmenge;
@@ -358,8 +352,8 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
                 trash.setId(View.generateViewId());
 
                 ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
-                        50,
-                        50
+                        45,
+                        45
                 );
                 trash.setLayoutParams(trashParams);
                 layout.addView(trash);
@@ -418,7 +412,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
                 layout.setBackgroundResource(R.drawable.background_with_rounded_corners_green);
                 layout.setPadding(20, 20, 20, 20);
                 layout.setLayoutParams(layoutParams);
-                layoutParams.setMargins(40, 10, 40, 10);
+                layoutParams.setMargins(20, 10, 20, 10);
 
                 // Text der Schrittbeschreibung
                 TextView stepDescriptionText = new TextView(this);
@@ -441,8 +435,8 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
                 trash.setId(View.generateViewId());
 
                 ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
-                        70,
-                        70
+                        45,
+                        45
                 );
                 trash.setLayoutParams(trashParams);
                 layout.addView(trash);

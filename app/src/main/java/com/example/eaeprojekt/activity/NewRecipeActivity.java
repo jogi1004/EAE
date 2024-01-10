@@ -49,13 +49,9 @@ import java.util.List;
 public class NewRecipeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     ImageView backButton;
-    ConstraintLayout button_add_ingredients;
-    ConstraintLayout button_add_steps;
-    ConstraintLayout button_add_recipe;
-    ConstraintLayout button_cancel;
+    ConstraintLayout button_add_ingredients, button_add_steps, button_add_recipe, button_cancel;
     DatabaseManager db;
-    EditText title;
-    EditText time;
+    EditText title, time;
     Spinner spinner_portionsmenge;
     int portionsmenge;
 
