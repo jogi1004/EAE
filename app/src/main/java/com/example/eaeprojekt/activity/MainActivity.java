@@ -3,24 +3,32 @@ package com.example.eaeprojekt.activity;
 
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
+import androidx.exifinterface.media.ExifInterface;
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
-import com.example.eaeprojekt.DTO.IngredientDTO;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.Random;
+
 
 /**
  * MainActivity gets started when the App Icon is pressed. It represents the Home Menu with the Navigation Bar at the Bottom.
@@ -30,8 +38,12 @@ public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView b;
     DatabaseManager db;
+    ImageView imageView;
+    TextView titleView;
+    LinearLayout randomRecipeHeading, randomRecipeLayout;
+    Button reloadButton;
+    int oldRandomNumber;
 
-    @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,13 +61,99 @@ public class MainActivity extends AppCompatActivity {
         b.setSelectedItemId(R.id.AddButtonNavBar);
         b.setOnItemSelectedListener(this::onNavigationItemSelected);
 
+        randomRecipeHeading = findViewById(R.id.randomRecipeHeading);
+        randomRecipeLayout = findViewById(R.id.randomRecipeLayout);
+
+        imageView = findViewById(R.id.circleViewRecipe);
+        titleView = findViewById(R.id.randomRecipeTitle);
+        reloadButton = findViewById(R.id.reloadButton);
+
+        reloadButton.setOnClickListener(v -> {
+            showRandomRecipe();
+                }
+        );
+
+        showRandomRecipe();
+
         //Abfragen der Displaygröße um die Positionierung der Item u.ä. prozentual anzuordnen
-        /** DisplayMetrics dM = new DisplayMetrics();
+        /* DisplayMetrics dM = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dM);
         int height = dM.heightPixels;
         int width = dM.widthPixels;
         Toast.makeText(this, "Höhe des Bildschirms: " + height + " Breite des Bildschirms: " + width, Toast.LENGTH_LONG).show();
-**/
+        */
+    }
+
+    public void showRandomRecipe() {
+        db = new DatabaseManager(this);
+        db.open();
+        List<RecipeDTO> allRecipes = db.getAllRecipes();
+        db.close();
+        allRecipes.removeIf(r -> r.getIsFavorite() == -1);
+        allRecipes.removeIf(r -> r.getTitle() == null);
+
+        int maxNumber = allRecipes.size();
+        if (maxNumber > 0) {
+            reloadButton.setVisibility(View.VISIBLE);
+            if (maxNumber == 1) {
+                reloadButton.setVisibility(View.INVISIBLE);
+            }
+            Random rand = new Random();
+            int randomNumber;
+            do {
+                randomNumber = rand.nextInt(maxNumber); // 0 inclusive, maxNumber exclusive
+            } while (randomNumber == oldRandomNumber && maxNumber != 1);
+            oldRandomNumber = randomNumber;
+
+            // Title
+            titleView.setText(allRecipes.get(randomNumber).getTitle());
+
+            // Image
+            String path = allRecipes.get(randomNumber).getImagePath();
+            imageView.setRotation(0); // reset rotation
+            if (path != null && Shared.checkPermission(this, false)) {
+                File imgFile = new File(path);
+                if(imgFile.exists()) {
+                    try {
+                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                        int rotate = 0;
+                        ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
+                        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                        switch (orientation) {
+                            case ExifInterface.ORIENTATION_ROTATE_270:
+                                rotate = 270;
+                                break;
+                            case ExifInterface.ORIENTATION_ROTATE_180:
+                                rotate = 180;
+                                break;
+                            case ExifInterface.ORIENTATION_ROTATE_90:
+                                rotate = 90;
+                                break;
+                        }
+                        imageView.setImageBitmap(myBitmap);
+                        imageView.setRotation(rotate);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        else {
+                imageView.setImageResource(R.drawable.camera_small);
+            }
+
+            int id = (int) allRecipes.get(randomNumber).getId();
+            randomRecipeLayout.setOnClickListener(v -> {
+                Context context = v.getContext();
+                Intent i = new Intent(context, RecipeDetailViewActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                i.putExtra("ID", id);
+                startActivity(i);
+            });
+
+        }
+        else {
+            randomRecipeLayout.removeAllViews();
+        }
     }
 
     @Override
@@ -69,14 +167,6 @@ public class MainActivity extends AppCompatActivity {
             //Ändert immer die Farbe der StatusBarColor auf die BackgroundFarbe
             getWindow().setStatusBarColor(Color.rgb(255,236,175));
         }
-    }
-
-    public void logAllIngredients(DatabaseManager dbMan) {
-        List<IngredientDTO> ingredients = dbMan.getAllIngredients();
-        for (IngredientDTO ingredient : ingredients) {
-            Log.d("HSKL", "Name: " + ingredient.getName() + ", Einheit: " + ingredient.getUnit());
-        }
-
     }
 
     @Override
@@ -100,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
             /**
              Erstellen eines Intents zum Öffnen der RecipeActivity
             sobald in der Navbar der entsprechende Button gedrückt wurde
-             **/
+             */
             Intent i = new Intent(this, RecipeActivity.class);
             startActivity(i);
         }

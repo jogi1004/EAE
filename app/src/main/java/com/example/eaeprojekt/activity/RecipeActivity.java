@@ -8,7 +8,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -68,7 +67,7 @@ public class RecipeActivity extends AppCompatActivity {
                         RelativeLayout.LayoutParams.MATCH_PARENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT
                 ));
-                /**
+                /*
                  * Creating Backgroundshape with rounded Corners
                  */
                 GradientDrawable shape = new GradientDrawable();
@@ -76,7 +75,7 @@ public class RecipeActivity extends AppCompatActivity {
                 shape.setCornerRadius(30); // Radius für abgerundete Ecken in Pixeln
                 shape.setColor(getColor(R.color.darkerYellow));
 
-                /**
+                /*
                  * Picture of the Recipe
                  */
                 de.hdodenhof.circleimageview.CircleImageView picture = new de.hdodenhof.circleimageview.CircleImageView(this);
@@ -194,7 +193,7 @@ public class RecipeActivity extends AppCompatActivity {
                     }
                 });
 
-                /**
+                /*
                  * Layout for adding Margins between Recipes
                  */
                 RelativeLayout.LayoutParams marginLayout = new RelativeLayout.LayoutParams(
@@ -213,22 +212,19 @@ public class RecipeActivity extends AppCompatActivity {
                 llayout.addView(dataLayout);
                 recipeItem.addView(llayout);
                 recipeItem.addView(favIcon);
-                /**
-                 * Use Recipe ID to identify which Layout got which Recipe
+                /*
+                  Use Recipe ID to identify which Layout got which Recipe
                  */
                 recipeItem.setId((int) recipeid);
-                /**
+                /*
                  * OnClickListener for opening DetailView of Recipe
                  */
-                recipeItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Context context = v.getContext();
-                        Intent i = new Intent(context, RecipeDetailViewActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                        i.putExtra("ID", recipeItem.getId());
-                        startActivity(i);
-                    }
+                recipeItem.setOnClickListener(v -> {
+                    Context context = v.getContext();
+                    Intent i = new Intent(context, RecipeDetailViewActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    i.putExtra("ID", recipeItem.getId());
+                    startActivity(i);
                 });
                 recipeLayout.addView(recipeItem);
             }
@@ -264,17 +260,5 @@ public class RecipeActivity extends AppCompatActivity {
             }
         }
     }
-
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.d("HSKL", "Öffne PermissionResult");
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == Shared.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE || requestCode == Shared.MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-            }
-        }
-    }*/
 }
 

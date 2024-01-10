@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
@@ -18,7 +17,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -155,8 +153,6 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
             pictureView.setImageResource(R.drawable.camera_small);
         }
 
-        pictureView.setPadding(15, 15, 15, 15);
-
         // initialisiere den ActivityResultLauncher
         imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK) {
@@ -216,14 +212,6 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
                 }
             }
         });
-
-        LinearLayout llayout = new LinearLayout(this);
-        llayout.setOrientation(LinearLayout.HORIZONTAL);
-
-        RelativeLayout.LayoutParams pictureParams = new RelativeLayout.LayoutParams(300, 300);
-        pictureParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);  // Align the picture to the left
-        pictureParams.addRule(RelativeLayout.CENTER_VERTICAL);  // Center the picture vertically
-        pictureView.setLayoutParams(pictureParams);
 
             addIngredients();
 
@@ -318,7 +306,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
                 ingredientText.setId(View.generateViewId());
                 ingredientText.setText(ingredientBare.getName());
                 ingredientText.setGravity(Gravity.CENTER);
-                ingredientText.setTextColor(Color.parseColor("#FFFFFF"));
+                ingredientText.setTextColor(getColor(R.color.white));
 
                 ViewGroup.LayoutParams ingredientParams = new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -333,9 +321,9 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
              */
                 TextView amountText = new TextView(this);
                 amountText.setId(View.generateViewId());
-                amountText.setText(String.valueOf((int) ingredient.getAmount()));
+                amountText.setText(String.valueOf(ingredient.getAmount()));
                 amountText.setGravity(Gravity.CENTER);
-                amountText.setTextColor(Color.parseColor("#FFFFFF"));
+                amountText.setTextColor(getColor(R.color.white));
 
                 ViewGroup.LayoutParams amountParams = new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -352,7 +340,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
                 unitText.setId(View.generateViewId());
                 unitText.setText(ingredientBare.getUnit());
                 unitText.setGravity(Gravity.CENTER);
-                unitText.setTextColor(Color.parseColor("#FFFFFF"));
+                unitText.setTextColor(getColor(R.color.white));
 
                 ViewGroup.LayoutParams unitParams = new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -437,7 +425,7 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
                 stepDescriptionText.setId(View.generateViewId());
                 stepDescriptionText.setText(step.getText());
                 stepDescriptionText.setGravity(Gravity.CENTER);
-                stepDescriptionText.setTextColor(Color.parseColor("#FFFFFF"));
+                stepDescriptionText.setTextColor(getColor(R.color.white));
 
                 ViewGroup.LayoutParams textViewParams = new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,

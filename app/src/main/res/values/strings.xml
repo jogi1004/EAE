@@ -70,6 +70,22 @@
     <string name="pleaseAllowStorageAccess">Please allow access to storage to use images</string>
     <string name="pleaseAllowStorageAccessInSettings">Please allow access to storage in the settings to use images</string>
     <string name="ingredientAmountCannotBeDeleted">Ingredient is still in use and cannot be deleted</string>
+    <string name="randomRecipe">Random recipe</string>
+    <string name="reload">↻</string>
+    <string name="ingredientAdded">Ingredient added to shoppingbag</string>
+    <string name="ingredientDeleted">Ingredient deleted from shoppingbag</string>
+    <string name="otherIngredients">Other ingredients</string>
+    <string name="wasRemoved">was removed.</string>
+    <string name="allEntriesRemoved">All entries removed</string>
+    <string name="XEntriesRemoved">entries removed</string>
+    <string name="noEntriesRemoved">No entries removed</string>
+    <string name="chooseIngredient">Choose ingredient</string>
+    <string name="createIngredientButtonDescription" translatable="false">Button to create a new ingredient</string>
+    <string name="setAmount">Set amount</string>
+    <string name="createIngredient">Create ingredient</string>
+    <string name="nameColon">Name:</string>
+    <string name="unitColon">Unit:</string>
+    <string name="create">Create</string>
 
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge"> <!-- TODO: This should be improved -->
