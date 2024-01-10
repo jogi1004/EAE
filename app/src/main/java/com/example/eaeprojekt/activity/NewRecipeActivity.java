@@ -41,7 +41,9 @@ import com.example.eaeprojekt.popups.PopupSteps;
 import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.DTO.StepDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
+import com.example.eaeprojekt.utility.IngredientDialogUtil;
 import com.example.eaeprojekt.utility.KeyboardUtils;
+import com.example.eaeprojekt.utility.StepDialogUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -116,10 +118,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         button_add_image = findViewById(R.id.picture_layout);
         button_add_image.setOnClickListener(this);
         pictureView = findViewById(R.id.picture);
-
-        //Layout zum dimmen
-        FrameLayout layout_MainMenu = findViewById( R.id.mainmenu);
-        layout_MainMenu.getForeground().setAlpha(0);
 
 
         //für db eintrag
@@ -201,23 +199,13 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
 
-        FrameLayout layout_MainMenu = findViewById( R.id.mainmenu);
-
         if (view == button_add_steps) {
-            PopupSteps popup = new PopupSteps();
-            popup.showPopupWindow(view, this);
-
-            //background-dimming
-            layout_MainMenu.getForeground().setAlpha(220);
-            layout_MainMenu.setElevation(1);
+            StepDialogUtil.showPopupWindow(this);
 
         } else if (view == button_add_ingredients) {
-            PopupIngredients popup = new PopupIngredients();
-            popup.showPopupWindow(view, this);
+            IngredientDialogUtil dialog = new IngredientDialogUtil();
+            dialog.showPopupWindow(view, this);
 
-            //background-dimming
-            layout_MainMenu.getForeground().setAlpha(220);
-            layout_MainMenu.setElevation(1);
         } else if (view == button_add_image) {
             openImagePicker();
         } else if (view == button_add_recipe) {

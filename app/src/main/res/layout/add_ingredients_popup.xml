@@ -4,19 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/below">
+    android:id="@+id/below"
+    android:minWidth="500dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bbelow"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/background_with_rounded_corners"
+        android:visibility="visible"
         android:windowSoftInputMode="adjustPan"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="visible">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/zubereitungsschritt"
@@ -37,13 +38,13 @@
             android:id="@+id/chooseIngredient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="-30dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"
             android:text="@string/chooseIngredient"
             android:textColor="#884D29"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/zubereitungsschritt"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/zubereitungsschritt" />
 
         <Spinner
@@ -63,11 +64,12 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="10dp"
+            android:contentDescription="@string/createIngredientButtonDescription"
             app:layout_constraintBottom_toBottomOf="@+id/spinnerIngredient"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/spinnerIngredient"
             app:layout_constraintTop_toTopOf="@+id/spinnerIngredient"
-            app:srcCompat="@drawable/plus_dark"
-            android:contentDescription="@string/createIngredientButtonDescription" />
+            app:srcCompat="@drawable/plus_dark" />
 
         <TextView
             android:id="@+id/chooseAmount"
@@ -76,7 +78,7 @@
             android:layout_marginTop="40dp"
             android:text="@string/setAmount"
             android:textColor="#884D29"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/chooseIngredient"
             app:layout_constraintTop_toBottomOf="@+id/chooseIngredient" />
@@ -87,6 +89,7 @@
             android:layout_width="90dp"
             android:layout_height="40dp"
             android:background="@drawable/background_edit_text"
+            android:importantForAutofill="no"
             android:inputType="numberDecimal"
             android:maxLength="6"
             android:maxLines="1"
@@ -95,8 +98,7 @@
             android:textCursorDrawable="@null"
             app:layout_constraintBottom_toBottomOf="@+id/chooseAmount"
             app:layout_constraintStart_toStartOf="@+id/spinnerIngredient"
-            app:layout_constraintTop_toTopOf="@+id/chooseAmount"
-            android:importantForAutofill="no" />
+            app:layout_constraintTop_toTopOf="@+id/chooseAmount" />
 
         <TextView
             android:id="@+id/textViewUnit"
@@ -152,13 +154,13 @@
                 android:layout_width="180dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="50dp"
+                android:autofillHints="no"
                 android:inputType="text"
                 android:maxLength="20"
                 android:maxLines="1"
                 app:layout_constraintBottom_toBottomOf="@+id/name"
                 app:layout_constraintStart_toEndOf="@+id/name"
-                app:layout_constraintTop_toTopOf="@+id/name"
-                android:autofillHints="no" />
+                app:layout_constraintTop_toTopOf="@+id/name" />
 
             <TextView
                 android:id="@+id/unit"
@@ -177,13 +179,13 @@
                 android:id="@+id/unitText"
                 android:layout_width="100dp"
                 android:layout_height="40dp"
+                android:importantForAutofill="no"
                 android:inputType="text"
                 android:maxLength="15"
                 android:maxLines="1"
                 app:layout_constraintBottom_toBottomOf="@+id/unit"
                 app:layout_constraintStart_toStartOf="@+id/nameText"
-                app:layout_constraintTop_toTopOf="@+id/unit"
-                android:importantForAutofill="no" />
+                app:layout_constraintTop_toTopOf="@+id/unit" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/createIngredient"
@@ -232,7 +234,7 @@
                 android:padding="10dp"
                 android:text="@string/add"
                 android:textColor="#884D29"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -257,7 +259,7 @@
                 android:padding="10dp"
                 android:text="@string/cancel"
                 android:textColor="#884D29"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

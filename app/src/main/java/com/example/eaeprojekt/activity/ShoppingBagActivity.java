@@ -25,6 +25,7 @@ import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.example.eaeprojekt.popups.PopupDeleteShoppingBag;
 import com.example.eaeprojekt.popups.PopupIngredients;
+import com.example.eaeprojekt.utility.IngredientDialogUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
@@ -89,8 +90,6 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
 
             IngredientDTO ingredient = db.getIngredientById(ingredientAmount.getIngredientId());
 
-            LinearLayout parentLayout1 = this.findViewById(R.id.ingredientWithoutRecipe);
-
             LinearLayout parentLayout2 = new LinearLayout(this);
             ViewGroup.LayoutParams pp = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -106,7 +105,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                     TextView titleOther = new TextView(this);
                     titleOther.setText(R.string.otherIngredients);
 
-                    parentLayout1.addView(titleOther);
+                    ingredientWithoutRecipe.addView(titleOther);
 
                     View view = new View(this);
                     view.setBackgroundColor(getColor(R.color.fontColor));
@@ -115,7 +114,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                             1
                     );
                     view.setLayoutParams(viewParams);
-                    parentLayout1.addView(view);
+                    ingredientWithoutRecipe.addView(view);
 
                     i = ingredientAmount.getRecipeId();
                 }
@@ -279,13 +278,11 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
 
             constraintSet.applyTo(layout);
 
-            LinearLayout parentparent2 = this.findViewById(R.id.shoppingLayoutinScrollView);
-
             if(ingredientAmount.getRecipeId() == -9){
-                parentLayout1.addView(layout);
+                ingredientWithoutRecipe.addView(layout);
             }else {
                 parentLayout2.addView(layout);
-                parentparent2.addView(parentLayout2);
+                shoppingLayout.addView(parentLayout2);
             }
 
             trash.setOnClickListener(v ->{
@@ -293,9 +290,9 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
 
                     db.deleteIngredientQuantity(ingredientAmount.getId());
                     List<IngredientAmountDTO> li = db.getIngredientsForRecipe(-9);
-                    parentLayout1.removeView(layout);
+                    ingredientWithoutRecipe.removeView(layout);
                     if(li.isEmpty()){
-                        parentLayout1.removeAllViews();
+                        ingredientWithoutRecipe.removeAllViews();
                     }
                 }else{
 
@@ -348,20 +345,14 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View view) {
 
-        FrameLayout layout_MainMenu = findViewById( R.id.FrameLayoutShoppingBag);
-
         if (view == deleteAllIcon) {
             deleteShoppingBagPopup.showPopupWindow(view, this);
 
-            dimmableLayoutShoppingBag.getForeground().setAlpha(220);
-            dimmableLayoutShoppingBag.setElevation(1);
         } else if (view == addIngredient) {
-            PopupIngredients popup = new PopupIngredients(this);
-            popup.showPopupWindow(view, this);
+            IngredientDialogUtil dialog = new IngredientDialogUtil(this);
+            dialog.showPopupWindow(view,this);
 
-            //background-dimminge
-            dimmableLayoutShoppingBag.getForeground().setAlpha(220);
-            dimmableLayoutShoppingBag.setElevation(1);
+
         }
     }
 
