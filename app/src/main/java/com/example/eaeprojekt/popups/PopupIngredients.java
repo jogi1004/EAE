@@ -21,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.example.eaeprojekt.DTO.IngredientAmountDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.activity.NewRecipeActivity;
 import com.example.eaeprojekt.activity.ShoppingBagActivity;
@@ -397,7 +398,6 @@ public class PopupIngredients implements View.OnClickListener {
     }
 
     class CustomAdapter extends ArrayAdapter<String> {
-
         public CustomAdapter(Context context, List<String> items) {
             super(context, android.R.layout.simple_spinner_item, items);
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -566,8 +566,21 @@ public class PopupIngredients implements View.OnClickListener {
             } else if (viewClick == buttonDelete) {
                 db = new DatabaseManager(mainActivity);
                 db.open();
-
-                db.deleteIngredient(id);
+                boolean isUsed = false;
+                List<IngredientAmountDTO> allIngredientAmounts = db.getAllIngredientAmounts();
+                for (IngredientAmountDTO i : allIngredientAmounts) {
+                    if (i.getIngredientId() == id) {
+                        isUsed = true;
+                        break;
+                    }
+                }
+                if (!isUsed)
+                    db.deleteIngredient(id);
+                else {
+                    Toast toast = new Toast(mainActivity);
+                    toast.setText(R.string.ingredientAmountCannotBeDeleted);
+                    toast.show();
+                }
 
                 parentView.findViewById(R.id.above).setVisibility(View.GONE);
                 parentView.findViewById(R.id.bbelow).setVisibility(View.VISIBLE);

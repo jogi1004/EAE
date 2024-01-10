@@ -79,7 +79,7 @@ public class PopupDeleteShoppingBag implements View.OnClickListener {
             //datenbankzugriff
             db = new DatabaseManager(context);
             db.open();
-            int rowCount = db.deleteCheckedRecipes();
+            int rowCount = db.removeCheckedRecipesFromShoppingBag();
             db.close();
             frame.getForeground().setAlpha(0);
             popupWindow.dismiss();
@@ -88,10 +88,13 @@ public class PopupDeleteShoppingBag implements View.OnClickListener {
             }
 
             Toast toast = new Toast(context);
-            if (rowCount > 0) {
+            if (rowCount > 1) {
                 toast.setText(rowCount + " " + mainActivity.getString(R.string.XEntriesRemoved));
                 toast.show();
-            } else {
+            } else if (rowCount == 1) {
+                toast.setText(rowCount + mainActivity.getString(R.string.entryRemoved));
+            }
+            else {
                 toast.setText(R.string.noEntriesRemoved);
                 toast.show();
             }

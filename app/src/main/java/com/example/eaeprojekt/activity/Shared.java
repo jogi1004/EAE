@@ -82,4 +82,8 @@ public class Shared {
             }
         }
     }
+
+    public static int dpToPx(int dp, float density) {
+        return Math.round(dp * density);
+    }
 }

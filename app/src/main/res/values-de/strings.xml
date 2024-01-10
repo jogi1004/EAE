@@ -86,6 +86,10 @@
     <string name="nameColon">Name:</string>
     <string name="unitColon">Einheit:</string>
     <string name="create">Erstellen</string>
+    <string name="deleteRecipe">Rezept löschen</string>
+    <string name="deleteRecipeCheck">Möchten Sie das Rezept wirklich löschen?</string>
+    <string name="delete">Löschen</string>
+    <string name="entryRemoved">Eintrag gelöscht</string>
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge">
         <item>1</item>

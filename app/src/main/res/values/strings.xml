@@ -86,9 +86,13 @@
     <string name="nameColon">Name:</string>
     <string name="unitColon">Unit:</string>
     <string name="create">Create</string>
+    <string name="deleteRecipe">Delete recipe</string>
+    <string name="deleteRecipeCheck">Are you sure?</string>
+    <string name="delete">Delete</string>
+    <string name="entryRemoved">entry removed</string>
 
     <!--Spinner Portionsmenge-->
-    <string-array name="portionsmenge"> <!-- TODO: This should be improved -->
+    <string-array name="portionsmenge">
         <item>1</item>
         <item>2</item>
         <item>3</item>

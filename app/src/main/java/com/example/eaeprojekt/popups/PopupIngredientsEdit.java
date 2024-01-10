@@ -1,5 +1,6 @@
 package com.example.eaeprojekt.popups;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.Gravity;
