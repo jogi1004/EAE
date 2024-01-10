@@ -55,7 +55,7 @@ public class PopupIngredientsEdit implements View.OnClickListener {
         db.open();
 
 
-        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.add_ingredients_popup, null);
         this.popupView = popupView;
 
