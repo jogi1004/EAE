@@ -1,5 +1,6 @@
 package com.example.eaeprojekt.activity;
 
+import static com.example.eaeprojekt.activity.Shared.dpToPx;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -139,7 +140,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                     line.setBackgroundColor(getColor(R.color.fontColor));
                     ViewGroup.LayoutParams lineParams = new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
-                            dpToPx(1)
+                            dpToPx(1, getResources().getDisplayMetrics().density)
                     );
                     line.setLayoutParams(lineParams);
                     parentLayout2.addView(line);
@@ -320,11 +321,6 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private int dpToPx(int dp) {
-        float density = getResources().getDisplayMetrics().density;
-        return Math.round(dp * density);
-    }
-
     private boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.AddButtonNavBar) {
@@ -348,8 +344,6 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View view) {
 
-        FrameLayout layout_MainMenu = findViewById( R.id.FrameLayoutShoppingBag);
-
         if (view == deleteAllIcon) {
             deleteShoppingBagPopup.showPopupWindow(view, this);
 
@@ -359,7 +353,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             PopupIngredients popup = new PopupIngredients(this);
             popup.showPopupWindow(view, this);
 
-            //background-dimminge
+            //background-dimming
             dimmableLayoutShoppingBag.getForeground().setAlpha(220);
             dimmableLayoutShoppingBag.setElevation(1);
         }

@@ -1,5 +1,6 @@
 package com.example.eaeprojekt.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.exifinterface.media.ExifInterface;
 
+import com.example.eaeprojekt.DTO.IngredientAmountDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
@@ -226,6 +228,11 @@ public class RecipeActivity extends AppCompatActivity {
                     i.putExtra("ID", recipeItem.getId());
                     startActivity(i);
                 });
+
+                recipeItem.setOnLongClickListener(v -> {
+                    showDeleteConfirmationDialog(recipe.getId());
+                    return true;
+                });
                 recipeLayout.addView(recipeItem);
             }
         }
@@ -242,6 +249,31 @@ public class RecipeActivity extends AppCompatActivity {
             startActivity(i);
         }
         return false;
+    }
+
+    private void showDeleteConfirmationDialog(long recipeId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.deleteRecipe);
+        builder.setMessage(R.string.deleteRecipeCheck);
+
+        builder.setPositiveButton(R.string.delete, (dialog, which) -> {
+            for (IngredientAmountDTO ingr : db.getIngredientsForRecipe(recipeId)) {
+                db.deleteIngredientQuantity(ingr.getId());
+            }
+            deleteRecipe(recipeId);
+        });
+
+        builder.setNegativeButton(R.string.cancel, (dialog, which) -> {
+            dialog.dismiss();
+        });
+
+        builder.create().show();
+    }
+
+    private void deleteRecipe(long recipeId) {
+        db.open();
+        db.deleteRecipe(recipeId);
+        updateRecipeList(db.getAllRecipes());
     }
 
     @Override
