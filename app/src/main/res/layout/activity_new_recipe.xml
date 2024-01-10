@@ -43,29 +43,30 @@
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/button_add_recipe"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/TitleRecipeNew">
+        app:layout_constraintTop_toBottomOf="@id/TitleRecipeNew"
+        app:layout_constraintVertical_bias="1.0">
 
         <ScrollView
             android:id="@+id/scrollView2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/swipe">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/newRecipeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/toolbar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/toolbar">
-
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -82,31 +83,31 @@
                         android:id="@+id/picture"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:civ_border_width="4dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/camera_small"
                         app:civ_border_color="@color/darkerYellow"
+                        app:civ_border_width="4dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_centerHorizontal="true"
-                        android:src="@drawable/camera_small" />
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/newRecipeInformationLayout"
+                    style="@style/roundedBackgroundNewRecipe"
                     android:layout_width="wrap_content"
                     android:layout_height="225dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="10dp"
-                    style="@style/roundedBackgroundNewRecipe"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/picture_layout">
 
                     <TextView
                         android:id="@+id/title"
-                        style ="@style/TextViewsgeneral"
+                        style="@style/TextViewsgeneral"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="20dp"
                         android:text="@string/titleColon"
@@ -124,6 +125,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@id/title"
+                        tools:ignore="TouchTargetSizeCheck"
                         android:maxLength="18"
                         android:maxLines="1"
                         android:hint="@string/titleHint"
@@ -145,16 +147,17 @@
                         style="@style/EditTextStyle"
                         android:layout_width="100dp"
                         android:layout_height="25dp"
+                        android:hint="@string/durationHint"
+                        android:importantForAutofill="no"
                         android:inputType="number"
-                        android:textAlignment="center"
                         android:maxLength="4"
                         android:maxLines="1"
+                        android:textAlignment="center"
+                        android:textColor="@color/fontColor"
                         app:layout_constraintBottom_toBottomOf="@+id/time"
                         app:layout_constraintStart_toStartOf="@+id/title_text"
                         app:layout_constraintTop_toTopOf="@id/time"
-                        android:importantForAutofill="no"
-                        android:textColor="@color/fontColor"
-                        android:hint="@string/durationHint"/>
+                        tools:ignore="TouchTargetSizeCheck" />
 
                     <TextView
                         android:id="@+id/minutes"
@@ -183,7 +186,8 @@
                         android:layout_marginStart="3dp"
                         app:layout_constraintBottom_toBottomOf="@id/portions"
                         app:layout_constraintStart_toEndOf="@id/portions"
-                        app:layout_constraintTop_toTopOf="@id/portions" />
+                        app:layout_constraintTop_toTopOf="@id/portions"
+                        tools:ignore="TouchTargetSizeCheck" />
 
                     <TextView
                         android:id="@+id/persons"
@@ -205,10 +209,10 @@
 
                         <TextView
                             android:id="@+id/text_add_ingredients"
-                            android:gravity="center"
                             android:layout_width="145dp"
                             android:layout_height="55dp"
                             android:background="@drawable/background_edit_text"
+                            android:gravity="center"
                             android:padding="5dp"
                             android:text="@string/addIngredient"
                             android:textSize="15sp"
@@ -218,7 +222,8 @@
                             app:layout_constraintHorizontal_bias="1.0"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.0" />
+                            app:layout_constraintVertical_bias="0.0"
+                            tools:ignore="TextSizeCheck" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -235,9 +240,9 @@
 
                         <TextView
                             android:id="@+id/text_add_steps"
-                            android:background="@drawable/background_edit_text"
                             android:layout_width="145dp"
                             android:layout_height="55dp"
+                            android:background="@drawable/background_edit_text"
                             android:gravity="center"
                             android:padding="5dp"
                             android:text="@string/addStep"
@@ -261,7 +266,7 @@
                     android:layout_marginRight="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/newRecipeInformationLayout"/>
+                    app:layout_constraintTop_toBottomOf="@id/newRecipeInformationLayout" />
 
 
                 <!--Layout für die Schritte -->
@@ -274,60 +279,65 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ingredientsLayout" />
 
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/button_add_recipe"
+                    android:layout_width="160dp"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/background_popup_steps"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/stepsLayout">
+
+                    <TextView
+                        android:id="@+id/text_cancel"
+                        style="@style/IngredientsAddButtons"
+                        android:padding="5dp"
+                        android:text="@string/cancel"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/button_cancel"
+                    style="@style/IngredientsAddButtons"
+                    android:layout_width="160dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/background_popup_steps"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/stepsLayout">
+
+                    <TextView
+                        android:id="@+id/text_add_recipe"
+                        style="@style/IngredientsAddButtons"
+                        android:layout_width="160dp"
+                        android:layout_height="55dp"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="@string/addRecipe"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
+                        tools:ignore="TextSizeCheck" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
 
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/button_add_recipe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/background_popup_steps"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <TextView
-                android:id="@+id/text_add_recipe"
-                style="@style/IngredientsAddButtons"
-                android:gravity="center"
-                android:text="@string/addRecipe"
-                android:padding="5dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/button_cancel"
-            style="@style/IngredientsAddButtons"
-            android:layout_marginEnd="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/background_popup_steps"
-            android:layout_marginStart="15dp"
-            android:layout_marginBottom="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:id="@+id/text_cancel"
-                style="@style/IngredientsAddButtons"
-                android:padding="5dp"
-                android:text="@string/cancel"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
