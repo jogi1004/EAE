@@ -4,9 +4,9 @@
     <item>
         <shape>
             <solid
-                android:color="#EEC131"/>
+                android:color="@color/darkerYellow"/>
             <corners
-                android:radius="50dp"/>
+                android:radius="40dp"/>
         </shape>
     </item>
 

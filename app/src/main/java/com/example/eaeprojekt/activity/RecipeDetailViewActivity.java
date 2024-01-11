@@ -193,12 +193,11 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         );
-
+        textViewParamsIngredientHeader.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        textViewParamsIngredientHeader.setMargins(50, 10, 0, 10);
 
         if(!iADTO.isEmpty()) {
 
-            textViewParamsIngredientHeader.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            textViewParamsIngredientHeader.setMargins(50, 10, 0, 10);
             TextView ingredientsHeader = new TextView(this);
             ingredientsHeader.setText(getText(R.string.ingredients));
             ingredientsHeader.setLayoutParams(textViewParamsIngredientHeader);
@@ -494,9 +493,8 @@ public void showMenu(View v) {
 
     private void updateIngredientTextViews(List<String> newPortions) {
         if (ingredientsLinearLayout != null && !iADTO.isEmpty()) {
-        //Entfernen aller bereits bestehenden Views und ersetzen durch die Korrekten
-        ingredientsLinearLayout.removeAllViews();
-        ingredientsLayout.removeAllViews();
+            //Entfernen aller bereits bestehenden Views und ersetzen durch die Korrekten
+            ingredientsLinearLayout.removeAllViews();
         int counter = 0;
     for (IngredientAmountDTO ingredient : iADTO) {
 

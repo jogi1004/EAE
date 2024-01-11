@@ -4,7 +4,7 @@
     <color name = "white">#FFFFFFFF</color>
     <color name = "buttonGrey">#D9D9D9</color>
     <color name = "background">#FFECAF</color>
-    <color name="fontColor">#884D20</color>
+    <color name="fontColor">#c26c2b</color>
     <color name = "darkerYellow">#EEC131</color>
     <color name ="backgroundGreen">#4D713D</color>
     <color name ="errorDelete">#f70202</color>
