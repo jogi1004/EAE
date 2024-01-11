@@ -2,10 +2,7 @@ package com.example.eaeprojekt.utility;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.view.View;
 import android.view.Window;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -93,9 +90,7 @@ public class DeleteShoppingBagUtil {
         });
 
         buttonBack = dialog.findViewById(R.id.cancel_button);
-        buttonBack.setOnClickListener((v)-> {
-            dialog.dismiss();
-        });
+        buttonBack.setOnClickListener((v)-> dialog.dismiss());
 
         dialog.show();
     }
