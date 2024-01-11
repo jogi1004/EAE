@@ -5,15 +5,12 @@ import static com.example.eaeprojekt.activity.Shared.dpToPx;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,7 +43,6 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
 
     DatabaseManager db;
     BottomNavigationView b;
-    FrameLayout dimmableLayoutShoppingBag;
     TextView helperTextView;
     int darkmode = 0;
 
@@ -164,10 +160,10 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
 
             //Ändern der Farben wenn Darkmode aktiviert ist
             if(Configuration.UI_MODE_NIGHT_YES == darkmode){
-                ingredientWithoutRecipe.setBackgroundColor(getColor(R.color.colorPrimaryDark)); //****************************************************
+                ingredientWithoutRecipe.setBackgroundColor(getColor(R.color.colorPrimaryDark));
                 parentLayout2.setBackgroundColor(getColor(R.color.colorPrimaryDark));
                 layout.setBackgroundColor(getColor(R.color.colorPrimaryDark));
-                checkBox.setButtonTintList(ColorStateList.valueOf(getResources().getColor(R.color.background)));
+                checkBox.setButtonTintList(ColorStateList.valueOf(getColor(R.color.background)));
             }
 
             ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(

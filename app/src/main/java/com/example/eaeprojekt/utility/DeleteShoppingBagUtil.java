@@ -13,6 +13,8 @@ import com.example.eaeprojekt.activity.ShoppingBagActivity;
 import com.example.eaeprojekt.activity.ShoppingBagUpdateListener;
 import com.example.eaeprojekt.database.DatabaseManager;
 
+import java.util.Objects;
+
 public class DeleteShoppingBagUtil {
 
     DatabaseManager db;
@@ -42,7 +44,7 @@ public class DeleteShoppingBagUtil {
 
         dialog.setContentView(R.layout.delete_shopping_bag_popup);
 
-        dialog.getWindow().setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+        Objects.requireNonNull(dialog.getWindow()).setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
 
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
@@ -72,7 +74,7 @@ public class DeleteShoppingBagUtil {
             //datenbankzugriff
             db = new DatabaseManager(context);
             db.open();
-            int rowCount = db.removeCheckedRecipesFromShoppingBag();
+            db.removeCheckedRecipesFromShoppingBag();
             db.close();
             dialog.dismiss();
             if (updateListener != null) {
@@ -80,13 +82,8 @@ public class DeleteShoppingBagUtil {
             }
 
             Toast toast = new Toast(context);
-            if (rowCount > 0) {
-                toast.setText(rowCount + " " + mainActivity.getString(R.string.XEntriesRemoved));
-                toast.show();
-            } else {
-                toast.setText(R.string.noEntriesRemoved);
-                toast.show();
-            }
+            toast.setText(R.string.deletedChecked);
+            toast.show();
         });
 
         buttonBack = dialog.findViewById(R.id.cancel_button);
