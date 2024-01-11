@@ -1,0 +1,120 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.EAEProjekt" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Schriftfarbe und Familie in gesamter App umstellen -->
+        <item name="android:fontFamily">@font/russo_one_regular</item>
+        <item name="android:textColor">@color/fontColor</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/backgroundGreen</item>
+    </style>
+
+    <style name="Theme.EAEProjekt" parent="Base.Theme.EAEProjekt">
+        <item name="android:fontFamily">@font/russo_one_regular</item>
+        <item name="android:textColor">@color/fontColor</item>
+
+    </style>
+    <style name="popupBGMenu" parent ="Widget.MaterialComponents.PopupMenu">
+
+        <item name ="android:popupBackground">@drawable/menu_background</item>
+    </style>
+    <style name="BottomNavigationBarStyle" parent = "Widget.Design.BottomNavigationView">
+        <item name="android:background">?attr/colorPrimaryVariant</item>
+        <item name ="android:textColor">@color/white</item>
+        <item name="itemIconSize">30dp</item>
+        <item name="itemIconTint">@color/white</item>
+        <item name="itemTextColor">@color/white</item>
+        <item name="android:layout_height">70dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_alignParentBottom">true</item>
+
+    </style>
+    <style name="TextViewHeader" parent="Widget.AppCompat.TextView">
+        <item name="android:background">@color/backgroundGreen</item>
+        <item name="android:layout_height">65sp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+       <!-- <item name="android:layout_marginTop">15sp</item> -->
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="TextViewsgeneral" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/fontColor</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="toolbarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name ="android:background">@color/colorSecondary</item>
+    </style>
+    <style name="roundedBackgroundNewRecipe">
+        <item name="android:background">@drawable/background_with_rounded_corners</item>
+    </style>
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">@color/fontColor</item>
+        <item name="android:textColorHint">@color/fontColor</item>
+        <item name="android:background">@drawable/background_edit_text</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+    <style name="IngredientsLayout">
+        <item name="android:background">@drawable/background_with_rounded_corners</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginStart">8sp</item>
+        <item name="android:layout_marginEnd">8sp</item>
+    </style>
+    <style name="IngredientsAddButtons">
+        <item name="android:layout_width">160dp</item>
+        <item name="android:layout_height">55dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/background_popup_steps</item>
+    </style>
+
+    <style name="ImageButtonTrashCanStyle" parent="Widget.AppCompat.ImageButton">
+        <item name="android:background">@color/background</item>
+        <item name="android:src">@drawable/trashcan_dark</item>
+    </style>
+    <style name="ImageButtonPlusStyle" parent="Widget.AppCompat.ImageButton">
+        <item name="android:background">@color/background</item>
+        <item name="android:src">@drawable/plus_dark</item>
+    </style>
+    <style name="ImageButtonBurgerMenu" parent="Widget.AppCompat.ImageButton">
+        <item name="android:layout_height">50sp</item>
+        <item name="android:layout_width">50sp</item>
+        <item name="android:src">@drawable/burger_menu</item>
+        <item name="android:background">@color/background</item>
+        <item name="android:layout_toStartOf">@id/circleViewRecipe</item>
+        <item name="android:layout_below">@id/RecipeName</item>
+        <item name="android:layout_marginTop">20sp</item>
+        <item name="android:layout_marginEnd">20sp</item>
+    </style>
+    <style name="ImageButtonFavStarDetail" parent="Widget.AppCompat.ImageButton">
+        <item name="android:layout_width">50sp</item>
+        <item name="android:layout_height">50sp</item>
+        <item name="android:src">@drawable/favoritestar_hollow_dark</item>
+        <item name="android:background">@color/background</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:layout_below">@id/RecipeName</item>
+        <item name="android:layout_toEndOf">@id/circleViewRecipe</item>
+        <item name="android:layout_marginTop">20sp</item>
+        <item name="android:layout_marginStart">20sp</item>
+    </style>
+    <style name="StepsLayoutStyle">
+        <item name="android:background">@color/backgroundGreen</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="SpinnerStyle" parent = "Widget.AppCompat.Spinner">
+        <item name="android:background">@drawable/background_edit_text</item>
+    </style>
+
+</resources>

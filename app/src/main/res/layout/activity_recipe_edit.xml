@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_edit_recipe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.NewRecipeActivity">
+
+
+  <FrameLayout
+        android:id="@+id/mainmenu"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:foreground="@drawable/dimming"
+        android:elevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/TitleRecipeEdit"
+        style="@style/TextViewHeader"
+        android:layout_height="65dp"
+        tools:ignore="MissingConstraints"
+        android:text="@string/recipeEditTitle"/>
+
+
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/arrow_left_light"
+        app:layout_constraintBottom_toBottomOf="@id/TitleRecipeEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/TitleRecipeEdit"
+        android:contentDescription="@string/backButtonDescription" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/swipe"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TitleRecipeEdit">
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/swipe">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/newRecipeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/picture_layout"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/background_add_picture"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/picture"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/camera_small"
+                        app:civ_border_color="@color/darkerYellow"
+                        app:civ_border_width="4dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/newRecipeInformationLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="225dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/background_with_rounded_corners"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/picture_layout">
+
+                    <TextView
+                        android:id="@+id/title"
+                        style="@style/TextViewsgeneral"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/titleColon"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                        android:id="@+id/title_text"
+                        style="@style/EditTextStyle"
+                        android:layout_width="200dp"
+                        android:layout_height="25dp"
+                        android:layout_marginStart="60dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/title"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/title"
+                        android:hint="@string/titleHint"
+                        android:importantForAutofill="no"
+                        android:inputType="text" />
+
+                    <TextView
+                        android:id="@+id/time"
+                        style="@style/TextViewsgeneral"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/durationColon"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+                    <EditText
+                        android:id="@+id/time_text"
+                        style="@style/EditTextStyle"
+                        android:layout_width="100dp"
+                        android:layout_height="25dp"
+                        android:inputType="number"
+                        app:layout_constraintBottom_toBottomOf="@+id/time"
+                        app:layout_constraintStart_toStartOf="@+id/title_text"
+                        app:layout_constraintTop_toTopOf="@+id/time"
+                        android:hint="@string/durationHint"
+                        android:importantForAutofill="no" />
+
+                    <TextView
+                        android:id="@+id/minutes"
+                        style="@style/TextViewsgeneral"
+                        android:layout_marginStart="5dp"
+                        android:text="@string/minutes"
+                        android:textSize="15sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/time_text"
+                        app:layout_constraintStart_toEndOf="@+id/time_text" />
+
+                    <TextView
+                        android:id="@+id/portions"
+                        style="@style/TextViewsgeneral"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/portionsColon"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/time" />
+
+                    <Spinner
+                        android:id="@+id/spinner"
+                        style="@style/SpinnerStyle"
+                        android:layout_width="75dp"
+                        android:layout_height="25dp"
+                        android:layout_marginStart="3dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/portions"
+                        app:layout_constraintStart_toEndOf="@+id/portions"
+                        app:layout_constraintTop_toTopOf="@+id/portions" />
+
+                    <TextView
+                        android:id="@+id/persons"
+                        style="@style/TextViewsgeneral"
+                        android:layout_marginStart="5dp"
+                        android:text="@string/people"
+                        android:textSize="15sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/spinner"
+                        app:layout_constraintStart_toEndOf="@+id/spinner" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/button_add_ingredients"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/portions">
+
+                        <TextView
+                            android:id="@+id/text_add_ingredients"
+                            android:gravity="center"
+                            android:background="@drawable/background_edit_text"
+                            android:layout_width="145dp"
+                            android:layout_height="55dp"
+                            android:padding="5dp"
+                            android:text="@string/addIngredient"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/button_add_steps"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="15dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/button_add_ingredients"
+                        app:layout_constraintTop_toBottomOf="@+id/portions">
+
+                        <TextView
+                            android:id="@+id/text_add_steps"
+                            android:gravity="center"
+                            android:background="@drawable/background_edit_text"
+                            android:layout_width="145dp"
+                            android:layout_height="55dp"
+                            android:padding="5dp"
+                            android:text="@string/addStep"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <!--Layout für die Zutaten -->
+                <LinearLayout
+                    android:id="@+id/ingredientsLayout"
+                    style="@style/IngredientsLayout"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/newRecipeInformationLayout"/>
+
+
+                <!--Layout für die Schritte -->
+                <LinearLayout
+                    android:id="@+id/stepsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ingredientsLayout"
+                    android:orientation="vertical" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/button_add_recipe"
+                    android:layout_width="160dp"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/background_popup_steps"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/stepsLayout">
+
+                    <TextView
+                        android:id="@+id/text_add_recipe"
+                        style="@style/IngredientsAddButtons"
+                        android:text="@string/recipeEditSave"
+                        android:textSize="15sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/button_cancel"
+                    style="@style/IngredientsAddButtons"
+                    android:layout_width="160dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/background_popup_steps"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/stepsLayout">
+
+                    <TextView
+                        android:id="@+id/text_cancel"
+                        style="@style/IngredientsAddButtons"
+                        android:text="@string/cancel"
+                        android:textSize="15sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
