@@ -320,8 +320,6 @@
                     <TextView
                         android:id="@+id/text_add_recipe"
                         style="@style/IngredientsAddButtons"
-                        android:layout_width="160dp"
-                        android:layout_height="55dp"
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/cancel"
