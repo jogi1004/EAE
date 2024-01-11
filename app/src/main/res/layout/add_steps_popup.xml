@@ -29,14 +29,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:minHeight="80dp"
-        android:maxHeight="230dp"
+        android:maxHeight="120dp"
         android:background="@drawable/background_edit_text"
         android:textCursorDrawable="@null"
-        android:gravity="center|left"
         android:hint="@string/stepDescription"
-        android:inputType="textMultiLine"
+        android:textAlignment="textStart"
         android:overScrollMode="always"
-        android:padding="10dp"
+        android:padding="15dp"
+        android:inputType="textMultiLine|textCapSentences"
         android:scrollbarStyle="insideInset"
         android:scrollbars="vertical"
         android:scrollHorizontally="false"
@@ -45,6 +45,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/zubereitungsschritt" />
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/add_button"
