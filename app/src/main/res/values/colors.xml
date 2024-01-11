@@ -15,4 +15,5 @@
     <color name ="colorSecondaryVariant">#EEC131</color>
     <color name ="colorOnSecondary">#FFFFFF</color>
     <color name="colorPrimaryDark">#34492A</color>
+    <color name= "hintColor">#8c6f58</color>
 </resources>
