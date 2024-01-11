@@ -7,17 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".activity.RecipeActivity">
 
-    <FrameLayout
-        android:id="@+id/FrameLayoutShoppingBag"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:foreground="@drawable/dimming"
-        android:elevation="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
 
     <RelativeLayout
         android:id="@+id/RelativeLayoutShoppingBag"

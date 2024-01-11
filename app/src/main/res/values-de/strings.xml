@@ -24,13 +24,13 @@
     <string name="deleteShoppingListYouSure">Möchtest du deine Einkaufliste wirklich leeren?</string>
     <string name="deleteConfirmation">Alle Zutaten löschen</string>
     <string name="deleteCheckedConfirmation">Markierte Zutaten löschen</string>
+    <string name="deletedChecked">Markierte Zutaten entfernt</string>
     <string name="cancel">Abbrechen</string>
     <string name="add">Hinzufügen</string>
     <string name="stepDescription">Schrittbeschreibung</string>
     <string name="step">Zubereitungsschritt</string>
     <string name="NavBarAddText">Rezept erstellen</string>
     <string name="shoppingBagHelperText">Deine Einkaufsliste ist leer!</string>
-    <string name="zubereitungsschritte">Zubereitungsschritte</string>
     <string name="stepsTitle">Zubereitungsschritte</string>
     <string name="recipeEditTitle">Rezept bearbeiten</string>
     <string name="recipeEditSave">Rezept speichern</string>

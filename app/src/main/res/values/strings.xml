@@ -23,13 +23,13 @@
     <string name="deleteShoppingListYouSure">Are you sure you want to empty your shopping list?</string>
     <string name="deleteConfirmation">Delete All Ingredients</string>
     <string name="deleteCheckedConfirmation">Delete Checked Ingredients</string>
+    <string name="deletedChecked">Checked ingredients removed</string>
     <string name="cancel">Cancel</string>
     <string name="add">Add</string>
     <string name="stepDescription">Step Description</string>
     <string name="step">Preparation Step</string>
     <string name="NavBarAddText">Create Recipe</string>
     <string name="shoppingBagHelperText">Your shopping list is empty!</string>
-    <string name="zubereitungsschritte">Preparation Steps</string>
     <string name="stepsTitle">Preparation Steps</string>
     <string name="recipeEditTitle">Edit Recipe</string>
     <string name="recipeEditSave">Save Recipe</string>

@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -32,13 +31,15 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 
-import com.example.eaeprojekt.popups.PopupIngredients;
+import com.example.eaeprojekt.DTO.IngredientAmountDTO;
+import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.R;
-import com.example.eaeprojekt.popups.PopupSteps;
 import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.DTO.StepDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
+import com.example.eaeprojekt.utility.IngredientDialogUtil;
 import com.example.eaeprojekt.utility.KeyboardUtils;
+import com.example.eaeprojekt.utility.StepDialogUtil;
 
 import java.util.List;
 
@@ -112,10 +113,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         button_add_image.setOnClickListener(this);
         pictureView = findViewById(R.id.picture);
 
-        //Layout zum dimmen
-        FrameLayout layout_MainMenu = findViewById( R.id.mainmenu);
-        layout_MainMenu.getForeground().setAlpha(0);
-
 
         //für db eintrag
         title = findViewById(R.id.title_text);
@@ -173,23 +170,13 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
 
-        FrameLayout layout_MainMenu = findViewById( R.id.mainmenu);
-
         if (view == button_add_steps) {
-            PopupSteps popup = new PopupSteps();
-            popup.showPopupWindow(view, this);
-
-            //background-dimming
-            layout_MainMenu.getForeground().setAlpha(220);
-            layout_MainMenu.setElevation(1);
+            StepDialogUtil.showPopupWindow(this);
 
         } else if (view == button_add_ingredients) {
-            PopupIngredients popup = new PopupIngredients();
-            popup.showPopupWindow(view, this);
+            IngredientDialogUtil dialog = new IngredientDialogUtil();
+            dialog.showPopupWindow(view, this);
 
-            //background-dimming
-            layout_MainMenu.getForeground().setAlpha(220);
-            layout_MainMenu.setElevation(1);
         } else if (view == button_add_image) {
             openImagePicker();
         } else if (view == button_add_recipe) {
@@ -303,7 +290,6 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     public void onNothingSelected(AdapterView<?> adapterView) {
         portionsmenge = 1;
     }
-
 
     public void addSteps(Context context) {
         //schrittbeschreibungen in der view hinzufügen
