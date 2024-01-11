@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.example.eaeprojekt.DTO.IngredientAmountDTO;
 import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.activity.NewRecipeActivity;
@@ -567,7 +568,22 @@ public class IngredientDialogUtil {
                     db = new DatabaseManager(mainActivity);
                     db.open();
 
-                    db.deleteIngredient(id);
+                    boolean isUsed = false;
+                    List<IngredientAmountDTO> allIngredientAmounts = db.getAllIngredientAmounts();
+                    for (IngredientAmountDTO i : allIngredientAmounts) {
+                        if (i.getIngredientId() == id) {
+                            isUsed = true;
+                            break;
+                        }
+                    }
+                    if (!isUsed)
+                        db.deleteIngredient(id);
+                    else {
+                        Toast toast = new Toast(mainActivity);
+                        toast.setText(R.string.ingredientAmountCannotBeDeleted);
+                        toast.show();
+                    }
+
 
                     dialog.findViewById(R.id.above).setVisibility(View.GONE);
                     dialog.findViewById(R.id.bbelow).setVisibility(View.VISIBLE);
@@ -591,11 +607,7 @@ public class IngredientDialogUtil {
 
                     ingredients.setSelection(0);
 
-                    LinearLayout ingredientLayout = dialog.findViewById(R.id.ingredientsLayout);
-                    ingredientLayout.removeAllViews();
-
-                    Shared.addIngredients(db, NewRecipeActivity.newRecipeId, mainActivity, mainActivity.findViewById(android.R.id.content));
-
+                    
 
                 }
             }
