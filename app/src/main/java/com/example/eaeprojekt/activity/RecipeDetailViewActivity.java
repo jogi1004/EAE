@@ -1,15 +1,13 @@
 package com.example.eaeprojekt.activity;
 
 import static com.example.eaeprojekt.R.id.menu_edit;
+import static com.example.eaeprojekt.activity.Shared.showImage;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.exifinterface.media.ExifInterface;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
 
@@ -17,7 +15,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
@@ -43,8 +41,6 @@ import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,6 +119,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
         GradientDrawable gshape = new GradientDrawable();
         gshape.setShape(GradientDrawable.RECTANGLE);
         gshape.setCornerRadius(30);
+
         int darkmode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if(darkmode == Configuration.UI_MODE_NIGHT_YES){
             gshape.setColor(getColor(R.color.fontColor));
@@ -135,7 +132,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
         ingredientsLayout.setBackground(ishape);
         durationLayout = findViewById(R.id.durationLayout);
 
-        //Favoriten Stern anpassen
+        //Favoriten Stern anpassen je nach Einstellung des Smartphones (darkmode/non-darkmode)
         favoriteStar = findViewById(R.id.favoriteStar);
         if(isFavorite == 1) {
             if (darkmode == Configuration.UI_MODE_NIGHT_YES) {
@@ -213,7 +210,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
             //Layout das den Inhalt wie Name, Menge usw enthält
             ingredientsLinearLayout = new LinearLayout(this);
             ingredientsLinearLayout.setOrientation(LinearLayout.VERTICAL);
-            ingredientsLinearLayout.setPadding(50, 0, 0, 10);
+            ingredientsLinearLayout.setPadding(10, 10, 10, 10);
 
             // Auslesen des DTOs für die Zutaten mit Menge und Einheit
             for (IngredientAmountDTO ingredient : iADTO) {
@@ -227,6 +224,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
         /**
          * Creating TextViews and Icons for durationView
          */
+
          TextView durationView = new TextView(this);
          durationView.setLayoutParams(textViewParamsName);
          durationView.setText(time);
@@ -324,7 +322,9 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
         // Erstellen Sie ein horizontales Layout für Name, Einheit und Menge
         LinearLayout ingredientLayout = new LinearLayout(this);
         ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
+        ingredientLayout.setGravity(Gravity.CENTER_VERTICAL);
         ingredientLayout.setDividerPadding(50);
+
 
         // TextView für den Namen
         TextView ingredientName = new TextView(this);
@@ -334,10 +334,11 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
         // TextView für die Einheit mit passendes Regeln
         RelativeLayout.LayoutParams ingredientUnitLayoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
+                60
         );
         ingredientUnitLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         TextView ingredientUnit = new TextView(this);
+        //ingredientUnit.setTextSize(50);
         ingredientUnit.setText(currIngredient.getUnit());
         ingredientUnit.setPadding(20, 0, 0, 0);
         ingredientUnit.setLayoutParams(ingredientUnitLayoutParams);
@@ -345,7 +346,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
         // TextView für die Menge der Zutat
         RelativeLayout.LayoutParams ingredientAmountLayoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
+                60
         );
         ingredientAmountLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         TextView ingredientAmount = new TextView(this);
@@ -362,11 +363,12 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
             60,
             60
         );
+        shoppingBagParams.gravity = Gravity.END;
 
         shoppingBag.setLayoutParams(shoppingBagParams);
         //Schneidet die Hälfte der textview weg wenn auf true
         //shoppingBag.setBaselineAlignBottom(true);
-        
+
         // OnClick Listener zur Shopping Bag hinzufügen
         shoppingBag.setOnClickListener(v -> {
                    if (ingredient.getOnShoppingList() == 0) {
@@ -397,30 +399,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
     }
         private void updateImage(String path) {
         if (path != null && Shared.checkPermission(this, false)) {
-            File imgFile = new File(path);
-            if(imgFile.exists()) {
-                try {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    int rotate = 0;
-                    ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
-                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-                    switch (orientation) {
-                        case ExifInterface.ORIENTATION_ROTATE_270:
-                            rotate = 270;
-                            break;
-                        case ExifInterface.ORIENTATION_ROTATE_180:
-                            rotate = 180;
-                            break;
-                        case ExifInterface.ORIENTATION_ROTATE_90:
-                            rotate = 90;
-                            break;
-                    }
-                    circleViewImage.setImageBitmap(myBitmap);
-                    circleViewImage.setRotation(rotate);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            showImage(path, circleViewImage);
         }
         else {
             circleViewImage.setImageResource(R.drawable.camera_small);
@@ -514,7 +493,6 @@ public void showMenu(View v) {
     }
 
     private void updateIngredientTextViews(List<String> newPortions) {
-
         if (ingredientsLinearLayout != null && !iADTO.isEmpty()) {
         //Entfernen aller bereits bestehenden Views und ersetzen durch die Korrekten
         ingredientsLinearLayout.removeAllViews();
@@ -528,11 +506,20 @@ public void showMenu(View v) {
         // Erstellen eines horizontalen Layouts für Name, Einheit und Menge
         LinearLayout ingredientLayout = new LinearLayout(this);
         ingredientLayout.setOrientation(LinearLayout.HORIZONTAL);
+        ingredientLayout.setGravity(Gravity.CENTER_VERTICAL);
+        ingredientLayout.setPadding(10,10,10,10);
+
+        //layout zum Anpassen der Zeilenbreite und -höhe
+        LinearLayout.LayoutParams ingLayoutParams = new LinearLayout.LayoutParams(
+          LinearLayout.LayoutParams.MATCH_PARENT,
+          LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        ingredientLayout.setLayoutParams(ingLayoutParams);
 
         // TextView für den Namen
         TextView ingredientName = new TextView(this);
         ingredientName.setText(currIngredient.getName());
-        ingredientName.setPadding(20, 0, 0, 0);
+        ingredientName.setPadding(20, 0, 20, 0);
 
         // TextView für die Einheit
         RelativeLayout.LayoutParams ingredientUnitLayoutParams = new RelativeLayout.LayoutParams(
@@ -550,19 +537,25 @@ public void showMenu(View v) {
         //Counter macht keine Probleme bei mehreren Rezepten
         ingredientAmount.setText(String.valueOf(newPortions.get(counter++)));
 
-
+        RelativeLayout shoppingBaglayout = new RelativeLayout(this);
+        shoppingBaglayout.setLayoutParams(new RelativeLayout.LayoutParams (
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+        
         ImageView shoppingBag = new ImageView(this);
         if(ingredient.getOnShoppingList() == 0){
             shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
         } else {
             shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
         }
-        LinearLayout.LayoutParams shoppingBagParams = new LinearLayout.LayoutParams(
-                60,
-                60
+        RelativeLayout.LayoutParams shoppingBagParams = new RelativeLayout.LayoutParams(
+                55,
+                55
         );
-
+        shoppingBagParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         shoppingBag.setLayoutParams(shoppingBagParams);
+        shoppingBaglayout.addView(shoppingBag);
 
         // OnClick Listener zur Shopping Bag hinzufügen
         shoppingBag.setOnClickListener(v -> {
@@ -585,10 +578,11 @@ public void showMenu(View v) {
         ingredientLayout.addView(ingredientAmount);
         ingredientLayout.addView(ingredientUnit);
         ingredientLayout.addView(ingredientName);
-        ingredientLayout.addView(shoppingBag);
+        ingredientLayout.addView(shoppingBaglayout);
 
         // Fügen Sie das horizontale Layout zum vertikalen Layout hinzu
         ingredientsLinearLayout.addView(ingredientLayout);
+        ingredientsLayout.removeAllViews();
         ingredientsLayout.addView(ingredientsLinearLayout);
     }
     }

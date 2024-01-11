@@ -108,5 +108,8 @@
     <style name="StepsLayoutStyle">
         <item name="android:background">@color/fontColor</item>
     </style>
+    <style name="TextViewShopping" parent = "Widget.AppCompat.TextView">
+        <item name ="android:textColor">@color/background</item>
+    </style>
 
 </resources>

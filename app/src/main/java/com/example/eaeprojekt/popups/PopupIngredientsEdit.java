@@ -1,7 +1,7 @@
 package com.example.eaeprojekt.popups;
 
+import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +24,7 @@ import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.activity.RecipeEditActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
+import com.example.eaeprojekt.utility.KeyboardUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,12 +55,14 @@ public class PopupIngredientsEdit implements View.OnClickListener {
         db.open();
 
 
-        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(view.getContext().LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.add_ingredients_popup, null);
         this.popupView = popupView;
 
+        KeyboardUtils.setupUI(popupView.findViewById(R.id.below), mainActivity);
+
         //length and width from the Window
-        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int width = LinearLayout.LayoutParams.MATCH_PARENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = true;
 
@@ -77,9 +80,7 @@ public class PopupIngredientsEdit implements View.OnClickListener {
 
         List<IngredientDTO> allIngredients = db.getAllIngredients();
         for(IngredientDTO newIngredient : allIngredients){
-            Log.d("spinner"," "+ newIngredient.getName() + " " + newIngredient.getUnit());
             ingredientList.add(newIngredient.getName() + ", " + newIngredient.getUnit());
-            Log.d("spinner"," "+ newIngredient.getName() + " " + newIngredient.getUnit() + " wurde hinzugefügt");
         }
 
         adapterIngredients = new ArrayAdapter<>(mainActivity, android.R.layout.simple_spinner_dropdown_item, ingredientList);
@@ -210,7 +211,7 @@ public class PopupIngredientsEdit implements View.OnClickListener {
             EditText amount = popupView.findViewById(R.id.amount);
 
             // Zutat zum Rezept hinzufügen
-            long ingredientId = db.insertIngredientQuantity(RecipeEditActivity.recipeIDEdit, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()),0, 0);
+            long ingredientId = db.insertIngredientQuantity(RecipeEditActivity.recipeIdEdit, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()),0, 0);
             /*
             schrittbeschreibung in der view hinzufügen
              */

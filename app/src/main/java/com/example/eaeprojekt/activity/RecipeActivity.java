@@ -1,9 +1,10 @@
 package com.example.eaeprojekt.activity;
 
+import static com.example.eaeprojekt.activity.Shared.showImage;
+
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -15,15 +16,13 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.exifinterface.media.ExifInterface;
 
+import com.example.eaeprojekt.DTO.IngredientAmountDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -81,31 +80,7 @@ public class RecipeActivity extends AppCompatActivity {
                 de.hdodenhof.circleimageview.CircleImageView picture = new de.hdodenhof.circleimageview.CircleImageView(this);
 
                 if (recipe.getImagePath() != null && Shared.checkPermission(this, false)) {
-
-                    File imgFile = new File(recipe.getImagePath());
-                    if (imgFile.exists()) {
-                        try {
-                            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                            int rotate = 0;
-                            ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
-                            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-                            switch (orientation) {
-                                case ExifInterface.ORIENTATION_ROTATE_270:
-                                    rotate = 270;
-                                    break;
-                                case ExifInterface.ORIENTATION_ROTATE_180:
-                                    rotate = 180;
-                                    break;
-                                case ExifInterface.ORIENTATION_ROTATE_90:
-                                    rotate = 90;
-                                    break;
-                            }
-                            picture.setImageBitmap(myBitmap);
-                            picture.setRotation(rotate);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
+                    showImage(recipe.getImagePath(), picture);
                 } else {
                     picture.setImageResource(R.drawable.camera_small);
                 }
@@ -226,6 +201,11 @@ public class RecipeActivity extends AppCompatActivity {
                     i.putExtra("ID", recipeItem.getId());
                     startActivity(i);
                 });
+
+                recipeItem.setOnLongClickListener(v -> {
+                    showDeleteConfirmationDialog(recipe.getId());
+                    return true;
+                });
                 recipeLayout.addView(recipeItem);
             }
         }
@@ -242,6 +222,31 @@ public class RecipeActivity extends AppCompatActivity {
             startActivity(i);
         }
         return false;
+    }
+
+    private void showDeleteConfirmationDialog(long recipeId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.deleteRecipe);
+        builder.setMessage(R.string.deleteRecipeCheck);
+
+        builder.setPositiveButton(R.string.delete, (dialog, which) -> {
+            for (IngredientAmountDTO ingr : db.getIngredientsForRecipe(recipeId)) {
+                db.deleteIngredientQuantity(ingr.getId());
+            }
+            deleteRecipe(recipeId);
+        });
+
+        builder.setNegativeButton(R.string.cancel, (dialog, which) -> {
+            dialog.dismiss();
+        });
+
+        builder.create().show();
+    }
+
+    private void deleteRecipe(long recipeId) {
+        db.open();
+        db.deleteRecipe(recipeId);
+        updateRecipeList(db.getAllRecipes());
     }
 
     @Override

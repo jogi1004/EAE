@@ -1,12 +1,12 @@
 package com.example.eaeprojekt.activity;
 
+import static com.example.eaeprojekt.activity.Shared.addIngredients;
+import static com.example.eaeprojekt.activity.Shared.showImage;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
@@ -30,32 +30,25 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.exifinterface.media.ExifInterface;
+import androidx.core.content.ContextCompat;
 
-import com.example.eaeprojekt.DTO.IngredientAmountDTO;
-import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.popups.PopupIngredients;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.popups.PopupSteps;
 import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.DTO.StepDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
+import com.example.eaeprojekt.utility.KeyboardUtils;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 
 public class NewRecipeActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     ImageView backButton;
-    ConstraintLayout button_add_ingredients;
-    ConstraintLayout button_add_steps;
-    ConstraintLayout button_add_recipe;
-    ConstraintLayout button_cancel;
+    ConstraintLayout button_add_ingredients, button_add_steps, button_add_recipe, button_cancel;
     DatabaseManager db;
-    EditText title;
-    EditText time;
+    EditText title, time;
     Spinner spinner_portionsmenge;
     int portionsmenge;
 
@@ -72,12 +65,8 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
         // Erhalte die Root-Ansicht der Activity
         View rootView = findViewById(android.R.id.content);
 
+        KeyboardUtils.setupUI(findViewById(R.id.layout_new_recipe), this);
 
-        //binding = ActivityNewRecipeBinding.inflate(getLayoutInflater());
-        //View view = binding.getRoot();
-        //setContentView(view);
-
-        setContentView(R.layout.activity_new_recipe);
         button_add_ingredients = findViewById(R.id.button_add_ingredients);
 
         //datenbankzugriff
@@ -168,41 +157,18 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
                             cursor.close();
                         }
 
-                    if (imagePath != null) {
-                        File imgFile = new File(imagePath);
-                        if(imgFile.exists()){
-                            try {
-                                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                                int rotate = 0;
-                                ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
-                                int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-                                switch (orientation) {
-                                    case ExifInterface.ORIENTATION_ROTATE_270:
-                                        rotate = 270;
-                                        break;
-                                    case ExifInterface.ORIENTATION_ROTATE_180:
-                                        rotate = 180;
-                                        break;
-                                    case ExifInterface.ORIENTATION_ROTATE_90:
-                                        rotate = 90;
-                                        break;
-                                }
-                                pictureView.setImageBitmap(myBitmap);
-                                pictureView.setRotation(rotate);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                    }
+                    showImage(imagePath, pictureView);
                 }
             }
         });
 
         addIngredients(db, newRecipeId, this, rootView);
 
-        addSteps();
+        addSteps(this);
 
     }
+
+
 
     @Override
     public void onClick(View view) {
@@ -339,124 +305,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
     }
 
 
-    public static void addIngredients(DatabaseManager db, long recipeId, Context context, View view){
-        List<IngredientAmountDTO> ingredientDTOs = db.getIngredientsForRecipe(recipeId);
-
-
-        for(IngredientAmountDTO ingredient : ingredientDTOs){
-
-            IngredientDTO ingredientBare = db.getIngredientById(ingredient.getIngredientId());
-
-            ConstraintLayout layout = new ConstraintLayout(context);
-
-            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
-                    ConstraintLayout.LayoutParams.MATCH_PARENT,
-                    ConstraintLayout.LayoutParams.WRAP_CONTENT
-            );
-            layout.setPadding(20,20,20,20);
-            layout.setLayoutParams(layoutParams);
-            layoutParams.setMargins(40, 0, 40, 0);
-
-            /*
-            Zutat
-             */
-            TextView ingredientText = new TextView(context);
-            ingredientText.setId(View.generateViewId());
-            ingredientText.setText(ingredientBare.getName());
-            ingredientText.setGravity(Gravity.CENTER);
-            ingredientText.setTextColor(Color.parseColor("#FFFFFF"));
-
-            ViewGroup.LayoutParams ingredientParams = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
-            ingredientText.setLayoutParams(ingredientParams);
-
-            layout.addView(ingredientText);
-
-            /*
-            Menge
-             */
-            TextView amountText = new TextView(context);
-            amountText.setId(View.generateViewId());
-            amountText.setText(String.valueOf((int) ingredient.getAmount()));
-            amountText.setGravity(Gravity.CENTER);
-            amountText.setTextColor(Color.parseColor("#FFFFFF"));
-
-            ViewGroup.LayoutParams amountParams = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
-            amountText.setLayoutParams(amountParams);
-
-            layout.addView(amountText);
-
-            /*
-            Einheit
-             */
-            TextView unitText = new TextView(context);
-            unitText.setId(View.generateViewId());
-            unitText.setText(ingredientBare.getUnit());
-            unitText.setGravity(Gravity.CENTER);
-            unitText.setTextColor(Color.parseColor("#FFFFFF"));
-
-            ViewGroup.LayoutParams unitParams = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
-            unitText.setLayoutParams(unitParams);
-
-            layout.addView(unitText);
-
-            /*
-            Mülleimer
-             */
-            ImageView trash = new ImageView(context);
-            trash.setImageResource(R.drawable.trashcan_light);
-            trash.setId(View.generateViewId());
-
-            ViewGroup.LayoutParams trashParams = new ViewGroup.LayoutParams(
-                    45,
-                    45
-            );
-            trash.setLayoutParams(trashParams);
-            layout.addView(trash);
-            /*
-            Constraints
-             */
-            ConstraintSet constraintSet = new ConstraintSet();
-            constraintSet.clone(layout);
-
-            //Zutat
-            constraintSet.connect(ingredientText.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
-            constraintSet.connect(ingredientText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-            constraintSet.connect(ingredientText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
-            //Menge
-            constraintSet.connect(amountText.getId(), ConstraintSet.START, ingredientText.getId(), ConstraintSet.START, 250);
-            constraintSet.connect(amountText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-            constraintSet.connect(amountText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
-            //Einheit
-            constraintSet.connect(unitText.getId(), ConstraintSet.START, amountText.getId(), ConstraintSet.END, 20);
-            constraintSet.connect(unitText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-            constraintSet.connect(unitText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
-            //Mülleimer
-            constraintSet.connect(trash.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
-            constraintSet.connect(trash.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-            constraintSet.connect(trash.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
-
-            constraintSet.applyTo(layout);
-
-            LinearLayout parentLayout = view.findViewById(R.id.ingredientsLayout);
-            parentLayout.addView(layout);
-
-            trash.setOnClickListener(v ->{
-                db.deleteIngredientQuantity(ingredient.getId());
-                parentLayout.removeView(layout);
-            });
-        }
-    }
-
-    public void addSteps() {
+    public void addSteps(Context context) {
         //schrittbeschreibungen in der view hinzufügen
         List<StepDTO> steps = db.getAllStepsForRecipe((int) newRecipeId);
 
@@ -480,7 +329,7 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
             stepDescriptionText.setId(View.generateViewId());
             stepDescriptionText.setText(step.getText());
             stepDescriptionText.setGravity(Gravity.CENTER);
-            stepDescriptionText.setTextColor(Color.parseColor("#FFFFFF"));
+            stepDescriptionText.setTextColor(ContextCompat.getColor(context, R.color.white));
 
             ViewGroup.LayoutParams textViewParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
