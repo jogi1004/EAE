@@ -1,5 +1,7 @@
 package com.example.eaeprojekt.popups;
 
+import static com.example.eaeprojekt.activity.Shared.addIngredients;
+
 import android.app.Activity;
 import android.content.Context;
 import android.view.Gravity;
@@ -560,7 +562,7 @@ public class PopupIngredients implements View.OnClickListener {
 
                 LinearLayout ingredientLayout = mainActivity.findViewById(R.id.ingredientsLayout);
                 ingredientLayout.removeAllViews();
-                NewRecipeActivity.addIngredients(db, NewRecipeActivity.newRecipeId, mainActivity, mainActivity.findViewById(android.R.id.content));
+                addIngredients(db, NewRecipeActivity.newRecipeId, mainActivity, mainActivity.findViewById(android.R.id.content));
 
 
             } else if (viewClick == buttonDelete) {
@@ -606,7 +608,7 @@ public class PopupIngredients implements View.OnClickListener {
 
                 LinearLayout ingredientLayout = mainActivity.findViewById(R.id.ingredientsLayout);
                 ingredientLayout.removeAllViews();
-                NewRecipeActivity.addIngredients(db, NewRecipeActivity.newRecipeId, mainActivity, mainActivity.findViewById(android.R.id.content));
+                addIngredients(db, NewRecipeActivity.newRecipeId, mainActivity, mainActivity.findViewById(android.R.id.content));
 
 
             }

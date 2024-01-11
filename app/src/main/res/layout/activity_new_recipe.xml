@@ -146,6 +146,7 @@
                         style="@style/EditTextStyle"
                         android:layout_width="100dp"
                         android:layout_height="25dp"
+                        android:layout_marginStart="3dp"
                         android:hint="@string/durationHint"
                         android:importantForAutofill="no"
                         android:inputType="number"
