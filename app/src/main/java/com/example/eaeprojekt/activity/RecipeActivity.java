@@ -90,7 +90,7 @@ public class RecipeActivity extends AppCompatActivity {
                 LinearLayout llayout = new LinearLayout(this);
                 llayout.setOrientation(LinearLayout.HORIZONTAL);
 
-                RelativeLayout.LayoutParams pictureParams = new RelativeLayout.LayoutParams(250, 250);
+                RelativeLayout.LayoutParams pictureParams = new RelativeLayout.LayoutParams(200, 200);
                 pictureParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);  // Align the picture to the left
                 pictureParams.addRule(RelativeLayout.CENTER_VERTICAL);  // Center the picture vertically
                 picture.setLayoutParams(pictureParams);

@@ -525,12 +525,12 @@ public class DatabaseManager {
         database.update(TABLE_INGREDIENT_QUANTITY, values, null, null);
     }
 
-    public int removeCheckedRecipesFromShoppingBag() {
+    public void removeCheckedRecipesFromShoppingBag() {
         ContentValues values = new ContentValues();
         values.put(COLUMN_IS_ON_SHOPPING_LIST, 0);
 
         String whereClause = COLUMN_INGREDIENT_QUANTITY_IS_CHECKED + " = 1";
-        return database.update(TABLE_INGREDIENT_QUANTITY, values, whereClause, null);
+        database.update(TABLE_INGREDIENT_QUANTITY, values, whereClause, null);
     }
 
 

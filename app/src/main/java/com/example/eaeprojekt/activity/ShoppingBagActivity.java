@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,8 +26,8 @@ import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
-import com.example.eaeprojekt.popups.PopupDeleteShoppingBag;
-import com.example.eaeprojekt.popups.PopupIngredients;
+import com.example.eaeprojekt.utility.DeleteShoppingBagUtil;
+import com.example.eaeprojekt.utility.IngredientDialogUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
@@ -39,11 +38,12 @@ import java.util.List;
 public class ShoppingBagActivity extends AppCompatActivity implements View.OnClickListener,ShoppingBagUpdateListener {
 
     ImageButton addIngredient, deleteAllIcon;
-    PopupDeleteShoppingBag deleteShoppingBagPopup;
+
+    DeleteShoppingBagUtil deleteShoppingBagDialog;
     LinearLayout shoppingLayout, ingredientWithoutRecipe;
+
     DatabaseManager db;
     BottomNavigationView b;
-    FrameLayout dimmableLayoutShoppingBag;
     TextView helperTextView;
     int darkmode = 0;
 
@@ -60,9 +60,9 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
         shoppingLayout = findViewById(R.id.shoppingLayoutinScrollView);
         deleteAllIcon = findViewById(R.id.deleteAllIcon);
         deleteAllIcon.setOnClickListener(this);
-        deleteShoppingBagPopup = new PopupDeleteShoppingBag(this, this);
-        dimmableLayoutShoppingBag = findViewById(R.id.FrameLayoutShoppingBag);
-        dimmableLayoutShoppingBag.getForeground().setAlpha(0);
+
+        deleteShoppingBagDialog = new DeleteShoppingBagUtil(this, this);
+
         helperTextView = findViewById(R.id.helperTextBox);
         b = findViewById(R.id.bottomNavView);
         b.setSelectedItemId(R.id.shoppingBagButtonNavBar);
@@ -97,8 +97,6 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
 
             IngredientDTO ingredient = db.getIngredientById(ingredientAmount.getIngredientId());
 
-            LinearLayout parentLayout1 = this.findViewById(R.id.ingredientWithoutRecipe);
-
             LinearLayout parentLayout2 = new LinearLayout(this);
             ViewGroup.LayoutParams pp = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -113,7 +111,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                     TextView titleOther = new TextView(this);
                     titleOther.setText(R.string.otherIngredients);
 
-                    parentLayout1.addView(titleOther);
+                    ingredientWithoutRecipe.addView(titleOther);
 
                     View view = new View(this);
                     view.setBackgroundColor(getColor(R.color.fontColor));
@@ -122,7 +120,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                             dpToPx(1, getResources().getDisplayMetrics().density)
                     );
                     view.setLayoutParams(viewParams);
-                    parentLayout1.addView(view);
+                    ingredientWithoutRecipe.addView(view);
 
                     i = ingredientAmount.getRecipeId();
                 }
@@ -165,10 +163,10 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
 
             //Ändern der Farben wenn Darkmode aktiviert ist
             if(Configuration.UI_MODE_NIGHT_YES == darkmode){
-                parentLayout1.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+                ingredientWithoutRecipe.setBackgroundColor(getColor(R.color.colorPrimaryDark));
                 parentLayout2.setBackgroundColor(getColor(R.color.colorPrimaryDark));
                 layout.setBackgroundColor(getColor(R.color.colorPrimaryDark));
-                checkBox.setButtonTintList(ColorStateList.valueOf(getResources().getColor(R.color.background)));
+                checkBox.setButtonTintList(ColorStateList.valueOf(getColor(R.color.background)));
             }
 
             ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
@@ -296,13 +294,11 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
 
             constraintSet.applyTo(layout);
 
-            LinearLayout parentparent2 = this.findViewById(R.id.shoppingLayoutinScrollView);
-
             if(ingredientAmount.getRecipeId() == -9){
-                parentLayout1.addView(layout);
+                ingredientWithoutRecipe.addView(layout);
             }else {
                 parentLayout2.addView(layout);
-                parentparent2.addView(parentLayout2);
+                shoppingLayout.addView(parentLayout2);
             }
 
             trash.setOnClickListener(v ->{
@@ -310,9 +306,9 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
 
                     db.deleteIngredientQuantity(ingredientAmount.getId());
                     List<IngredientAmountDTO> li = db.getIngredientsForRecipe(-9);
-                    parentLayout1.removeView(layout);
+                    ingredientWithoutRecipe.removeView(layout);
                     if(li.isEmpty()){
-                        parentLayout1.removeAllViews();
+                        ingredientWithoutRecipe.removeAllViews();
                     }
                 }else{
 
@@ -361,17 +357,13 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
 
         if (view == deleteAllIcon) {
-            deleteShoppingBagPopup.showPopupWindow(view, this);
 
-            dimmableLayoutShoppingBag.getForeground().setAlpha(220);
-            dimmableLayoutShoppingBag.setElevation(1);
+            deleteShoppingBagDialog.showPopupWindow(this);
+
         } else if (view == addIngredient) {
-            PopupIngredients popup = new PopupIngredients(this);
-            popup.showPopupWindow(view, this);
+            IngredientDialogUtil dialog = new IngredientDialogUtil(this);
+            dialog.showPopupWindow(view,this);
 
-            //background-dimming
-            dimmableLayoutShoppingBag.getForeground().setAlpha(220);
-            dimmableLayoutShoppingBag.setElevation(1);
         }
     }
 
