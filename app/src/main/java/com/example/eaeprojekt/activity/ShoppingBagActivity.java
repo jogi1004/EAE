@@ -172,7 +172,6 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             );
             layout.setPadding(20,20,20,20);
             layout.setLayoutParams(layoutParams);
-            layoutParams.setMargins(40, 0, 40, 0);
 
             /*
             Zutat
@@ -199,6 +198,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             amountText.setText(String.valueOf((int) ingredientAmount.getAmount()));
             amountText.setGravity(Gravity.CENTER);
             amountText.setTextAppearance(R.style.TextViewShopping);
+            amountText.setSingleLine(false);
 
             ViewGroup.LayoutParams amountParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -273,7 +273,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             constraintSet.connect(ingredientText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
             constraintSet.connect(ingredientText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
             //Menge
-            constraintSet.connect(amountText.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 250);
+            constraintSet.connect(amountText.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 400);
             constraintSet.connect(amountText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
             constraintSet.connect(amountText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
             //Einheit
