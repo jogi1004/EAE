@@ -23,8 +23,7 @@ import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
-import com.example.eaeprojekt.popups.PopupDeleteShoppingBag;
-import com.example.eaeprojekt.popups.PopupIngredients;
+import com.example.eaeprojekt.utility.DeleteShoppingBagUtil;
 import com.example.eaeprojekt.utility.IngredientDialogUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -37,7 +36,8 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
 
     ImageButton addIngredient;
     ImageButton deleteAllIcon;
-    PopupDeleteShoppingBag deleteShoppingBagPopup;
+
+    DeleteShoppingBagUtil deleteShoppingBagDialog;
     LinearLayout shoppingLayout;
     DatabaseManager db;
     BottomNavigationView b;
@@ -55,9 +55,9 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
         shoppingLayout = findViewById(R.id.shoppingLayoutinScrollView);
         deleteAllIcon = findViewById(R.id.deleteAllIcon);
         deleteAllIcon.setOnClickListener(this);
-        deleteShoppingBagPopup = new PopupDeleteShoppingBag(this, this);
-        dimmableLayoutShoppingBag = findViewById(R.id.FrameLayoutShoppingBag);
-        dimmableLayoutShoppingBag.getForeground().setAlpha(0);
+
+        deleteShoppingBagDialog = new DeleteShoppingBagUtil(this, this);
+
         helperTextView = findViewById(R.id.helperTextBox);
         b = findViewById(R.id.bottomNavView);
         b.setSelectedItemId(R.id.shoppingBagButtonNavBar);
@@ -346,7 +346,8 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
 
         if (view == deleteAllIcon) {
-            deleteShoppingBagPopup.showPopupWindow(view, this);
+
+            deleteShoppingBagDialog.showPopupWindow(this);
 
         } else if (view == addIngredient) {
             IngredientDialogUtil dialog = new IngredientDialogUtil(this);

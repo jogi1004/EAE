@@ -4,10 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.text.Layout;
-import android.util.Log;
+
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -28,10 +26,10 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.activity.NewRecipeActivity;
+import com.example.eaeprojekt.activity.RecipeEditActivity;
 import com.example.eaeprojekt.activity.ShoppingBagActivity;
 import com.example.eaeprojekt.activity.ShoppingBagUpdateListener;
 import com.example.eaeprojekt.database.DatabaseManager;
-import com.example.eaeprojekt.popups.PopupIngredients;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -45,7 +43,8 @@ public class IngredientDialogUtil {
         static View popupView;
         PopupWindow popupWindow;
         //Adapter für Zutaten
-        private static com.example.eaeprojekt.utility.IngredientDialogUtil.CustomAdapter adapter;
+        private static CustomAdapter adapter;
+
         static Spinner ingredients;
         static TextView unitTV;
 
@@ -56,8 +55,9 @@ public class IngredientDialogUtil {
         static ConstraintLayout addButtonIngredient;
 
         static EditText nameText;
-    static EditText unitText;
-    static EditText amountText;
+        static EditText unitText;
+        static EditText amountText;
+
         static ConstraintLayout createIngredient;
 
 
@@ -161,8 +161,6 @@ public class IngredientDialogUtil {
 
             });
 
-
-
             dialog.show();
         }
 
@@ -264,7 +262,13 @@ public class IngredientDialogUtil {
             EditText amount = dialog.findViewById(R.id.amount);
 
             // Zutat zum Rezept hinzufügen
-            long ingredientId = db.insertIngredientQuantity(NewRecipeActivity.newRecipeId, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()),0, 0);
+
+            long ingredientId;
+            if (mainActivity.getClass() == NewRecipeActivity.class) {
+                ingredientId = db.insertIngredientQuantity(NewRecipeActivity.newRecipeId, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()), 0, 0);
+            }else{
+                ingredientId = db.insertIngredientQuantity(RecipeEditActivity.recipeIDEdit, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()), 0, 0);
+            }
             /*
             schrittbeschreibung in der view hinzufügen
              */
@@ -554,7 +558,8 @@ public class IngredientDialogUtil {
 
                     LinearLayout ingredientLayout = mainActivity.findViewById(R.id.ingredientsLayout);
                     ingredientLayout.removeAllViews();
-                    NewRecipeActivity.addIngredients(db, NewRecipeActivity.newRecipeId, mainActivity, dialog.findViewById(android.R.id.content));
+
+                    NewRecipeActivity.addIngredients(db, NewRecipeActivity.newRecipeId, mainActivity, mainActivity.findViewById(android.R.id.content));
 
 
                 } else if (viewClick == buttonDelete) {
@@ -587,7 +592,8 @@ public class IngredientDialogUtil {
 
                     LinearLayout ingredientLayout = dialog.findViewById(R.id.ingredientsLayout);
                     ingredientLayout.removeAllViews();
-                    NewRecipeActivity.addIngredients(db, NewRecipeActivity.newRecipeId, mainActivity, dialog.findViewById(android.R.id.content));
+
+                    NewRecipeActivity.addIngredients(db, NewRecipeActivity.newRecipeId, mainActivity, mainActivity.findViewById(android.R.id.content));
 
 
                 }

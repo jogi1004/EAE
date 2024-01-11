@@ -1,5 +1,7 @@
 package com.example.eaeprojekt.utility;
 
+
+import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.view.Gravity;
@@ -19,6 +21,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.activity.NewRecipeActivity;
+import com.example.eaeprojekt.activity.RecipeEditActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
 
 public class StepDialogUtil{
@@ -28,11 +31,12 @@ public class StepDialogUtil{
         static Dialog dialog;
         static ConstraintLayout buttonAdd;
         static ConstraintLayout buttonBack;
-        static NewRecipeActivity mainActivity;
 
-        public static void showPopupWindow(NewRecipeActivity newRecipeActivity) {
+        static Activity mainActivity;
 
-            mainActivity = newRecipeActivity;
+        public static void showPopupWindow(Activity activity) {
+
+            mainActivity = activity;
 
             dialog = new Dialog(mainActivity);
 
@@ -69,8 +73,14 @@ public class StepDialogUtil{
 
                 EditText stepDescription = (EditText) dialog.findViewById(R.id.step_description);
 
-                long stepId = db.insertStep(NewRecipeActivity.newRecipeId, stepDescription.getText().toString());
 
+                long stepId;
+
+                if(mainActivity.getClass() == RecipeEditActivity.class){
+                    stepId = db.insertStep(RecipeEditActivity.recipeIDEdit, stepDescription.getText().toString());
+                }else {
+                    stepId = db.insertStep(NewRecipeActivity.newRecipeId, stepDescription.getText().toString());
+                }
                 dialog.dismiss();
 
 

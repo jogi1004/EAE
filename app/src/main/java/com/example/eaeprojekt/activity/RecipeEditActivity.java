@@ -34,9 +34,10 @@ import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.DTO.StepDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
-import com.example.eaeprojekt.popups.PopupIngredientsEdit;
-import com.example.eaeprojekt.popups.PopupStepsEdit;
+
+import com.example.eaeprojekt.utility.IngredientDialogUtil;
 import com.example.eaeprojekt.utility.KeyboardUtils;
+import com.example.eaeprojekt.utility.StepDialogUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -222,21 +223,12 @@ public class RecipeEditActivity extends AppCompatActivity implements View.OnClic
             FrameLayout layout_MainMenu = findViewById(R.id.mainmenu);
 
             if (view == button_add_steps) {
-                PopupStepsEdit popup = new PopupStepsEdit();
-                popup.showPopupWindow(view, this);
 
-
-                //background-dimming
-                layout_MainMenu.getForeground().setAlpha(220);
-                layout_MainMenu.setElevation(1);
+                StepDialogUtil.showPopupWindow(this);
 
             } else if (view == button_add_ingredients) {
-                PopupIngredientsEdit popup = new PopupIngredientsEdit();
-                popup.showPopupWindow(view, this);
-
-                //background-dimming
-                layout_MainMenu.getForeground().setAlpha(220);
-                layout_MainMenu.setElevation(1);
+                IngredientDialogUtil ingredientDialog = new IngredientDialogUtil();
+                ingredientDialog.showPopupWindow(view, this);
 
             } else if (view == button_add_recipe) {
 

@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -35,9 +34,8 @@ import androidx.exifinterface.media.ExifInterface;
 
 import com.example.eaeprojekt.DTO.IngredientAmountDTO;
 import com.example.eaeprojekt.DTO.IngredientDTO;
-import com.example.eaeprojekt.popups.PopupIngredients;
+
 import com.example.eaeprojekt.R;
-import com.example.eaeprojekt.popups.PopupSteps;
 import com.example.eaeprojekt.DTO.RecipeDTO;
 import com.example.eaeprojekt.DTO.StepDTO;
 import com.example.eaeprojekt.database.DatabaseManager;
@@ -322,7 +320,15 @@ public class NewRecipeActivity extends AppCompatActivity implements View.OnClick
 
 
     public static void addIngredients(DatabaseManager db, long recipeId, Context context, View view){
-        List<IngredientAmountDTO> ingredientDTOs = db.getIngredientsForRecipe(recipeId);
+
+        List<IngredientAmountDTO> ingredientDTOs;
+
+        if (context.getClass() == NewRecipeActivity.class) {
+            ingredientDTOs = db.getIngredientsForRecipe(recipeId);
+        }else{
+            Log.d("jk", String.valueOf(context.getClass()));
+            ingredientDTOs = db.getIngredientsForRecipe(RecipeEditActivity.recipeIDEdit);
+        }
 
         for(IngredientAmountDTO ingredient : ingredientDTOs) {
 
