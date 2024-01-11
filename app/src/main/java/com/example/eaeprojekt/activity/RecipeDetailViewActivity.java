@@ -510,7 +510,7 @@ public void showMenu(View v) {
             ingredientsHeader.setText(getText(R.string.ingredients));
             ingredientsHeader.setLayoutParams(textViewParamsIngredientHeader);
             ingredientsHeader.setPaintFlags(ingredientsHeader.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            ingredientsLayout.addView(ingredientsHeader);
+
         int counter = 0;
     for (IngredientAmountDTO ingredient : iADTO) {
 
@@ -533,7 +533,7 @@ public void showMenu(View v) {
         // TextView für den Namen
         TextView ingredientName = new TextView(this);
         ingredientName.setText(currIngredient.getName());
-        ingredientName.setPadding(50, 0, 20, 0);
+        ingredientName.setPadding(15, 0, 20, 0);
 
         // TextView für die Einheit
         RelativeLayout.LayoutParams ingredientUnitLayoutParams = new RelativeLayout.LayoutParams(
@@ -543,13 +543,14 @@ public void showMenu(View v) {
         ingredientUnitLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         TextView ingredientUnit = new TextView(this);
         ingredientUnit.setText(currIngredient.getUnit());
-        ingredientUnit.setPadding(20, 0, 0, 0);
+        ingredientUnit.setPadding(15, 0, 0, 0);
         ingredientUnit.setLayoutParams(ingredientUnitLayoutParams);
 
 
         TextView ingredientAmount = new TextView(this);
         //Counter macht keine Probleme bei mehreren Rezepten
         ingredientAmount.setText(String.valueOf(newPortions.get(counter++)));
+        ingredientAmount.setPadding(50,0,0,0);
 
         RelativeLayout shoppingBaglayout = new RelativeLayout(this);
         shoppingBaglayout.setLayoutParams(new RelativeLayout.LayoutParams (
@@ -596,6 +597,8 @@ public void showMenu(View v) {
 
         // Fügen Sie das horizontale Layout zum vertikalen Layout hinzu
         ingredientsLinearLayout.addView(ingredientLayout);
+        ingredientsLayout.removeAllViews();
+        ingredientsLayout.addView(ingredientsHeader);
         ingredientsLayout.addView(ingredientsLinearLayout);
     }
     }
