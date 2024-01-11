@@ -62,8 +62,7 @@
     <string name="burgerMenuDescription">Click here to access the burger menu</string>
     <string name="favoritesSwitchDescription">Click here to toggle favorites</string>
     <string name="recipeCreated">Recipe created successfully!</string>
-    <string name="bearbeiten">Edit</string>
-    <string name="zutat_loeschen">Delete Ingredient</string>
+    <string name="deleteIngredient">Delete Ingredient</string>
     <string name="permissionNecessary">Permission Required</string>
     <string name="pleaseAllowGalleryAccess">Please allow access to the gallery to use images</string>
     <string name="pleaseAllowGalleryAccessInSettings">Please allow access to the gallery in the settings to use images</string>
@@ -86,9 +85,15 @@
     <string name="nameColon">Name:</string>
     <string name="unitColon">Unit:</string>
     <string name="create">Create</string>
+    <string name="deleteRecipe">Delete recipe</string>
+    <string name="deleteRecipeCheck">Are you sure?</string>
+    <string name="delete">Delete</string>
+    <string name="entryRemoved">entry removed</string>
+    <string name="amount">amount</string>
+    <string name="name">name</string>
 
     <!--Spinner Portionsmenge-->
-    <string-array name="portionsmenge"> <!-- TODO: This should be improved -->
+    <string-array name="portionsmenge">
         <item>1</item>
         <item>2</item>
         <item>3</item>

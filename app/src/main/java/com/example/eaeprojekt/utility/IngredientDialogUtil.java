@@ -27,6 +27,7 @@ import com.example.eaeprojekt.DTO.IngredientDTO;
 import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.activity.NewRecipeActivity;
 import com.example.eaeprojekt.activity.RecipeEditActivity;
+import com.example.eaeprojekt.activity.Shared;
 import com.example.eaeprojekt.activity.ShoppingBagActivity;
 import com.example.eaeprojekt.activity.ShoppingBagUpdateListener;
 import com.example.eaeprojekt.database.DatabaseManager;
@@ -267,7 +268,7 @@ public class IngredientDialogUtil {
             if (mainActivity.getClass() == NewRecipeActivity.class) {
                 ingredientId = db.insertIngredientQuantity(NewRecipeActivity.newRecipeId, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()), 0, 0);
             }else{
-                ingredientId = db.insertIngredientQuantity(RecipeEditActivity.recipeIDEdit, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()), 0, 0);
+                ingredientId = db.insertIngredientQuantity(RecipeEditActivity.recipeIdEdit, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()), 0, 0);
             }
             /*
             schrittbeschreibung in der view hinzufügen
@@ -559,7 +560,7 @@ public class IngredientDialogUtil {
                     LinearLayout ingredientLayout = mainActivity.findViewById(R.id.ingredientsLayout);
                     ingredientLayout.removeAllViews();
 
-                    NewRecipeActivity.addIngredients(db, NewRecipeActivity.newRecipeId, mainActivity, mainActivity.findViewById(android.R.id.content));
+                    Shared.addIngredients(db, NewRecipeActivity.newRecipeId, mainActivity, mainActivity.findViewById(android.R.id.content));
 
 
                 } else if (viewClick == buttonDelete) {
@@ -593,7 +594,7 @@ public class IngredientDialogUtil {
                     LinearLayout ingredientLayout = dialog.findViewById(R.id.ingredientsLayout);
                     ingredientLayout.removeAllViews();
 
-                    NewRecipeActivity.addIngredients(db, NewRecipeActivity.newRecipeId, mainActivity, mainActivity.findViewById(android.R.id.content));
+                    Shared.addIngredients(db, NewRecipeActivity.newRecipeId, mainActivity, mainActivity.findViewById(android.R.id.content));
 
 
                 }

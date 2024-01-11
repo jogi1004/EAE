@@ -63,8 +63,7 @@
     <string name="burgerMenuDescription">Hier klicken, um ins Burger-Menü zu gelangen</string>
     <string name="favoritesSwitchDescription">Hier klicken, um Favorit umzuschalten</string>
     <string name="recipeCreated">Rezept wurde erfolgreich erstellt!</string>
-    <string name="bearbeiten">Bearbeiten</string>
-    <string name="zutat_loeschen">Zutat Löschen</string>
+    <string name="deleteIngredient">Zutat Löschen</string>
     <string name="permissionNecessary">Berechtigung notwendig</string>
     <string name="pleaseAllowGalleryAccess">Bitte erlaube den Zugriff auf die Galerie, um Bilder zu verwenden</string>
     <string name="pleaseAllowGalleryAccessInSettings">Bitte erlaube den Zugriff auf die Galerie in den Einstellungen, um Bilder zu verwenden</string>
@@ -86,6 +85,12 @@
     <string name="nameColon">Name:</string>
     <string name="unitColon">Einheit:</string>
     <string name="create">Erstellen</string>
+    <string name="deleteRecipe">Rezept löschen</string>
+    <string name="deleteRecipeCheck">Möchten Sie das Rezept wirklich löschen?</string>
+    <string name="delete">Löschen</string>
+    <string name="entryRemoved">Eintrag gelöscht</string>
+    <string name="amount">Menge</string>
+    <string name="name">Name</string>
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge">
         <item>1</item>

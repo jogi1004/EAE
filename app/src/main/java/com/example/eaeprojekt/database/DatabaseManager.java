@@ -525,10 +525,14 @@ public class DatabaseManager {
         database.update(TABLE_INGREDIENT_QUANTITY, values, null, null);
     }
 
-    public int deleteCheckedRecipes() {
+    public int removeCheckedRecipesFromShoppingBag() {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_IS_ON_SHOPPING_LIST, 0);
+
         String whereClause = COLUMN_INGREDIENT_QUANTITY_IS_CHECKED + " = 1";
-        return database.delete(TABLE_INGREDIENT_QUANTITY, whereClause, null);
+        return database.update(TABLE_INGREDIENT_QUANTITY, values, whereClause, null);
     }
+
 
 
 

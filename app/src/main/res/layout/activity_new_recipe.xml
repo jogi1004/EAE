@@ -108,17 +108,16 @@
                         style="@style/EditTextStyle"
                         android:layout_width="200dp"
                         android:layout_height="25dp"
-                        android:layout_marginStart="60dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/title"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/title"
-                        tools:ignore="TouchTargetSizeCheck"
+                        android:layout_marginStart="3dp"
+                        android:hint="@string/titleHint"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
                         android:maxLength="18"
                         android:maxLines="1"
-                        android:hint="@string/titleHint"
-                        android:inputType="text"
-                        android:importantForAutofill="no" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/title"
+                        app:layout_constraintTop_toTopOf="@id/title"
+                        tools:ignore="TouchTargetSizeCheck" />
 
                     <TextView
                         android:id="@+id/time"
@@ -135,6 +134,7 @@
                         style="@style/EditTextStyle"
                         android:layout_width="100dp"
                         android:layout_height="25dp"
+                        android:layout_marginStart="3dp"
                         android:hint="@string/durationHint"
                         android:importantForAutofill="no"
                         android:inputType="number"
@@ -142,8 +142,8 @@
                         android:maxLines="1"
                         android:textAlignment="center"
                         android:textColor="@color/fontColor"
-                        app:layout_constraintBottom_toBottomOf="@+id/time"
-                        app:layout_constraintStart_toStartOf="@+id/title_text"
+                        app:layout_constraintBottom_toBottomOf="@id/time"
+                        app:layout_constraintStart_toEndOf="@id/time"
                         app:layout_constraintTop_toTopOf="@id/time"
                         tools:ignore="TouchTargetSizeCheck" />
 
@@ -164,7 +164,7 @@
                         android:text="@string/portionsColon"
                         android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/time" />
+                        app:layout_constraintTop_toBottomOf="@id/time" />
 
                     <Spinner
                         android:id="@+id/spinner"
@@ -277,7 +277,7 @@
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/background_popup_steps"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/stepsLayout">
+                    app:layout_constraintTop_toBottomOf="@id/stepsLayout">
 
                     <TextView
                         android:id="@+id/text_cancel"
@@ -308,8 +308,6 @@
                     <TextView
                         android:id="@+id/text_add_recipe"
                         style="@style/IngredientsAddButtons"
-                        android:layout_width="160dp"
-                        android:layout_height="55dp"
                         android:gravity="center"
                         android:padding="5dp"
                         android:text="@string/cancel"

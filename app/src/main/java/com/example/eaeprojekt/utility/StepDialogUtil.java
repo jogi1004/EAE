@@ -50,6 +50,8 @@ public class StepDialogUtil{
 
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
+            KeyboardUtils.setupUI(dialog.findViewById(R.id.parentView), mainActivity);
+
             //Buttons
             buttonAdd = dialog.findViewById(R.id.add_button);
             buttonAdd.setOnClickListener((v)->{
@@ -77,7 +79,7 @@ public class StepDialogUtil{
                 long stepId;
 
                 if(mainActivity.getClass() == RecipeEditActivity.class){
-                    stepId = db.insertStep(RecipeEditActivity.recipeIDEdit, stepDescription.getText().toString());
+                    stepId = db.insertStep(RecipeEditActivity.recipeIdEdit, stepDescription.getText().toString());
                 }else {
                     stepId = db.insertStep(NewRecipeActivity.newRecipeId, stepDescription.getText().toString());
                 }

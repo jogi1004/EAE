@@ -72,7 +72,7 @@ public class DeleteShoppingBagUtil {
             //datenbankzugriff
             db = new DatabaseManager(context);
             db.open();
-            int rowCount = db.deleteCheckedRecipes();
+            int rowCount = db.removeCheckedRecipesFromShoppingBag();
             db.close();
             dialog.dismiss();
             if (updateListener != null) {
