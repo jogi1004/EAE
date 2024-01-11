@@ -74,14 +74,6 @@ public class MainActivity extends AppCompatActivity {
         );
 
         showRandomRecipe();
-
-        //Abfragen der Displaygröße um die Positionierung der Item u.ä. prozentual anzuordnen
-        /* DisplayMetrics dM = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dM);
-        int height = dM.heightPixels;
-        int width = dM.widthPixels;
-        Toast.makeText(this, "Höhe des Bildschirms: " + height + " Breite des Bildschirms: " + width, Toast.LENGTH_LONG).show();
-        */
     }
 
     public void showRandomRecipe() {
@@ -180,4 +172,3 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 }
-

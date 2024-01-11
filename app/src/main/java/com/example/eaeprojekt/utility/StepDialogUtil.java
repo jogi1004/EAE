@@ -5,15 +5,12 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -23,6 +20,8 @@ import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.activity.NewRecipeActivity;
 import com.example.eaeprojekt.activity.RecipeEditActivity;
 import com.example.eaeprojekt.database.DatabaseManager;
+
+import java.util.Objects;
 
 public class StepDialogUtil{
 
@@ -46,7 +45,7 @@ public class StepDialogUtil{
 
             dialog.setContentView(R.layout.add_steps_popup);
 
-            dialog.getWindow().setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(dialog.getWindow()).setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
 
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
@@ -155,4 +154,3 @@ public class StepDialogUtil{
             }
 
     }
-

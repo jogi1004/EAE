@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.util.DisplayMetrics;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -242,6 +244,14 @@ public class Shared {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public Pair<Integer, Integer> getDisplaySize() {
+        //Abfragen der Displaygröße um die Positionierung der Item u.ä. prozentual anzuordnen
+        DisplayMetrics dM = new DisplayMetrics();
+        int height = dM.heightPixels;
+        int width = dM.widthPixels;
+        return new Pair<>(width, height);
     }
 
 }

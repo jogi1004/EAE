@@ -172,7 +172,6 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             );
             layout.setPadding(20,20,20,20);
             layout.setLayoutParams(layoutParams);
-            layoutParams.setMargins(40, 0, 40, 0);
 
             /*
             Zutat
@@ -196,7 +195,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
              */
             TextView amountText = new TextView(this);
             amountText.setId(View.generateViewId());
-            amountText.setText(String.valueOf((int) ingredientAmount.getAmount()));
+            amountText.setText(String.valueOf(ingredientAmount.getAmount()));
             amountText.setGravity(Gravity.CENTER);
             amountText.setTextAppearance(R.style.TextViewShopping);
 
