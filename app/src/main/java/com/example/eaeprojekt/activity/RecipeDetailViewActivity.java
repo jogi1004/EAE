@@ -495,7 +495,21 @@ public void showMenu(View v) {
         if (ingredientsLinearLayout != null && !iADTO.isEmpty()) {
             //Entfernen aller bereits bestehenden Views und ersetzen durch die Korrekten
             ingredientsLinearLayout.removeAllViews();
-        int counter = 0;
+            ingredientsLayout.removeAllViews();
+            // IngredientsHeader mit Parameter hinzufügen
+            RelativeLayout.LayoutParams textViewParamsIngredientHeader = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
+            );
+            textViewParamsIngredientHeader.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            textViewParamsIngredientHeader.setMargins(50, 10,0,10);
+            TextView ingredientsHeader = new TextView(this);
+            ingredientsHeader.setText(getText(R.string.ingredients));
+            ingredientsHeader.setLayoutParams(textViewParamsIngredientHeader);
+            ingredientsHeader.setPaintFlags(ingredientsHeader.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            ingredientsLayout.addView(ingredientsHeader);
+            
+            int counter = 0;
     for (IngredientAmountDTO ingredient : iADTO) {
 
         //Alle Zutaten die benötigt werden aus der DB auslesen und in currIngredient speichern
@@ -580,7 +594,6 @@ public void showMenu(View v) {
 
         // Fügen Sie das horizontale Layout zum vertikalen Layout hinzu
         ingredientsLinearLayout.addView(ingredientLayout);
-        ingredientsLayout.removeAllViews();
         ingredientsLayout.addView(ingredientsLinearLayout);
     }
     }
