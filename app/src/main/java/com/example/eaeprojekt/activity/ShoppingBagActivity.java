@@ -118,7 +118,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
                     view.setBackgroundColor(getColor(R.color.fontColor));
                     ViewGroup.LayoutParams viewParams = new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
-                            dpToPx(1)
+                            dpToPx(1, getResources().getDisplayMetrics().density)
                     );
                     view.setLayoutParams(viewParams);
                     parentLayout1.addView(view);
@@ -285,7 +285,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             constraintSet.connect(unitText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
             constraintSet.connect(unitText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
             //Checkbox
-            constraintSet.connect(checkBox.getId(), ConstraintSet.END, trash.getId(), ConstraintSet.START, dpToPx(8));
+            constraintSet.connect(checkBox.getId(), ConstraintSet.END, trash.getId(), ConstraintSet.START, dpToPx(8,getResources().getDisplayMetrics().density));
             constraintSet.connect(unitText.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
             constraintSet.connect(unitText.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
             //Mülleimer
