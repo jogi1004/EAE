@@ -157,12 +157,17 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             Zutaten in der view hinzufügen
              */
             ConstraintLayout layout = new ConstraintLayout(this);
+            // Checkbox für Einkaufsliste
+            CheckBox checkBox = new CheckBox(this);
+            checkBox.setId(View.generateViewId());
+
 
             //Ändern der Farben wenn Darkmode aktiviert ist
             if(Configuration.UI_MODE_NIGHT_YES == darkmode){
                 parentLayout1.setBackgroundColor(getColor(R.color.colorPrimaryDark));
                 parentLayout2.setBackgroundColor(getColor(R.color.colorPrimaryDark));
                 layout.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+                checkBox.setButtonTintList(ColorStateList.valueOf(getResources().getColor(R.color.background)));
             }
 
             ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
@@ -225,12 +230,8 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
             layout.addView(unitText);
 
             /*
-            Checkbox
+            Checkboxparameter
             */
-            CheckBox checkBox = new CheckBox(this);
-            checkBox.setId(View.generateViewId());
-            checkBox.setButtonTintList(ColorStateList.valueOf(getResources().getColor(R.color.background)));
-
             ViewGroup.LayoutParams checkBoxParams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
