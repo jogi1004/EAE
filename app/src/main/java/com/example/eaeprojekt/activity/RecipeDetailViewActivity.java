@@ -1,15 +1,13 @@
 package com.example.eaeprojekt.activity;
 
 import static com.example.eaeprojekt.R.id.menu_edit;
+import static com.example.eaeprojekt.activity.Shared.showImage;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.exifinterface.media.ExifInterface;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
 
@@ -17,7 +15,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -44,8 +41,6 @@ import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -242,7 +237,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
          portionsIcon.setImageResource(R.drawable.baseline_person_24);
 
 
-         /**
+         /*
          * Adding Views to GridLayout
          */
          durationLayout.addView(durationIcon);
@@ -405,30 +400,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
     }
         private void updateImage(String path) {
         if (path != null && Shared.checkPermission(this, false)) {
-            File imgFile = new File(path);
-            if(imgFile.exists()) {
-                try {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    int rotate = 0;
-                    ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
-                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-                    switch (orientation) {
-                        case ExifInterface.ORIENTATION_ROTATE_270:
-                            rotate = 270;
-                            break;
-                        case ExifInterface.ORIENTATION_ROTATE_180:
-                            rotate = 180;
-                            break;
-                        case ExifInterface.ORIENTATION_ROTATE_90:
-                            rotate = 90;
-                            break;
-                    }
-                    circleViewImage.setImageBitmap(myBitmap);
-                    circleViewImage.setRotation(rotate);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            showImage(path, circleViewImage);
         }
         else {
             circleViewImage.setImageResource(R.drawable.camera_small);

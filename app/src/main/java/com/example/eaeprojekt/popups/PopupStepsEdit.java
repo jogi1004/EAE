@@ -83,7 +83,7 @@ public class PopupStepsEdit implements View.OnClickListener {
 
             EditText stepDescription = (EditText) view.findViewById(R.id.step_description);
 
-            long stepId = db.insertStep(RecipeEditActivity.recipeIDEdit, stepDescription.getText().toString());
+            long stepId = db.insertStep(RecipeEditActivity.recipeIdEdit, stepDescription.getText().toString());
 
             frame.getForeground().setAlpha(0);
             frame.setElevation(0);

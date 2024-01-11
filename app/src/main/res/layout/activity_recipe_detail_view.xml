@@ -5,6 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.RecipeDetailViewActivity">
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/RecipeName"
@@ -48,53 +56,43 @@
         android:paddingBottom="5sp"
         android:rowCount="1" />
 
-    <ScrollView
-        android:id="@+id/recipeScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/durationLayout"
-        android:layout_above="@+id/bottomNavView"
-        android:layout_marginTop="10sp"
-        android:layout_marginBottom="7sp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
             <LinearLayout
-                android:id="@+id/ingredientsLayout"
+                android:orientation="vertical"
+                android:id="@+id/recipeScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5sp"
-                android:layout_marginStart="5sp"
-                android:background="@color/darkerYellow"
-                android:orientation="vertical"
-                android:layout_marginTop="7sp"
-                />
+                android:layout_below="@id/durationLayout"
+                android:layout_marginTop="10sp"
+                android:layout_marginBottom="7sp"
+                android:paddingBottom="100sp"> <!-- to enable scrolling to the bottom -->
 
-            <LinearLayout
-                android:id="@+id/stepsLayout"
-                style="@style/StepsLayoutStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5sp"
-                android:layout_marginStart="5sp"
-                android:orientation="vertical"
-                android:layout_below="@id/ingredientsLayout"
-                android:layout_marginTop="17sp"/>
+                <LinearLayout
+                    android:id="@+id/ingredientsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5sp"
+                    android:layout_marginStart="5sp"
+                    android:background="@color/darkerYellow"
+                    android:orientation="vertical"
+                    android:layout_marginTop="7sp" />
+
+                <LinearLayout
+                    android:id="@+id/stepsLayout"
+                    style="@style/StepsLayoutStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5sp"
+                    android:layout_marginStart="5sp"
+                    android:orientation="vertical"
+                    android:layout_marginTop="17sp" />
+
+            </LinearLayout>
         </RelativeLayout>
-</ScrollView>
+    </ScrollView>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_above="@+id/bottomNavView"
-android:layout_below="@id/recipeScrollView" />
-
-<com.google.android.material.bottomnavigation.BottomNavigationView
-    android:id="@+id/bottomNavView"
-    style="@style/BottomNavigationBarStyle"
-    app:menu="@menu/bottom_nav_bar"
-    android:layout_alignParentBottom="true">
-</com.google.android.material.bottomnavigation.BottomNavigationView>
-    </RelativeLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavView"
+        style="@style/BottomNavigationBarStyle"
+        app:menu="@menu/bottom_nav_bar"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>

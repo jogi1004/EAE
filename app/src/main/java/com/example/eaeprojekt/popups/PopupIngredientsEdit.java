@@ -2,7 +2,6 @@ package com.example.eaeprojekt.popups;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,9 +80,7 @@ public class PopupIngredientsEdit implements View.OnClickListener {
 
         List<IngredientDTO> allIngredients = db.getAllIngredients();
         for(IngredientDTO newIngredient : allIngredients){
-            Log.d("spinner"," "+ newIngredient.getName() + " " + newIngredient.getUnit());
             ingredientList.add(newIngredient.getName() + ", " + newIngredient.getUnit());
-            Log.d("spinner"," "+ newIngredient.getName() + " " + newIngredient.getUnit() + " wurde hinzugefügt");
         }
 
         adapterIngredients = new ArrayAdapter<>(mainActivity, android.R.layout.simple_spinner_dropdown_item, ingredientList);
@@ -214,7 +211,7 @@ public class PopupIngredientsEdit implements View.OnClickListener {
             EditText amount = popupView.findViewById(R.id.amount);
 
             // Zutat zum Rezept hinzufügen
-            long ingredientId = db.insertIngredientQuantity(RecipeEditActivity.recipeIDEdit, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()),0, 0);
+            long ingredientId = db.insertIngredientQuantity(RecipeEditActivity.recipeIdEdit, ingredientToAdd.getId(), Double.parseDouble(amount.getText().toString()),0, 0);
             /*
             schrittbeschreibung in der view hinzufügen
              */

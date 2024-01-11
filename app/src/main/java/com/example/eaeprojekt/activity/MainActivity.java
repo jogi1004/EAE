@@ -2,14 +2,15 @@ package com.example.eaeprojekt.activity;
 
 
 
+import static com.example.eaeprojekt.activity.Shared.showImage;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.exifinterface.media.ExifInterface;
+
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -24,8 +25,7 @@ import com.example.eaeprojekt.R;
 import com.example.eaeprojekt.database.DatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.io.File;
-import java.io.IOException;
+
 import java.util.List;
 import java.util.Random;
 
@@ -112,30 +112,7 @@ public class MainActivity extends AppCompatActivity {
             String path = allRecipes.get(randomNumber).getImagePath();
             imageView.setRotation(0); // reset rotation
             if (path != null && Shared.checkPermission(this, false)) {
-                File imgFile = new File(path);
-                if(imgFile.exists()) {
-                    try {
-                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                        int rotate = 0;
-                        ExifInterface exif = new ExifInterface(imgFile.getAbsolutePath());
-                        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-                        switch (orientation) {
-                            case ExifInterface.ORIENTATION_ROTATE_270:
-                                rotate = 270;
-                                break;
-                            case ExifInterface.ORIENTATION_ROTATE_180:
-                                rotate = 180;
-                                break;
-                            case ExifInterface.ORIENTATION_ROTATE_90:
-                                rotate = 90;
-                                break;
-                        }
-                        imageView.setImageBitmap(myBitmap);
-                        imageView.setRotation(rotate);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+                showImage(path, imageView);
             }
         else {
                 imageView.setImageResource(R.drawable.camera_small);
@@ -187,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
             //Öffne ADDActivity
         }
         if (id == R.id.recipeListButtonNavBar) {
-            /**
+            /*
              Erstellen eines Intents zum Öffnen der RecipeActivity
             sobald in der Navbar der entsprechende Button gedrückt wurde
              */

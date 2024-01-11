@@ -34,38 +34,41 @@
         android:layout_height="40dp"
         android:layout_marginStart="10dp"
         android:src="@drawable/arrow_left_light"
+        android:layout_marginBottom="15dp"
         app:layout_constraintBottom_toBottomOf="@id/TitleRecipeEdit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/TitleRecipeEdit"
-        android:contentDescription="@string/backButtonDescription" />
-
+        android:contentDescription="@string/backButtonDescription"
+        app:layout_constraintVertical_bias="1.0" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/TitleRecipeEdit">
+        app:layout_constraintTop_toBottomOf="@id/TitleRecipeEdit"
+        app:layout_constraintVertical_bias="1.0">
 
         <ScrollView
             android:id="@+id/scrollView2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/swipe">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/newRecipeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/toolbar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/toolbar">
-
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -94,12 +97,12 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/newRecipeInformationLayout"
+                    style="@style/roundedBackgroundNewRecipe"
                     android:layout_width="wrap_content"
                     android:layout_height="225dp"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="3dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="10dp"
-                    android:background="@drawable/background_with_rounded_corners"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/picture_layout">
@@ -119,14 +122,16 @@
                         style="@style/EditTextStyle"
                         android:layout_width="200dp"
                         android:layout_height="25dp"
-                        android:layout_marginStart="60dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/title"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/title"
+                        android:layout_marginStart="3dp"
                         android:hint="@string/titleHint"
                         android:importantForAutofill="no"
-                        android:inputType="text" />
+                        android:inputType="text"
+                        android:maxLength="18"
+                        android:maxLines="1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/title"
+                        app:layout_constraintTop_toTopOf="@id/title"
+                        tools:ignore="TouchTargetSizeCheck" />
 
                     <TextView
                         android:id="@+id/time"
@@ -143,12 +148,20 @@
                         style="@style/EditTextStyle"
                         android:layout_width="100dp"
                         android:layout_height="25dp"
-                        android:inputType="number"
-                        app:layout_constraintBottom_toBottomOf="@+id/time"
-                        app:layout_constraintStart_toStartOf="@+id/title_text"
-                        app:layout_constraintTop_toTopOf="@+id/time"
+                        android:layout_marginStart="3dp"
                         android:hint="@string/durationHint"
-                        android:importantForAutofill="no" />
+                        android:importantForAutofill="no"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        android:textColor="@color/fontColor"
+                        app:layout_constraintBottom_toBottomOf="@id/time"
+                        app:layout_constraintEnd_toStartOf="@id/minutes"
+                        app:layout_constraintStart_toEndOf="@id/time"
+                        app:layout_constraintTop_toTopOf="@id/time"
+                        tools:ignore="TouchTargetSizeCheck"
+                        tools:layout_constraintEnd_toEndOf="@id/time" />
 
                     <TextView
                         android:id="@+id/minutes"
@@ -156,8 +169,9 @@
                         android:layout_marginStart="5dp"
                         android:text="@string/minutes"
                         android:textSize="15sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/time_text"
-                        app:layout_constraintStart_toEndOf="@+id/time_text" />
+                        app:layout_constraintBottom_toBottomOf="@id/time_text"
+                        app:layout_constraintStart_toEndOf="@id/time_text"
+                        app:layout_constraintTop_toTopOf="@id/time_text" />
 
                     <TextView
                         android:id="@+id/portions"
@@ -167,17 +181,18 @@
                         android:text="@string/portionsColon"
                         android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/time" />
+                        app:layout_constraintTop_toBottomOf="@id/time" />
 
                     <Spinner
                         android:id="@+id/spinner"
-                        style="@style/SpinnerStyle"
+                        style="@style/EditTextStyle"
                         android:layout_width="75dp"
                         android:layout_height="25dp"
                         android:layout_marginStart="3dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/portions"
-                        app:layout_constraintStart_toEndOf="@+id/portions"
-                        app:layout_constraintTop_toTopOf="@+id/portions" />
+                        app:layout_constraintBottom_toBottomOf="@id/portions"
+                        app:layout_constraintStart_toEndOf="@id/portions"
+                        app:layout_constraintTop_toTopOf="@id/portions"
+                        tools:ignore="TouchTargetSizeCheck" />
 
                     <TextView
                         android:id="@+id/persons"
@@ -185,8 +200,8 @@
                         android:layout_marginStart="5dp"
                         android:text="@string/people"
                         android:textSize="15sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/spinner"
-                        app:layout_constraintStart_toEndOf="@+id/spinner" />
+                        app:layout_constraintBottom_toBottomOf="@id/spinner"
+                        app:layout_constraintStart_toEndOf="@id/spinner" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/button_add_ingredients"
@@ -195,14 +210,14 @@
                         android:layout_marginStart="15dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/portions">
+                        app:layout_constraintTop_toBottomOf="@id/portions">
 
                         <TextView
                             android:id="@+id/text_add_ingredients"
-                            android:gravity="center"
-                            android:background="@drawable/background_edit_text"
                             android:layout_width="145dp"
                             android:layout_height="55dp"
+                            android:background="@drawable/background_edit_text"
+                            android:gravity="center"
                             android:padding="5dp"
                             android:text="@string/addIngredient"
                             android:textSize="15sp"
@@ -212,7 +227,8 @@
                             app:layout_constraintHorizontal_bias="1.0"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.0" />
+                            app:layout_constraintVertical_bias="0.0"
+                            tools:ignore="TextSizeCheck" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -224,15 +240,15 @@
                         android:layout_marginEnd="15dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/button_add_ingredients"
-                        app:layout_constraintTop_toBottomOf="@+id/portions">
+                        app:layout_constraintStart_toEndOf="@id/button_add_ingredients"
+                        app:layout_constraintTop_toBottomOf="@id/portions">
 
                         <TextView
                             android:id="@+id/text_add_steps"
-                            android:gravity="center"
-                            android:background="@drawable/background_edit_text"
                             android:layout_width="145dp"
                             android:layout_height="55dp"
+                            android:background="@drawable/background_edit_text"
+                            android:gravity="center"
                             android:padding="5dp"
                             android:text="@string/addStep"
                             android:textSize="15sp"
@@ -246,6 +262,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <!--Layout für die Zutaten -->
                 <LinearLayout
                     android:id="@+id/ingredientsLayout"
@@ -254,7 +271,7 @@
                     android:layout_marginRight="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/newRecipeInformationLayout"/>
+                    app:layout_constraintTop_toBottomOf="@id/newRecipeInformationLayout" />
 
 
                 <!--Layout für die Schritte -->
@@ -262,11 +279,11 @@
                     android:id="@+id/stepsLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ingredientsLayout"
-                    android:orientation="vertical" />
+                    app:layout_constraintTop_toBottomOf="@id/ingredientsLayout" />
+
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/button_add_recipe"
@@ -277,21 +294,24 @@
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/background_popup_steps"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/stepsLayout">
+                    app:layout_constraintTop_toBottomOf="@id/stepsLayout">
 
                     <TextView
                         android:id="@+id/text_add_recipe"
                         style="@style/IngredientsAddButtons"
+                        android:layout_width="160dp"
+                        android:layout_height="55dp"
+                        android:gravity="center"
+                        android:padding="5dp"
                         android:text="@string/recipeEditSave"
-                        android:textSize="15sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0" />
+                        app:layout_constraintVertical_bias="0.0"
+                        tools:ignore="TextSizeCheck" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/button_cancel"
@@ -309,8 +329,8 @@
                     <TextView
                         android:id="@+id/text_cancel"
                         style="@style/IngredientsAddButtons"
+                        android:padding="5dp"
                         android:text="@string/cancel"
-                        android:textSize="15sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="1.0"
@@ -318,13 +338,11 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.0" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
