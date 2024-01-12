@@ -1,5 +1,7 @@
 package com.example.eaeprojekt.utility;
 
+import static com.example.eaeprojekt.activity.Shared.roundDouble;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -13,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,14 +37,13 @@ import com.example.eaeprojekt.database.DatabaseManager;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class IngredientDialogUtil {
 
         static DatabaseManager db;
 
         static Activity mainActivity;
-        static View popupView;
-        PopupWindow popupWindow;
         //Adapter für Zutaten
         private static CustomAdapter adapter;
 
@@ -90,13 +90,11 @@ public class IngredientDialogUtil {
 
             dialog.setContentView(R.layout.add_ingredients_popup);
 
-            dialog.getWindow().setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(dialog.getWindow()).setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
 
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
             layoutAddIngredient = dialog.findViewById(R.id.addIngredientLayout);
-
-
 
 
             db = new DatabaseManager(mainActivity);
@@ -105,7 +103,6 @@ public class IngredientDialogUtil {
             parentView = view;
 
             KeyboardUtils.setupUI(dialog.findViewById(R.id.below), mainActivity);
-
 
 
             //Spinner Zutaten
@@ -306,7 +303,7 @@ public class IngredientDialogUtil {
              */
             TextView amountText = new TextView(mainActivity);
             amountText.setId(View.generateViewId());
-            amountText.setText(amount.getText().toString());
+            amountText.setText(roundDouble(Double.parseDouble(amount.getText().toString())));
             amountText.setGravity(Gravity.CENTER);
             amountText.setTextColor(mainActivity.getColor(R.color.white));
 
@@ -606,9 +603,6 @@ public class IngredientDialogUtil {
                     unitTV.setText(chosenUnit);
 
                     ingredients.setSelection(0);
-
-                    
-
                 }
             }
         }

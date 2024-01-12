@@ -89,8 +89,10 @@
     <string name="deleteRecipeCheck">Möchten Sie das Rezept wirklich löschen?</string>
     <string name="delete">Löschen</string>
     <string name="entryRemoved">Eintrag gelöscht</string>
-    <string name="amount">Menge</string>
+    <string name="amount">Menge</string>g
     <string name="name">Name</string>
+    <string name="ingredientAddedToShoppingBag">Zutat zur Einkaufsliste hinzugefügt</string>
+    <string name="ingredientRemovedFromShoppingBag">Zutat von Einkaufsliste entfernt</string>
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge">
         <item>1</item>

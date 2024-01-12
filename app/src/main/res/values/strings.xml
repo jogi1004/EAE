@@ -91,6 +91,8 @@
     <string name="entryRemoved">entry removed</string>
     <string name="amount">amount</string>
     <string name="name">name</string>
+    <string name="ingredientAddedToShoppingBag">Ingredient added to shopping bag</string>
+    <string name="ingredientRemovedFromShoppingBag">Ingredient removed from shopping bag</string>
 
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge">

@@ -1,6 +1,7 @@
 package com.example.eaeprojekt.activity;
 
 import static com.example.eaeprojekt.activity.Shared.dpToPx;
+import static com.example.eaeprojekt.activity.Shared.roundDouble;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -195,7 +196,7 @@ public class ShoppingBagActivity extends AppCompatActivity implements View.OnCli
              */
             TextView amountText = new TextView(this);
             amountText.setId(View.generateViewId());
-            amountText.setText(String.valueOf(ingredientAmount.getAmount()));
+            amountText.setText(roundDouble(ingredientAmount.getAmount()));
             amountText.setGravity(Gravity.CENTER);
             amountText.setTextAppearance(R.style.TextViewShopping);
 
