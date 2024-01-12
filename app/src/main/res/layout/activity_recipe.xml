@@ -6,11 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".activity.RecipeActivity">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <RelativeLayout
-        android:id="@+id/WelcomeLinearLayoutRecipes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/RecipeListHeader"
@@ -56,38 +63,18 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="15sp" />
-
-    </RelativeLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="0sp"
-        android:layout_above="@id/bottomNavView"
-        android:layout_below="@id/WelcomeLinearLayoutRecipes">
-
-        <ScrollView
-            android:id="@+id/ScrollViewRecipes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            tools:ignore="MissingConstraints"
-            android:layout_marginEnd="5dp"
-            android:layout_marginStart="5dp">
+        </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/recipeLayoutinScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView">
+                android:paddingBottom="100dp"
+                android:layout_below="@id/header" />
 
-            </LinearLayout>
-
-        </ScrollView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+    </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavView"
