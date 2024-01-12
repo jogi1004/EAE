@@ -70,7 +70,7 @@
     <string name="pleaseAllowStorageAccess">Bitte erlaube den Zugriff auf den Speicher, um Bilder zu verwenden</string>
     <string name="pleaseAllowStorageAccessInSettings">Bitte erlaube den Zugriff auf den Speicher in den Einstellungen, um Bilder zu verwenden</string>
     <string name="ingredientAmountCannotBeDeleted">Zutat wird noch verwendet und kann nicht gelöscht werden</string>
-    <string name="randomRecipe">Zufallsrezept</string>
+    <string name="randomRecipe">Unser Koch empfiehlt:</string>
     <string name="reload">↻</string>
     <string name="ingredientAdded">Zutat zur Einkaufsliste hinzugefügt</string>
     <string name="ingredientDeleted">Zutat aus der Einkaufsliste entfernt</string>

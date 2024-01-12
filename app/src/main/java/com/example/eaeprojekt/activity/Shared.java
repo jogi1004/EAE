@@ -119,7 +119,7 @@ public class Shared {
             );
             layout.setPadding(20, 20, 20, 20);
             layout.setLayoutParams(layoutParams);
-            //layoutParams.setMargins(40, 0, 40, 0);
+            layoutParams.setMargins(40, 0, 40, 0);
 
             /*
             Zutat

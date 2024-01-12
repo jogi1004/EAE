@@ -193,12 +193,12 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         );
+        textViewParamsIngredientHeader.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        textViewParamsIngredientHeader.setMargins(50, 10, 0, 10);
 
 
         if(!iADTO.isEmpty()) {
 
-            textViewParamsIngredientHeader.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            textViewParamsIngredientHeader.setMargins(50, 10, 0, 10);
             TextView ingredientsHeader = new TextView(this);
             ingredientsHeader.setText(getText(R.string.ingredients));
             ingredientsHeader.setLayoutParams(textViewParamsIngredientHeader);
@@ -423,7 +423,7 @@ public void showMenu(View v) {
         // TextView für den Namen
         TextView ingredientName = new TextView(this);
         ingredientName.setText(currIngredient.getName());
-        ingredientName.setPadding(20, 0, 20, 0);
+        ingredientName.setPadding(15, 0, 20, 0);
 
         // TextView für die Einheit
         RelativeLayout.LayoutParams ingredientUnitLayoutParams = new RelativeLayout.LayoutParams(
@@ -433,13 +433,14 @@ public void showMenu(View v) {
         ingredientUnitLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         TextView ingredientUnit = new TextView(this);
         ingredientUnit.setText(currIngredient.getUnit());
-        ingredientUnit.setPadding(20, 0, 0, 0);
+        ingredientUnit.setPadding(15, 0, 0, 0);
         ingredientUnit.setLayoutParams(ingredientUnitLayoutParams);
 
 
         TextView ingredientAmount = new TextView(this);
         //Counter macht keine Probleme bei mehreren Rezepten
         ingredientAmount.setText(String.valueOf(newPortions.get(counter++)));
+        ingredientAmount.setPadding(50,0,0,0);
 
         RelativeLayout shoppingBaglayout = new RelativeLayout(this);
         shoppingBaglayout.setLayoutParams(new RelativeLayout.LayoutParams (
@@ -464,18 +465,19 @@ public void showMenu(View v) {
         // OnClick Listener zur Shopping Bag hinzufügen
         shoppingBag.setOnClickListener(v -> {
             if (ingredient.getOnShoppingList() == 0) {
-                db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), 1, 0);
+                ingredient.setOnShoppingList(1);
+                shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
                 Toast toast = new Toast(this);
                 toast.setText(R.string.ingredientAddedToShoppingBag);
                 toast.show();
-                shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
             } else {
-                db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), 0, 0);
+                ingredient.setOnShoppingList(0);
+                shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
                 Toast toast = new Toast(this);
                 toast.setText(R.string.ingredientRemovedFromShoppingBag);
                 toast.show();
-                shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
             }
+            db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), ingredient.getOnShoppingList(), 0);
         });
 
         // Einfügen der Text und ImageViews
