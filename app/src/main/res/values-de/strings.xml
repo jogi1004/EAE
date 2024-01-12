@@ -70,7 +70,7 @@
     <string name="pleaseAllowStorageAccess">Bitte erlaube den Zugriff auf den Speicher, um Bilder zu verwenden</string>
     <string name="pleaseAllowStorageAccessInSettings">Bitte erlaube den Zugriff auf den Speicher in den Einstellungen, um Bilder zu verwenden</string>
     <string name="ingredientAmountCannotBeDeleted">Zutat wird noch verwendet und kann nicht gelöscht werden</string>
-    <string name="randomRecipe">Unser Koch empfiehlt</string>
+    <string name="randomRecipe">Unser Koch empfiehlt:</string>
     <string name="reload">↻</string>
     <string name="ingredientAdded">Zutat zur Einkaufsliste hinzugefügt</string>
     <string name="ingredientDeleted">Zutat aus der Einkaufsliste entfernt</string>
@@ -89,8 +89,10 @@
     <string name="deleteRecipeCheck">Möchten Sie das Rezept wirklich löschen?</string>
     <string name="delete">Löschen</string>
     <string name="entryRemoved">Eintrag gelöscht</string>
-    <string name="amount">Menge</string>
+    <string name="amount">Menge</string>g
     <string name="name">Name</string>
+    <string name="ingredientAddedToShoppingBag">Zutat zur Einkaufsliste hinzugefügt</string>
+    <string name="ingredientRemovedFromShoppingBag">Zutat von Einkaufsliste entfernt</string>
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge">
         <item>1</item>

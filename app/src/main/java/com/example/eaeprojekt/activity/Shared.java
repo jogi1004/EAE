@@ -30,6 +30,7 @@ import com.example.eaeprojekt.database.DatabaseManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class Shared {
@@ -142,7 +143,7 @@ public class Shared {
              */
             TextView amountText = new TextView(context);
             amountText.setId(View.generateViewId());
-            amountText.setText(String.valueOf((int) ingredient.getAmount()));
+            amountText.setText(roundDouble(ingredient.getAmount()));
             amountText.setGravity(Gravity.CENTER);
             amountText.setTextColor(ContextCompat.getColor(context, R.color.white));
 
@@ -252,6 +253,13 @@ public class Shared {
         int height = dM.heightPixels;
         int width = dM.widthPixels;
         return new Pair<>(width, height);
+    }
+
+    public static String roundDouble(double number) {
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        String ret = decimalFormat.format(number);
+        ret = ret.replaceAll(",0$", "");
+        return ret;
     }
 
 }

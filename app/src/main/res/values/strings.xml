@@ -90,6 +90,8 @@
     <string name="entryRemoved">entry removed</string>
     <string name="amount">amount</string>
     <string name="name">name</string>
+    <string name="ingredientAddedToShoppingBag">Ingredient added to shopping bag</string>
+    <string name="ingredientRemovedFromShoppingBag">Ingredient removed from shopping bag</string>
 
     <!--Spinner Portionsmenge-->
     <string-array name="portionsmenge">
@@ -109,5 +111,5 @@
     <!--Spinner Zutat-->
     <string-array name="zutat">
     </string-array>
-    <string name="randomRecipe">Chefs choice</string>
+    <string name="randomRecipe">Chefs choice:</string>
 </resources>
