@@ -6,6 +6,7 @@ import static com.example.eaeprojekt.activity.Shared.showImage;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -15,6 +16,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -63,7 +65,7 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
     List<IngredientAmountDTO> iADTO;
     List<StepDTO> steps;
     ImageButton favoriteStar;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
