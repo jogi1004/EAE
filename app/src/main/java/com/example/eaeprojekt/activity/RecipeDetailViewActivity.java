@@ -373,18 +373,19 @@ public class RecipeDetailViewActivity extends AppCompatActivity implements Popup
         // OnClick Listener zur Shopping Bag hinzufügen
         shoppingBag.setOnClickListener(v -> {
                    if (ingredient.getOnShoppingList() == 0) {
-                      db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), 1, 0);
-                      Toast toast = new Toast(this);
-                      toast.setText("Zutat zur Einkaufsliste hinzugefügt");
-                      toast.show();
-                      shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
+                       ingredient.setOnShoppingList(1);
+                       shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
+                       Toast toast = new Toast(this);
+                       toast.setText("Zutat zur Einkaufsliste hinzugefügt");
+                       toast.show();
                    } else {
-                       db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), 0, 0);
+                       ingredient.setOnShoppingList(0);
+                       shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
                        Toast toast = new Toast(this);
                        toast.setText("Zutat aus der Einkaufsliste entfernt");
                        toast.show();
-                       shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
                    }
+                   db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), ingredient.getOnShoppingList(), 0);
         });
 
 
@@ -575,18 +576,19 @@ public void showMenu(View v) {
         // OnClick Listener zur Shopping Bag hinzufügen
         shoppingBag.setOnClickListener(v -> {
             if (ingredient.getOnShoppingList() == 0) {
-                db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), 1, 0);
+                ingredient.setOnShoppingList(1);
+                shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
                 Toast toast = new Toast(this);
                 toast.setText("Zutat zur Einkaufsliste hinzugefügt");
                 toast.show();
-                shoppingBag.setImageResource(R.drawable.shoppingbag_dark_filled);
             } else {
-                db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), 0, 0);
+                ingredient.setOnShoppingList(0);
+                shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
                 Toast toast = new Toast(this);
                 toast.setText("Zutat aus der Einkaufsliste entfernt");
                 toast.show();
-                shoppingBag.setImageResource(R.drawable.shoppingbag_dark_hollow);
             }
+            db.updateIngredientQuantity(ingredient.getId(), ingredient.getIngredientId(), ingredient.getAmount(), ingredient.getOnShoppingList(), 0);
         });
 
         // Einfügen der Text und ImageViews
